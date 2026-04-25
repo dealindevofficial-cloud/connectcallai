@@ -45,7 +45,7 @@ export const useCases = [
   {
     name: "Hospitals",
     outcome: "Handle patient scheduling and reminder calls with empathy.",
-    metric: "-52% missed appointments",
+    metric: "-92% missed appointments",
   },
   {
     name: "Pet Clinics",

@@ -48,7 +48,7 @@ export function Hero() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const fullName = String(formData.get("fullName") ?? "").trim();
+    const fullName = String(formData.get("name") ?? "").trim();
 
     if (!fullName) {
       setRequestStatus("error");
@@ -65,7 +65,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative mx-auto grid w-full max-w-6xl gap-10 px-5 pb-20 pt-16 md:grid-cols-2 md:px-8 md:pt-24">
+    <section className="relative mx-auto grid w-full max-w-6xl gap-10 px-5 pb-14 pt-16 md:grid-cols-2 md:px-8 md:pb-20 md:pt-24">
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -79,7 +79,7 @@ export function Hero() {
           variants={fadeUp}
           className="text-4xl font-semibold leading-tight text-white md:text-6xl"
         >
-          Phone automation that sounds human and converts faster.
+          Automate Business Calls with Specialized AI Voice Agents.
         </motion.h1>
         <motion.p variants={fadeUp} className="max-w-xl text-lg text-blue-100/80">
           CCAI handles inbound and outbound calls, qualifies leads, books appointments,
@@ -110,7 +110,7 @@ export function Hero() {
           <p className="text-xl font-semibold text-white">Live Booking Assistant</p>
           <div className="mt-6 rounded-2xl border border-white/15 bg-[#0e155f]/70 p-5">
             <div className="mb-5 flex items-center justify-between">
-              <span className="text-sm text-blue-100/80">Live request widget</span>
+              <span className="text-sm text-blue-100/80">Live test call</span>
               <span className="text-xs text-emerald-300">Connected</span>
             </div>
             <div className="mb-6 flex h-16 items-end gap-1.5">
@@ -132,9 +132,9 @@ export function Hero() {
             </div>
             <form onSubmit={onRequestDemo} className="space-y-3">
               <input
-                name="fullName"
+                name="name"
                 required
-                placeholder="Full name"
+                placeholder="Name"
                 className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
               />
               <input
@@ -145,8 +145,10 @@ export function Hero() {
                 className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
               />
               <input
-                name="business"
-                placeholder="Business name (optional)"
+                name="email"
+                required
+                type="email"
+                placeholder="Email"
                 className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
               />
               <button

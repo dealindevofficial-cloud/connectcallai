@@ -12,7 +12,7 @@ export function DemoForm() {
   };
 
   return (
-    <section id="demo" className="mx-auto w-full max-w-6xl px-5 py-20 md:px-8">
+    <section id="demo" className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20">
       <div className="grid gap-8 rounded-3xl border border-white/14 bg-[#0f155f]/70 p-8 md:grid-cols-2">
         <div>
           <p className="chip">Request a personalized walkthrough</p>

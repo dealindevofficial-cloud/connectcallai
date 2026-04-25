@@ -6,7 +6,7 @@ import { fadeUp, staggerContainer } from "@/lib/motion";
 
 export function Features() {
   return (
-    <section id="features" className="mx-auto w-full max-w-6xl px-5 py-20 md:px-8">
+    <section id="features" className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20">
       <h2 className="text-3xl font-semibold text-white md:text-4xl">Core features</h2>
       <motion.div
         variants={staggerContainer}

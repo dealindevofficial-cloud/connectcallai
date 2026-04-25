@@ -6,7 +6,10 @@ import { cardHover, fadeUp, staggerContainer } from "@/lib/motion";
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="mx-auto w-full max-w-6xl px-5 py-20 md:px-8">
+    <section
+      id="how-it-works"
+      className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
+    >
       <h2 className="text-3xl font-semibold text-white md:text-4xl">How it works</h2>
       <p className="mt-4 max-w-2xl text-blue-100/80">
         Start with ready-made AI agents, connect your phone number, and go live quickly.

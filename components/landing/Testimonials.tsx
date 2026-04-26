@@ -19,7 +19,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
+      className="scroll-mt-28 mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
     >
       <h2 className="text-3xl font-semibold text-white md:text-4xl">What customers say</h2>
       <div className="mt-8 rounded-2xl border border-white/12 bg-white/6 p-7">

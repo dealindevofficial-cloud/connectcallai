@@ -20,6 +20,47 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 7rem;
+  scrollbar-color: #9daeff #101a64;
+  scrollbar-width: thin;
+}
+
+/* WebKit scrollbar styling (Chrome, Edge, Safari) */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(10, 16, 66, 0.72), rgba(16, 27, 104, 0.72));
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  border: 1px solid rgba(155, 170, 255, 0.3);
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #22d3ee 0%, #6366f1 50%, #a855f7 100%) !important;
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(235, 240, 255, 0.12),
+    0 0 10px rgba(121, 134, 255, 0.3);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #67e8f9 0%, #818cf8 50%, #c084fc 100%) !important;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: rgba(9, 14, 56, 0.55);
 }
 
 .glass-card {

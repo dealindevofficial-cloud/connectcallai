@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function FinalCta() {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 pb-24 pt-8 md:px-8">
@@ -11,9 +13,9 @@ export function FinalCta() {
             Move from missed opportunities to always-on conversations that
             book, confirm, and convert.
           </p>
-          <a href="#demo" className="btn-primary inline-flex">
+          <Link href="/#demo" className="btn-primary inline-flex">
             Book my setup
-          </a>
+          </Link>
         </div>
       </div>
     </section>

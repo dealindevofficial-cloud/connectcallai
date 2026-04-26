@@ -8,7 +8,7 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
+      className="scroll-mt-28 mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
     >
       <h2 className="text-3xl font-semibold text-white md:text-4xl">How it works</h2>
       <p className="mt-4 max-w-2xl text-blue-100/80">

@@ -6,7 +6,10 @@ import { cardHover, fadeUp, staggerContainer } from "@/lib/motion";
 
 export function UseCases() {
   return (
-    <section id="use-cases" className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20">
+    <section
+      id="use-cases"
+      className="scroll-mt-28 mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
+    >
       <h2 className="text-3xl font-semibold text-white md:text-4xl">Use cases</h2>
       <motion.div
         variants={staggerContainer}

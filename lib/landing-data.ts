@@ -1,8 +1,9 @@
 export const navLinks = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Use cases", href: "#use-cases" },
-  { label: "Features", href: "#features" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Industries", href: "/industries" },
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Use cases", href: "/#use-cases" },
+  { label: "Features", href: "/#features" },
+  { label: "Testimonials", href: "/#testimonials" },
 ] as const;
 
 export const trustLogos = [

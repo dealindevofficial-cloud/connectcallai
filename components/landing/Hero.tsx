@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   createFloatLoop,
@@ -86,12 +87,12 @@ export function Hero() {
           and syncs outcomes to your workflow without adding operational drag.
         </motion.p>
         <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
-          <a href="#demo" className="btn-primary">
+          <Link href="/#demo" className="btn-primary">
             Start your demo
-          </a>
-          <a href="#how-it-works" className="btn-secondary">
+          </Link>
+          <Link href="/#how-it-works" className="btn-secondary">
             See how it works
-          </a>
+          </Link>
         </motion.div>
       </motion.div>
 
@@ -106,7 +107,7 @@ export function Hero() {
           className="glass-card relative overflow-hidden rounded-3xl p-7"
         >
           <div className="absolute right-5 top-5 h-3 w-3 animate-pulse rounded-full bg-emerald-400" />
-          <p className="mb-2 text-sm text-blue-100/70">AI Call Demo Widget</p>
+          <p className="mb-2 text-sm text-blue-100/70">AI Call Demo</p>
           <p className="text-xl font-semibold text-white">Live Booking Assistant</p>
           <div className="mt-6 rounded-2xl border border-white/15 bg-[#0e155f]/70 p-5">
             <div className="mb-5 flex items-center justify-between">

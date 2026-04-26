@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
   return {
     title: `AI Calling for ${industry.name} | AI Phone Agent for ${industry.name} | CCAI`,
     description: industry.longDescription,
-    keywords: industry.seoKeywords,
+    keywords: [...industry.seoKeywords],
   };
 }
 

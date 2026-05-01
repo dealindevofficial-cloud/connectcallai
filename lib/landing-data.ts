@@ -4,6 +4,7 @@ export const navLinks = [
   { label: "Use cases", href: "/#use-cases" },
   { label: "Features", href: "/#features" },
   { label: "Testimonials", href: "/#testimonials" },
+  { label: "Price estimator", href: "/price-estimator" },
 ] as const;
 
 export const trustLogos = [
@@ -84,17 +85,43 @@ export const testimonials = [
       "We replaced overflow voicemail with CCAI and doubled booked consultations in under three weeks.",
     name: "Maya Chen",
     role: "Operations Director, BlueStone Realty",
+    image: "/customers/maya-chen.svg",
   },
   {
     quote:
       "Our team stopped juggling missed calls. The agent books, confirms, and escalates complex requests perfectly.",
     name: "Arjun Patel",
     role: "Owner, UrbanBite Group",
+    image: "/customers/arjun-patel.svg",
   },
   {
     quote:
       "Patients love the response speed and tone. It feels truly conversational, not robotic.",
     name: "Dr. Sofia Lane",
     role: "Chief Admin, NorthCare Clinics",
+    image: "/customers/sofia-lane.svg",
+  },
+] as const;
+
+export const faqs = [
+  {
+    question: "How quickly can we go live with an AI receptionist?",
+    answer:
+      "Our USP is simple: we provide pre-built agents that are ready to launch fast, and if you need something specific, we can create custom agents on request for your exact workflow.",
+  },
+  {
+    question: "Do you offer custom agents if pre-built ones do not fit?",
+    answer:
+      "Yes. If your use case is unique, our team can build a custom AI agent tailored to your industry, call flow, and escalation rules.",
+  },
+  {
+    question: "Do we need a technical team to set everything up?",
+    answer:
+      "No technical team is required on your side. We handle the full setup, integrations, call logic, and deployment so you can focus on operations.",
+  },
+  {
+    question: "What technical work do you handle for us?",
+    answer:
+      "We handle all technicalities end-to-end, including agent configuration, number setup, workflow integration, testing, and launch support.",
   },
 ] as const;

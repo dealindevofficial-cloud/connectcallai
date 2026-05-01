@@ -13,7 +13,7 @@ export function FinalCta() {
             Move from missed opportunities to always-on conversations that
             book, confirm, and convert.
           </p>
-          <Link href="/#demo" className="btn-primary inline-flex">
+          <Link href="/contact-us" className="btn-primary inline-flex">
             Book my setup
           </Link>
         </div>

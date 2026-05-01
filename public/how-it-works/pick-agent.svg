@@ -1,0 +1,14 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pick-agent-bg" x1="14" y1="12" x2="82" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B73FF" />
+      <stop offset="1" stop-color="#8D63FF" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#pick-agent-bg)" />
+  <rect x="22" y="24" width="52" height="40" rx="10" fill="#E8EEFF" fill-opacity="0.18" stroke="#E8EEFF" stroke-opacity="0.45" />
+  <circle cx="48" cy="40" r="8" fill="#F5F8FF" />
+  <path d="M34 56C36.2 49.4 41.6 46 48 46C54.4 46 59.8 49.4 62 56" stroke="#F5F8FF" stroke-width="4" stroke-linecap="round" />
+  <path d="M30 20L33.5 14L37 20" stroke="#F5F8FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M59 20L62.5 14L66 20" stroke="#F5F8FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

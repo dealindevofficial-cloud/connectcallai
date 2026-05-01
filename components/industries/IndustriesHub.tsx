@@ -26,9 +26,6 @@ export function IndustriesHub() {
           animate="visible"
           className="mx-auto max-w-4xl space-y-5"
         >
-          <motion.p variants={fadeUp} className="chip">
-            Industry-ready AI voice agents
-          </motion.p>
           <motion.h1 variants={fadeUp} className="text-4xl font-semibold text-white md:text-6xl">
             AI Calling Agents for Every Industry
           </motion.h1>
@@ -79,7 +76,7 @@ export function IndustriesHub() {
               Launch a voice agent tuned for your workflows, customer intents, and conversion
               goals.
             </p>
-            <Link href="/#demo" className="btn-primary inline-flex">
+            <Link href="/contact-us" className="btn-primary inline-flex">
               Get Started
             </Link>
           </div>

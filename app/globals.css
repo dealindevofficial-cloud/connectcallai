@@ -8,20 +8,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 7rem;
-  scrollbar-color: #9daeff #101a64;
+  scrollbar-color: #9daeff transparent;
   scrollbar-width: thin;
 }
 
@@ -36,13 +36,13 @@ body::-webkit-scrollbar,
 html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, rgba(10, 16, 66, 0.72), rgba(16, 27, 104, 0.72));
+  background: transparent;
 }
 
 html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb {
-  border: 1px solid rgba(155, 170, 255, 0.3);
+  border: 1px solid transparent;
   border-radius: 9999px;
   background: linear-gradient(180deg, #22d3ee 0%, #6366f1 50%, #a855f7 100%) !important;
   background-clip: padding-box;
@@ -60,7 +60,7 @@ body::-webkit-scrollbar-thumb:hover,
 html::-webkit-scrollbar-corner,
 body::-webkit-scrollbar-corner,
 *::-webkit-scrollbar-corner {
-  background: rgba(9, 14, 56, 0.55);
+  background: transparent;
 }
 
 .glass-card {
@@ -119,6 +119,49 @@ body::-webkit-scrollbar-corner,
   border-radius: 9999px;
   filter: blur(40px);
   animation: glow-drift 12s ease-in-out infinite;
+}
+
+.landing-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(3, 6, 32, 0.45) 100%);
+}
+
+.landing-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(151, 170, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(151, 170, 255, 0.08) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 28%, rgba(0, 0, 0, 0.75), transparent 78%);
+  opacity: 0.25;
+}
+
+.landing-noise {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.07) 0.7px, transparent 1px),
+    radial-gradient(circle at 70% 65%, rgba(157, 209, 255, 0.06) 0.7px, transparent 1px);
+  background-size: 3px 3px, 4px 4px;
+  opacity: 0.16;
+}
+
+.landing-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.landing-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(164, 185, 255, 0.15), transparent 30%),
+    linear-gradient(0deg, rgba(84, 107, 255, 0.15), transparent 24%);
+  opacity: 0.55;
 }
 
 .glow-surface {
@@ -181,6 +224,30 @@ body::-webkit-scrollbar-corner,
   animation-delay: 0.12s;
 }
 
+.footer-shell {
+  border-top: 1px solid rgba(178, 195, 255, 0.24);
+  background:
+    radial-gradient(circle at 50% -50%, rgba(147, 168, 255, 0.24), transparent 58%),
+    linear-gradient(180deg, rgba(7, 13, 60, 0.82), rgba(4, 8, 40, 0.92));
+}
+
+.footer-title {
+  color: transparent;
+  letter-spacing: 0.22em;
+  -webkit-text-stroke: 1px rgba(232, 238, 255, 0.7);
+  text-shadow:
+    0 0 14px rgba(136, 156, 255, 0.3),
+    0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+.footer-detail {
+  color: rgba(214, 225, 255, 0.88);
+}
+
+.footer-subline {
+  color: rgba(190, 204, 255, 0.7);
+}
+
 @keyframes glow-drift {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -211,7 +278,35 @@ body::-webkit-scrollbar-corner,
   }
 }
 
+@keyframes money-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.92) rotate(0deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) scale(1.08) rotate(8deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.92) rotate(0deg);
+    opacity: 0.45;
+  }
+}
+
 @media (max-width: 768px) {
+  .landing-grid {
+    background-size: 42px 42px;
+    opacity: 0.2;
+  }
+
+  .landing-noise {
+    opacity: 0.1;
+  }
+
+  .landing-section::before {
+    opacity: 0.4;
+  }
+
   .glow-orb {
     opacity: 0.48;
     filter: blur(30px);

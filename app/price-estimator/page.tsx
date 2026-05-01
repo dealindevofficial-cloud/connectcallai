@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
-import { IndustriesHub } from "@/components/industries/IndustriesHub";
+import { FinalCta } from "@/components/landing/FinalCta";
+import { PriceEstimator } from "@/components/pricing/PriceEstimator";
 
 export const metadata: Metadata = {
-  title: "Industries | CCAI",
+  title: "Price Estimator | CCAI",
   description:
-    "Explore AI calling agents by industry. Discover tailored solutions for real estate, restaurants, hospitals, and pet clinics.",
+    "Estimate monthly AI call handling pricing using call volume, duration, and staffing assumptions.",
 };
 
-export default function IndustriesPage() {
+export default function PriceEstimatorPage() {
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#070b3a]">
       <BackgroundFX />
       <CursorGlow />
-      <IndustriesHub />
+      <PriceEstimator />
+      <FinalCta />
     </div>
   );
 }

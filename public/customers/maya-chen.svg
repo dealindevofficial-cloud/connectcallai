@@ -1,0 +1,11 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="maya-bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="64" fill="url(#maya-bg)"/>
+  <circle cx="64" cy="50" r="22" fill="white" fill-opacity="0.92"/>
+  <path d="M32 104C35 85 48 74 64 74C80 74 93 85 96 104" fill="white" fill-opacity="0.92"/>
+</svg>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
-import { Navbar } from "@/components/landing/Navbar";
 import { IndustryLanding } from "@/components/industries/IndustryLanding";
 import { getIndustryBySlug, industries } from "@/lib/industries-data";
 
@@ -43,7 +42,6 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#070b3a]">
       <BackgroundFX />
       <CursorGlow />
-      <Navbar />
       <IndustryLanding industry={industry} />
     </div>
   );

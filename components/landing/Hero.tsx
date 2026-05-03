@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { toast } from "sonner";
 import {
   createFloatLoop,
   createPulseLoop,
@@ -77,11 +78,13 @@ export function Hero() {
     if (!fullName) {
       setRequestStatus("error");
       setStatusMessage("Please enter your full name to continue.");
+      toast.error("Please enter your full name to continue.");
       return;
     }
 
     setRequestStatus("submitting");
     setStatusMessage("Connecting your demo call now...");
+    const loadingToast = toast.loading("Connecting your demo call…");
 
     try {
       const response = await fetch("/api/demo-call", {
@@ -98,10 +101,12 @@ export function Hero() {
       });
 
       const result = (await response.json().catch(() => ({}))) as DemoCallResponse;
+      toast.dismiss(loadingToast);
 
       if (result.status === "called_now") {
         setRequestStatus("called_now");
         setStatusMessage(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
+        toast.success(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         form.reset();
         setIndustry("");
         setIsIndustryOpen(false);
@@ -111,6 +116,9 @@ export function Hero() {
       if (result.status === "queued_fallback") {
         setRequestStatus("queued_fallback");
         setStatusMessage(
+          `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
+        );
+        toast.success(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
         form.reset();
@@ -124,17 +132,22 @@ export function Hero() {
         const firstFieldError = result.errors
           ? Object.values(result.errors).find((value) => Boolean(value))
           : "";
-        setStatusMessage(firstFieldError || "Please review your details and try again.");
+        const msg = firstFieldError || "Please review your details and try again.";
+        setStatusMessage(msg);
+        toast.error(msg);
         return;
       }
 
       setRequestStatus("error");
-      setStatusMessage(
-        result.message || "We could not process your demo call request right now. Please try again.",
-      );
+      const errMsg =
+        result.message || "We could not process your demo call request right now. Please try again.";
+      setStatusMessage(errMsg);
+      toast.error(errMsg);
     } catch {
+      toast.dismiss(loadingToast);
       setRequestStatus("error");
       setStatusMessage("Network error. Please check your connection and try again.");
+      toast.error("Network error. Please check your connection and try again.");
     }
   };
 
@@ -162,11 +175,10 @@ export function Hero() {
           variants={fadeUp}
           className="text-4xl font-extrabold leading-tight tracking-tight text-white drop-shadow-[0_8px_26px_rgba(90,118,255,0.45)] md:text-6xl"
         >
-          Automate Business Calls with Specialized AI Voice Agents.
+          Never Miss a Call Again with AI Agents That Answer, Book & Convert 24/7.
         </motion.h1>
         <motion.p variants={fadeUp} className="max-w-xl text-lg text-blue-100/80">
-          CCAI handles inbound and outbound calls, qualifies leads, books appointments,
-          and syncs outcomes to your workflow without adding operational drag.
+        No setup. No training. Just plug & play AI agents for your business..
         </motion.p>
         <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
           <Link href="/contact-us" className="btn-primary">
@@ -189,11 +201,11 @@ export function Hero() {
           className="glass-card relative overflow-hidden rounded-3xl p-7"
         >
           <div className="absolute right-5 top-5 h-3 w-3 animate-pulse rounded-full bg-emerald-400" />
-          <p className="mb-2 text-sm text-blue-100/70">AI Call Demo</p>
+          <p className="mb-2 text-sm text-blue-100/70">Free AI Call Demo</p>
           <p className="text-xl font-semibold text-white">Live Assistant</p>
           <div className="mt-6 rounded-2xl border border-white/15 bg-[#0e155f]/70 p-5">
             <div className="mb-5 flex items-center justify-between">
-              <span className="text-sm text-blue-100/80">Free Live test call</span>
+              <span className="text-sm text-blue-100/80">See it in action, takes 30 seconds</span>
               <span className="text-xs text-emerald-300">Connected</span>
             </div>
             <div className="mb-6 flex h-16 items-end gap-1.5">

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { fadeUp, motionViewport, staggerContainer } from "@/lib/motion";
 import type { Industry } from "@/lib/industries-data";
 
@@ -37,11 +38,13 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
     if (!fullName) {
       setRequestStatus("error");
       setStatusMessage("Please enter your full name to continue.");
+      toast.error("Please enter your full name to continue.");
       return;
     }
 
     setRequestStatus("submitting");
     setStatusMessage("Connecting your demo call now...");
+    const loadingToast = toast.loading("Connecting your demo call…");
 
     try {
       const response = await fetch("/api/demo-call", {
@@ -58,10 +61,12 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
       });
 
       const result = (await response.json().catch(() => ({}))) as DemoCallResponse;
+      toast.dismiss(loadingToast);
 
       if (result.status === "called_now") {
         setRequestStatus("called_now");
         setStatusMessage(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
+        toast.success(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         form.reset();
         return;
       }
@@ -69,6 +74,9 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
       if (result.status === "queued_fallback") {
         setRequestStatus("queued_fallback");
         setStatusMessage(
+          `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
+        );
+        toast.success(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
         form.reset();
@@ -80,17 +88,22 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
         const firstFieldError = result.errors
           ? Object.values(result.errors).find((value) => Boolean(value))
           : "";
-        setStatusMessage(firstFieldError || "Please review your details and try again.");
+        const msg = firstFieldError || "Please review your details and try again.";
+        setStatusMessage(msg);
+        toast.error(msg);
         return;
       }
 
       setRequestStatus("error");
-      setStatusMessage(
-        result.message || "We could not process your demo call request right now. Please try again.",
-      );
+      const errMsg =
+        result.message || "We could not process your demo call request right now. Please try again.";
+      setStatusMessage(errMsg);
+      toast.error(errMsg);
     } catch {
+      toast.dismiss(loadingToast);
       setRequestStatus("error");
       setStatusMessage("Network error. Please check your connection and try again.");
+      toast.error("Network error. Please check your connection and try again.");
     }
   };
 

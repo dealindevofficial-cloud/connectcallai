@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -22,6 +23,8 @@ export function ContactForm() {
       message: String(formData.get("message") ?? "").trim(),
     };
 
+    const loadingToast = toast.loading("Sending your message…");
+
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -36,13 +39,17 @@ export function ContactForm() {
         throw new Error(data?.error ?? "Unable to submit your message right now.");
       }
 
+      toast.dismiss(loadingToast);
       form.reset();
       setSubmitState("success");
+      toast.success("Message sent. Our team will get back to you soon.");
     } catch (error) {
+      toast.dismiss(loadingToast);
+      const message =
+        error instanceof Error ? error.message : "Something went wrong while sending your message.";
       setSubmitState("error");
-      setErrorMessage(
-        error instanceof Error ? error.message : "Something went wrong while sending your message.",
-      );
+      setErrorMessage(message);
+      toast.error(message);
     }
   };
 

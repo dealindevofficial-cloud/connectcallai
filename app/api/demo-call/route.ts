@@ -1,4 +1,5 @@
-import { mkdir, appendFile } from "node:fs/promises";
+import { appendFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
@@ -207,9 +208,8 @@ function pruneRateLimitMap(windowStart: number) {
 }
 
 async function enqueueFallbackLead(record: QueuedLeadRecord) {
-  const queueDirectory = path.join(process.cwd(), ".data");
-  const queueFile = path.join(queueDirectory, "demo-call-queue.jsonl");
-  await mkdir(queueDirectory, { recursive: true });
+  // Serverless (e.g. Vercel) is read-only except the OS temp dir; cwd/.data works locally only.
+  const queueFile = path.join(tmpdir(), "connectcallai-demo-call-queue.jsonl");
   await appendFile(queueFile, `${JSON.stringify(record)}\n`, "utf8");
 }
 
@@ -467,6 +467,18 @@ export async function POST(request: Request) {
     industry,
   });
 
+  if (!callResult.ok) {
+    console.warn("[demo-call]", {
+      requestId,
+      ip,
+      industry,
+      outcome: "vapi_call_failed",
+      providerStatusCode: callResult.statusCode,
+      message: callResult.message,
+      raw: "raw" in callResult ? callResult.raw : undefined,
+    });
+  }
+
   if (callResult.ok) {
     console.info("[demo-call]", {
       requestId,
@@ -516,21 +528,30 @@ export async function POST(request: Request) {
       },
       { status: 202 },
     );
-  } catch {
+  } catch (persistError) {
+    // Serverless disks are often ephemeral or read-only outside /tmp; if append fails, still
+    // return queued_fallback — email already ran above, and logs capture the lead for recovery.
+    const persistMsg =
+      persistError instanceof Error ? persistError.message : String(persistError);
     console.error("[demo-call]", {
       requestId,
       ip,
       industry,
-      outcome: "provider_error",
+      outcome: "queued_fallback",
       reason: "queue_persist_failed",
+      persistError: persistMsg,
+      providerStatusCode: callResult.statusCode,
+      vapiMessage: callResult.message,
+      recoverPayload: queuedLead.payload,
     });
     return NextResponse.json(
       {
-        status: "provider_error",
+        status: "queued_fallback",
         requestId,
-        message: "We could not process your call request right now.",
+        submittedAt: startedAt,
+        queuePersisted: false,
       },
-      { status: 502 },
+      { status: 202 },
     );
   }
 }

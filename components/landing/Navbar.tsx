@@ -165,6 +165,13 @@ export function Navbar() {
             Industries
           </Link>
           <Link
+            href="/blog"
+            onClick={(event) => onNavLinkClick(event, "/blog")}
+            className="transition hover:text-white"
+          >
+            Blog
+          </Link>
+          <Link
             href="/contact-us"
             onClick={(event) => onNavLinkClick(event, "/contact-us")}
             className="transition hover:text-white"
@@ -244,6 +251,13 @@ export function Navbar() {
                 className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
               >
                 Industries
+              </Link>
+              <Link
+                href="/blog"
+                onClick={(event) => onNavLinkClick(event, "/blog")}
+                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
+              >
+                Blog
               </Link>
               <Link
                 href="/contact-us"

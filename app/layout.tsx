@@ -3,6 +3,7 @@ import { Geist_Mono, Poppins } from "next/font/google";
 import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/landing/Navbar";
 import { AppToaster } from "@/components/ui/app-toaster";
+import { getSiteOrigin } from "@/lib/blog/site-url";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -16,12 +17,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteOrigin = getSiteOrigin();
+
 export const metadata: Metadata = {
+  metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
   title: "CCAI",
   description: "AI voice agent landing page for CCAI.",
   icons: {
     icon: "/tab-logo.png",
     apple: "/tab-logo.png",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "CCAI",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 

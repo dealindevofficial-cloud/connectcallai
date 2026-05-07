@@ -293,6 +293,176 @@ body::-webkit-scrollbar-corner,
   }
 }
 
+/* Sanitized blog HTML (markdown → rehype) */
+.blog-prose {
+  max-width: 65ch;
+  color: #1f2937;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+/* Force consistent readability even if stored HTML carries old color styles. */
+.blog-prose :where(p, li, span, strong, em, b, i, small) {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+.blog-prose :where(h1, h2, h3, h4) {
+  color: #020617;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 1.75em;
+  margin-bottom: 0.65em;
+  opacity: 1 !important;
+}
+
+.blog-prose h1 {
+  font-size: 2rem;
+  margin-top: 0;
+}
+
+.blog-prose h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #bfdbfe;
+  padding-bottom: 0.35em;
+}
+
+.blog-prose h3 {
+  font-size: 1.25rem;
+}
+
+.blog-prose h4 {
+  font-size: 1.1rem;
+}
+
+.blog-prose :where(p) {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.blog-prose :where(a) {
+  color: #1e3a8a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-prose :where(a:hover) {
+  color: #0f172a;
+}
+
+.blog-prose :where(ul, ol) {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.35em;
+}
+
+.blog-prose :where(li) {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+.blog-prose :where(blockquote) {
+  margin: 1.25em 0;
+  padding: 0.75em 1em;
+  border-left: 4px solid #93c5fd;
+  background: #dbeafe;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: #1e293b;
+}
+
+.blog-cta {
+  margin: 2rem 0;
+  padding: 1.35rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.08);
+}
+
+.blog-cta-title {
+  margin: 0 0 0.85rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #020617;
+  line-height: 1.35;
+}
+
+.blog-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0.65rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.blog-cta-button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.blog-prose :where(code) {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.35rem;
+  border: 1px solid #bfdbfe;
+  background: #e2e8f0;
+}
+
+.blog-prose :where(pre) {
+  margin: 1.25em 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border-radius: 0.65rem;
+  border: 1px solid #bfdbfe;
+  background: #0f172a;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.blog-prose pre code {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: inherit;
+}
+
+.blog-prose :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25em 0;
+  font-size: 0.95rem;
+}
+
+.blog-prose :where(th, td) {
+  border: 1px solid #bfdbfe;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.blog-prose th {
+  background: #dbeafe;
+}
+
+.blog-prose :where(hr) {
+  margin: 2em 0;
+  border: none;
+  border-top: 1px solid #bfdbfe;
+}
+
+.blog-prose :where(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.65rem;
+  margin: 1.25em 0;
+}
+
 @media (max-width: 768px) {
   .landing-grid {
     background-size: 42px 42px;

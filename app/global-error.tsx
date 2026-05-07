@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 type GlobalErrorProps = {
@@ -42,12 +43,12 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             >
               Try again
             </button>
-            <a
+            <Link
               href="/"
               className="inline-flex items-center justify-center rounded-full border border-[rgba(156,173,255,0.48)] bg-[rgba(10,18,82,0.42)] px-5 py-2.5 text-sm font-medium text-[rgb(227,234,255)]"
             >
               Back to home
-            </a>
+            </Link>
           </div>
         </div>
       </body>

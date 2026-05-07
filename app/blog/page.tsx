@@ -90,7 +90,7 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
             <>
               <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => (
-                  <li key={post.slug}>
+                  <li key={String(post.slug)}>
                     <BlogCard post={post as BlogPublicDoc} />
                   </li>
                 ))}

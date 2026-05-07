@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 
 type Status = "draft" | "published";
 
@@ -40,6 +41,12 @@ export function NewBlogForm() {
     setError(null);
     setCreated(null);
     setSubmitting(true);
+
+    if (!content.trim()) {
+      setError("Content is required.");
+      setSubmitting(false);
+      return;
+    }
 
     const payload: Record<string, unknown> = {
       title: title.trim(),
@@ -165,12 +172,10 @@ export function NewBlogForm() {
 
       <label className="block">
         <span className="mb-1.5 block text-sm font-medium text-blue-100">Content (markdown) *</span>
-        <textarea
+        <MarkdownEditor
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="min-h-72 w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 font-mono text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
+          onChange={setContent}
           placeholder={"# Heading\nWrite your post here..."}
-          required
         />
       </label>
 

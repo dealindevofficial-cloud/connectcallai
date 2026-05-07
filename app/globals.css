@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@uiw/react-md-editor/markdown-editor.css";
+@import "@uiw/react-markdown-preview/markdown.css";
 
 :root {
   --background: #070b3a;
@@ -16,6 +18,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+}
+
+.ccai-md-editor .w-md-editor {
+  background: transparent !important;
+}
+
+.ccai-md-editor .w-md-editor-toolbar {
+  background: rgba(2, 6, 23, 0.72) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+.ccai-md-editor .w-md-editor-text-pre > code,
+.ccai-md-editor .w-md-editor-text-input {
+  color: #e2e8f0 !important;
+  font-size: 0.95rem !important;
 }
 
 html {
@@ -295,7 +312,7 @@ body::-webkit-scrollbar-corner,
 
 /* Sanitized blog HTML (markdown → rehype) */
 .blog-prose {
-  max-width: 65ch;
+  max-width: 100%;
   color: #1f2937;
   font-size: 1.05rem;
   line-height: 1.75;

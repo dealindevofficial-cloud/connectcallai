@@ -9,18 +9,18 @@ import { normalizeSlug, type ListPublishedResult } from "@/lib/blog/repository";
 import { isMongoConfigured } from "@/lib/db/connect";
 
 export const metadata: Metadata = {
-  title: "Blog | CCAI",
+  title: "Blogs | CCAI",
   description:
     "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
   openGraph: {
-    title: "Blog | CCAI",
+    title: "Blogs | CCAI",
     description:
       "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog | CCAI",
+    title: "Blogs | CCAI",
     description:
       "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
   },
@@ -68,7 +68,7 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
       <main className="px-5 pb-20 pt-14 md:px-8 md:pt-20">
         <div className="mx-auto w-full max-w-6xl">
           <header className="mb-10 text-center md:mb-14">
-            <h1 className="text-4xl font-bold text-slate-950 md:text-5xl">Blog</h1>
+            <h1 className="text-4xl font-bold text-slate-950 md:text-5xl">Blogs</h1>
             <p className="mx-auto mt-4 max-w-2xl text-slate-700">
               Product updates, voice AI patterns, and practical tips for better customer calls.
             </p>

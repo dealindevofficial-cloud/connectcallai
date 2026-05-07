@@ -26,7 +26,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
             <p className="text-xs uppercase tracking-[0.2em] text-cyan-200/80">Admin</p>
             <h1 className="mt-2 text-2xl font-semibold text-white">Sign in</h1>
             <p className="mt-2 text-sm text-blue-100/85">
-              Enter your admin password to manage blog posts.
+              Enter your admin password to manage blogs.
             </p>
 
             <AdminLoginForm from={from} />

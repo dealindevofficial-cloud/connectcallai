@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 
 type Status = "draft" | "published";
 
@@ -51,6 +52,12 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
     setError(null);
     setSavedSlug(null);
     setSaving(true);
+
+    if (!content.trim()) {
+      setError("Content is required.");
+      setSaving(false);
+      return;
+    }
 
     const payload: Record<string, unknown> = {
       title: title.trim(),
@@ -156,11 +163,9 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
 
       <label className="block">
         <span className="mb-1.5 block text-sm font-medium text-blue-100">Content (markdown) *</span>
-        <textarea
+        <MarkdownEditor
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="min-h-72 w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 font-mono text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
-          required
+          onChange={setContent}
         />
       </label>
 

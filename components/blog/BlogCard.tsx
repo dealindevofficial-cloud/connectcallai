@@ -16,7 +16,7 @@ export function BlogCard({ post }: BlogCardProps) {
   const image = post.featuredImage?.trim();
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-[#C7D2FE] bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#1E3A8A]/35 hover:shadow-md">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#C7D2FE] bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#1E3A8A]/35 hover:shadow-md">
       <Link href={href} className="group block shrink-0">
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#E2E8F0]">
           {image ? (

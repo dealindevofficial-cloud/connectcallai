@@ -12,7 +12,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
 
   return (
     <section className="mt-14 border-t border-[#BFDBFE] pt-10" aria-label="Related posts">
-      <h2 className="mb-6 text-xl font-semibold text-slate-950">Related posts</h2>
+      <h2 className="mb-6 text-xl font-semibold text-slate-950">Related blogs</h2>
       <div className="grid gap-6 sm:grid-cols-2">
         {posts.map((p) => (
           <BlogCard key={p.slug} post={p} />

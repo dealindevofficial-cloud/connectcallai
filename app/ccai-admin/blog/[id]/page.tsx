@@ -27,7 +27,7 @@ export default async function EditBlogPage({ params }: EditPageProps) {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-cyan-200/80">Admin</p>
-                <h1 className="mt-2 text-2xl font-semibold text-white">Edit blog post</h1>
+                <h1 className="mt-2 text-2xl font-semibold text-white">Edit blogs post</h1>
               </div>
               <div className="flex items-center gap-2">
                 <Link href="/ccai-admin/blog" className="btn-secondary">

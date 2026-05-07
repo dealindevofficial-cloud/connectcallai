@@ -40,7 +40,7 @@ export function Pagination({
   return (
     <nav
       className="mt-12 flex flex-wrap items-center justify-center gap-2"
-      aria-label="Blog pagination"
+      aria-label="Blogs pagination"
     >
       {page > 1 ? (
         <Link

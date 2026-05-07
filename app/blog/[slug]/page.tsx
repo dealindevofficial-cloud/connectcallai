@@ -22,14 +22,14 @@ type BlogPostPageProps = {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   if (!isMongoConfigured()) {
-    return { title: "Blog setup | CCAI" };
+    return { title: "Blogs setup | CCAI" };
   }
   let raw: Awaited<ReturnType<typeof getCachedPostBySlug>>;
   try {
     raw = await getCachedPostBySlug(slug);
   } catch {
     return {
-      title: "Blog | CCAI",
+      title: "Blogs | CCAI",
       description: "Unable to load this article right now.",
     };
   }
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const siteOrigin = getSiteOrigin();
 
   const title = metaTitle || post.title;
-  const description = metaDesc || excerpt || "Article on the CCAI blog.";
+  const description = metaDesc || excerpt || "Article on the CCAI blogs.";
   const canonical =
     canonicalUrl ||
     (siteOrigin ? `${siteOrigin}/blog/${post.slug}` : undefined);
@@ -101,17 +101,33 @@ function formatDate(d: Date | undefined | null) {
   return new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date(d));
 }
 
+function BlogBreadcrumb({ currentLabel }: { currentLabel?: string }) {
+  return (
+    <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-[#1E3A8A]" aria-label="Breadcrumb">
+      <Link href="/" className="hover:text-slate-950">
+        Home
+      </Link>
+      <span aria-hidden>/</span>
+      <Link href="/blog" className="hover:text-slate-950">
+        Blogs
+      </Link>
+      {currentLabel ? (
+        <>
+          <span aria-hidden>/</span>
+          <span className="text-slate-700">{currentLabel}</span>
+        </>
+      ) : null}
+    </nav>
+  );
+}
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   if (!isMongoConfigured()) {
     return (
       <div className="min-h-screen bg-[#EEF3FF]">
         <div className="mx-auto max-w-3xl px-5 pb-20 pt-14 md:px-8 md:pt-20">
-          <nav className="mb-8 text-sm text-[#1E3A8A]">
-            <Link href="/blog" className="hover:text-slate-950">
-              ← Blog
-            </Link>
-          </nav>
+          <BlogBreadcrumb currentLabel="Post" />
           <MongoNotConfiguredNotice />
         </div>
       </div>
@@ -126,11 +142,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return (
       <div className="min-h-screen bg-[#EEF3FF]">
         <div className="mx-auto max-w-3xl px-5 pb-20 pt-14 md:px-8 md:pt-20">
-          <nav className="mb-8 text-sm text-[#1E3A8A]">
-            <Link href="/blog" className="hover:text-slate-950">
-              ← Blog
-            </Link>
-          </nav>
+          <BlogBreadcrumb currentLabel="Post" />
           <BlogMongoConnectionFailedNotice technical={msg} />
         </div>
       </div>
@@ -170,12 +182,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <JsonLdArticle post={post} pageUrl={pageUrl} siteOrigin={siteOrigin} />
       ) : null}
       <article className="px-5 pb-20 pt-14 md:px-8 md:pt-20">
-        <div className="mx-auto w-full max-w-3xl">
-          <nav className="mb-8 text-sm text-[#1E3A8A]">
-            <Link href="/blog" className="hover:text-slate-950">
-              ← Blog
-            </Link>
-          </nav>
+        <div className="mx-auto w-full max-w-5xl">
+          <BlogBreadcrumb currentLabel={post.title} />
 
           <header className="mb-10">
             <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-slate-700">

@@ -14,6 +14,7 @@ export default async function EditBlogPage({ params }: EditPageProps) {
   if (!post) {
     notFound();
   }
+  const category = post.category as { slug?: string; name?: string } | undefined;
 
   return (
     <main className="relative flex-1 overflow-hidden">
@@ -48,8 +49,8 @@ export default async function EditBlogPage({ params }: EditPageProps) {
                 excerpt: String(post.excerpt ?? ""),
                 featuredImage: String(post.featuredImage ?? ""),
                 tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
-                categorySlug: String(post.category?.slug ?? ""),
-                categoryName: String(post.category?.name ?? ""),
+                categorySlug: String(category?.slug ?? ""),
+                categoryName: String(category?.name ?? ""),
               }}
             />
           </div>

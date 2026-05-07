@@ -47,11 +47,15 @@ export default async function AdminBlogListPage() {
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="truncate text-base font-semibold text-white">{post.title}</p>
-                        <p className="mt-1 text-xs text-blue-100/70">/{post.slug}</p>
+                        <p className="truncate text-base font-semibold text-white">
+                          {String(post.title)}
+                        </p>
+                        <p className="mt-1 text-xs text-blue-100/70">/{String(post.slug)}</p>
                         <p className="mt-1 text-xs text-blue-200/60">
                           {post.status === "published" ? "Published" : "Draft"} · Updated{" "}
-                          {formatDate(post.updatedAt)}
+                          {formatDate(
+                            post.updatedAt as Date | string | null | undefined
+                          )}
                         </p>
                       </div>
 

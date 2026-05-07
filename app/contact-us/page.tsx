@@ -2,14 +2,27 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
+import { getCalendlyEmbedUrl } from "@/lib/config/calendly";
 
 export const metadata: Metadata = {
   title: "Contact Us | CCAI",
   description: "Book a demo and connect with the CCAI team.",
 };
 
-const calendlyUrl =
-  process.env.NEXT_PUBLIC_CALENDLY_URL ?? "https://calendly.com/connectcallaiofficial/30min";
+function getEmbedDomain(): string | undefined {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!siteUrl) return undefined;
+  try {
+    return new URL(siteUrl).hostname;
+  } catch {
+    return undefined;
+  }
+}
+
+const calendlyUrl = getCalendlyEmbedUrl(
+  process.env.NEXT_PUBLIC_CALENDLY_URL,
+  getEmbedDomain()
+);
 
 export default function ContactUsPage() {
   return (

@@ -38,6 +38,10 @@ export function NewBlogForm() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLElement | null;
+    if (submitter?.closest(".w-md-editor")) {
+      return;
+    }
     setError(null);
     setCreated(null);
     setSubmitting(true);
@@ -170,14 +174,14 @@ export function NewBlogForm() {
         />
       </label>
 
-      <label className="block">
+      <div className="block">
         <span className="mb-1.5 block text-sm font-medium text-blue-100">Content (markdown) *</span>
         <MarkdownEditor
           value={content}
           onChange={setContent}
           placeholder={"# Heading\nWrite your post here..."}
         />
-      </label>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block">

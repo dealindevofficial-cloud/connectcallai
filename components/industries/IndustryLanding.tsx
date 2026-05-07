@@ -241,7 +241,10 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
             handle real customer conversations.
           </p>
 
-          <form onSubmit={onRequestDemo} className="mt-6 grid gap-4 md:grid-cols-[1fr_1fr_1fr_auto]">
+          <form
+            onSubmit={onRequestDemo}
+            className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_auto]"
+          >
             <label className="sr-only" htmlFor="demo-name">
               Name
             </label>
@@ -277,7 +280,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
             />
             <button
               type="submit"
-              className="btn-primary h-12 w-full justify-center md:w-auto"
+              className="btn-primary h-12 w-full justify-center sm:w-auto md:col-span-2 md:justify-self-start xl:col-span-1"
               disabled={requestStatus === "submitting"}
             >
               {requestStatus === "submitting"

@@ -10,6 +10,8 @@ declare namespace NodeJS {
     ADMIN_PASSWORD_HASH?: string;
     /** Site origin for canonical URLs and OG (no trailing slash). */
     NEXT_PUBLIC_SITE_URL?: string;
+    /** Public Calendly booking page URL used for embed and booking links. */
+    NEXT_PUBLIC_CALENDLY_URL?: string;
     /**
      * Comma-separated hostnames allowed for `next/image` (markdown/CDN). Example: `res.cloudinary.com,images.example.com`
      */

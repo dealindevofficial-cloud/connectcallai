@@ -1,19 +1,141 @@
-import { redirect } from "next/navigation";
-
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { BlogCard } from "@/components/blog/BlogCard";
+import { Pagination } from "@/components/blog/Pagination";
+import { getCachedListPublished } from "@/lib/blog/public-cache";
+import type { BlogPublicDoc } from "@/lib/blog/public-types";
 import { normalizeSlug } from "@/lib/blog/repository";
+import { getSiteOrigin } from "@/lib/blog/site-url";
+import { isMongoConfigured } from "@/lib/db/connect";
 
-type IndustryRedirectProps = {
+const PAGE_SIZE = 10;
+
+type IndustryBlogPageProps = {
   params: Promise<{ industry: string }>;
+  searchParams: Promise<{ page?: string }>;
 };
 
-/** Shareable alias for ` /blog?industry=…` (programmatic SEO). */
-export default async function IndustryBlogRedirect({
+function titleFromSlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export async function generateMetadata({
   params,
-}: IndustryRedirectProps) {
+  searchParams,
+}: IndustryBlogPageProps): Promise<Metadata> {
+  const { industry } = await params;
+  const sp = await searchParams;
+  const slug = normalizeSlug(decodeURIComponent(industry));
+  if (!slug) {
+    return {
+      title: "Industry Blogs | CCAI",
+      robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+    };
+  }
+
+  const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
+  const label = titleFromSlug(slug);
+  const base = getSiteOrigin();
+  const query = pageNum > 1 ? `?page=${pageNum}` : "";
+  const canonicalPath = `/blog/industry/${encodeURIComponent(slug)}${query}`;
+
+  return {
+    title: `${label} Blogs | CCAI`,
+    description: `Industry-specific AI voice and automation insights for ${label}.`,
+    alternates: base ? { canonical: `${base}${canonicalPath}` } : undefined,
+    openGraph: {
+      title: `${label} Blogs | CCAI`,
+      description: `Industry-specific AI voice and automation insights for ${label}.`,
+      type: "website",
+      url: base ? `${base}${canonicalPath}` : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${label} Blogs | CCAI`,
+      description: `Industry-specific AI voice and automation insights for ${label}.`,
+    },
+  };
+}
+
+export default async function IndustryBlogPage({
+  params,
+  searchParams,
+}: IndustryBlogPageProps) {
+  if (!isMongoConfigured()) {
+    throw new Error("Industry blogs unavailable: MongoDB is not configured.");
+  }
+
   const { industry } = await params;
   const slug = normalizeSlug(decodeURIComponent(industry));
   if (!slug) {
-    redirect("/blog");
+    notFound();
   }
-  redirect(`/blog?industry=${encodeURIComponent(slug)}`);
+
+  const sp = await searchParams;
+  const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
+  const label = titleFromSlug(slug);
+
+  let result: Awaited<ReturnType<typeof getCachedListPublished>>;
+  try {
+    result = await getCachedListPublished({
+      page: pageNum,
+      pageSize: PAGE_SIZE,
+      industrySlug: slug,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown database error";
+    throw new Error(`Industry blogs unavailable: ${message}`);
+  }
+
+  const { posts, page, totalPages, total } = result;
+  if (total > 0 && page > totalPages) {
+    notFound();
+  }
+
+  return (
+    <div className="min-h-screen bg-[#EEF3FF]">
+      <main className="px-5 pb-20 pt-14 md:px-8 md:pt-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <header className="mb-10 text-center md:mb-14">
+            <h1 className="text-4xl font-bold text-slate-950 md:text-5xl">
+              {label} Blogs
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-slate-700">
+              Industry-specific voice AI patterns and practical playbooks for {label}.
+            </p>
+          </header>
+
+          {posts.length === 0 ? (
+            <p className="text-center text-slate-700">
+              No posts found for this industry yet.
+            </p>
+          ) : (
+            <>
+              <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.map((post) => (
+                  <li key={String(post.slug)}>
+                    <BlogCard post={post as BlogPublicDoc} />
+                  </li>
+                ))}
+              </ul>
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                basePath={`/blog/industry/${encodeURIComponent(slug)}`}
+              />
+              {total > 0 ? (
+                <p className="mt-6 text-center text-sm text-slate-600">
+                  {total} article{total === 1 ? "" : "s"}
+                </p>
+              ) : null}
+            </>
+          )}
+        </div>
+      </main>
+    </div>
+  );
 }

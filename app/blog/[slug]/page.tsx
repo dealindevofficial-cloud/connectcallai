@@ -3,8 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogPostBody } from "@/components/blog/BlogPostBody";
 import { JsonLdArticle } from "@/components/blog/JsonLdArticle";
-import { BlogMongoConnectionFailedNotice } from "@/components/blog/BlogMongoConnectionFailedNotice";
-import { MongoNotConfiguredNotice } from "@/components/blog/MongoNotConfiguredNotice";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { markdownToSafeHtml } from "@/lib/blog/markdown";
 import { listRelatedForPost } from "@/lib/blog/repository";
@@ -22,7 +20,10 @@ type BlogPostPageProps = {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   if (!isMongoConfigured()) {
-    return { title: "Blogs setup | CCAI" };
+    return {
+      title: "Blogs setup | CCAI",
+      robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+    };
   }
   let raw: Awaited<ReturnType<typeof getCachedPostBySlug>>;
   try {
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return {
       title: "Blogs | CCAI",
       description: "Unable to load this article right now.",
+      robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
   if (!raw) {
@@ -124,29 +126,15 @@ function BlogBreadcrumb({ currentLabel }: { currentLabel?: string }) {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   if (!isMongoConfigured()) {
-    return (
-      <div className="min-h-screen bg-[#EEF3FF]">
-        <div className="mx-auto max-w-3xl px-5 pb-20 pt-14 md:px-8 md:pt-20">
-          <BlogBreadcrumb currentLabel="Post" />
-          <MongoNotConfiguredNotice />
-        </div>
-      </div>
-    );
+    throw new Error("Blog post unavailable: MongoDB is not configured.");
   }
 
   let raw: Awaited<ReturnType<typeof getCachedPostBySlug>>;
   try {
     raw = await getCachedPostBySlug(slug);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Database connection failed";
-    return (
-      <div className="min-h-screen bg-[#EEF3FF]">
-        <div className="mx-auto max-w-3xl px-5 pb-20 pt-14 md:px-8 md:pt-20">
-          <BlogBreadcrumb currentLabel="Post" />
-          <BlogMongoConnectionFailedNotice technical={msg} />
-        </div>
-      </div>
-    );
+    const message = err instanceof Error ? err.message : "Database connection failed";
+    throw new Error(`Blog post unavailable: ${message}`);
   }
 
   if (!raw) {
@@ -222,7 +210,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary external URLs from CMS */}
               <img
                 src={image}
-                alt=""
+                alt={post.title}
                 className="h-full w-full object-cover"
                 loading="eager"
               />

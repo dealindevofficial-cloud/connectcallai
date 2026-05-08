@@ -11,5 +11,8 @@ export function getSiteOrigin(): string | undefined {
   if (vercel) {
     return `https://${vercel.replace(/\/$/, "")}`;
   }
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("NEXT_PUBLIC_SITE_URL must be set in production.");
+  }
   return undefined;
 }

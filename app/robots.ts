@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/ccai-admin/"],
+      disallow: ["/ccai-admin", "/ccai-admin/"],
     },
     ...(base ? { sitemap: `${base}/sitemap.xml` } : {}),
   };

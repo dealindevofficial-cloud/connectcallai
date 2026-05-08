@@ -15,6 +15,17 @@ export default async function EditBlogPage({ params }: EditPageProps) {
     notFound();
   }
   const category = post.category as { slug?: string; name?: string } | undefined;
+  const author = post.author as { name?: string; slug?: string; image?: string } | undefined;
+  const relatedIds = Array.isArray(post.relatedPostIds)
+    ? post.relatedPostIds.map((id) => String(id)).join(", ")
+    : "";
+  const toDateTimeLocal = (value: Date | string | null | undefined): string => {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    const timezoneOffsetMs = date.getTimezoneOffset() * 60_000;
+    return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16);
+  };
 
   return (
     <main className="relative flex-1 overflow-hidden">
@@ -51,6 +62,17 @@ export default async function EditBlogPage({ params }: EditPageProps) {
                 tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
                 categorySlug: String(category?.slug ?? ""),
                 categoryName: String(category?.name ?? ""),
+                metaTitle: String(post.metaTitle ?? ""),
+                metaDescription: String(post.metaDescription ?? ""),
+                canonicalUrl: String(post.canonicalUrl ?? ""),
+                noindex: Boolean(post.noindex),
+                authorName: String(author?.name ?? ""),
+                authorSlug: String(author?.slug ?? ""),
+                authorImage: String(author?.image ?? ""),
+                industrySlug: String(post.industrySlug ?? ""),
+                templateKey: String(post.templateKey ?? ""),
+                relatedPostIds: relatedIds,
+                publishedAt: toDateTimeLocal(post.publishedAt as Date | null | undefined),
               }}
             />
           </div>

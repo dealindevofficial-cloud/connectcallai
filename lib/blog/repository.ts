@@ -370,6 +370,14 @@ export type SitemapPostEntry = {
   lastModified: Date;
 };
 
+export type FeedPostEntry = {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  publishedAt?: Date;
+  updatedAt?: Date;
+};
+
 /**
  * All published posts meant for discovery (excludes `noindex` posts).
  */
@@ -394,4 +402,30 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
       lastModified: updatedAt ?? publishedAt ?? new Date(),
     };
   });
+}
+
+/**
+ * Published posts for RSS/Atom discovery (excludes `noindex` posts).
+ */
+export async function listPublishedForFeed(limit = 100): Promise<FeedPostEntry[]> {
+  await connectDB();
+  const safeLimit = Math.min(500, Math.max(1, limit));
+  const filter: Record<string, unknown> = {
+    ...publishedFilter(),
+    noindex: { $ne: true },
+  };
+  const rows = await Blog.find(filter as never)
+    .select({ slug: 1, title: 1, excerpt: 1, publishedAt: 1, updatedAt: 1 })
+    .sort({ publishedAt: -1 })
+    .limit(safeLimit)
+    .lean()
+    .exec();
+
+  return rows.map((row) => ({
+    slug: String(row.slug),
+    title: String(row.title),
+    excerpt: typeof row.excerpt === "string" ? row.excerpt : undefined,
+    publishedAt: row.publishedAt instanceof Date ? row.publishedAt : undefined,
+    updatedAt: row.updatedAt instanceof Date ? row.updatedAt : undefined,
+  }));
 }

@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
   title: "CCAI",
   description: "AI voice agent landing page for CCAI.",
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
   icons: {
     icon: "/tab-logo.png",
     apple: "/tab-logo.png",

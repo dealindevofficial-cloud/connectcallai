@@ -1,30 +1,12 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Pagination } from "@/components/blog/Pagination";
-import { BlogMongoConnectionFailedNotice } from "@/components/blog/BlogMongoConnectionFailedNotice";
-import { MongoNotConfiguredNotice } from "@/components/blog/MongoNotConfiguredNotice";
 import { getCachedListPublished } from "@/lib/blog/public-cache";
 import type { BlogPublicDoc } from "@/lib/blog/public-types";
-import { normalizeSlug, type ListPublishedResult } from "@/lib/blog/repository";
+import { normalizeSlug } from "@/lib/blog/repository";
+import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
-
-export const metadata: Metadata = {
-  title: "Blogs | CCAI",
-  description:
-    "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
-  openGraph: {
-    title: "Blogs | CCAI",
-    description:
-      "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Blogs | CCAI",
-    description:
-      "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
-  },
-};
 
 const PAGE_SIZE = 10;
 
@@ -32,7 +14,52 @@ type BlogIndexProps = {
   searchParams: Promise<{ page?: string; industry?: string }>;
 };
 
+function buildCanonicalPath(page: number, industrySlug?: string): string {
+  const query = new URLSearchParams();
+  if (industrySlug) {
+    query.set("industry", industrySlug);
+  }
+  if (page > 1) {
+    query.set("page", String(page));
+  }
+  const queryString = query.toString();
+  return queryString ? `/blog?${queryString}` : "/blog";
+}
+
+export async function generateMetadata({ searchParams }: BlogIndexProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
+  const rawIndustry = sp.industry?.trim() ?? "";
+  const industrySlug = rawIndustry !== "" ? normalizeSlug(rawIndustry) : undefined;
+  const siteOrigin = getSiteOrigin();
+  const canonicalPath = buildCanonicalPath(pageNum, industrySlug);
+
+  return {
+    title: "Blogs | CCAI",
+    description:
+      "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+    alternates: siteOrigin ? { canonical: `${siteOrigin}${canonicalPath}` } : undefined,
+    openGraph: {
+      title: "Blogs | CCAI",
+      description:
+        "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+      type: "website",
+      url: siteOrigin ? `${siteOrigin}${canonicalPath}` : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Blogs | CCAI",
+      description:
+        "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+    },
+  };
+}
+
 export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
+  if (!isMongoConfigured()) {
+    throw new Error("Blog listing unavailable: MongoDB is not configured.");
+  }
+
   const sp = await searchParams;
   const raw = sp.page;
   const pageNum = Math.max(1, Number.parseInt(raw ?? "1", 10) || 1);
@@ -42,8 +69,7 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
       ? normalizeSlug(rawIndustry)
       : undefined;
 
-  let mongoLoadError: string | null = null;
-  let result: ListPublishedResult;
+  let result: Awaited<ReturnType<typeof getCachedListPublished>>;
   try {
     result = await getCachedListPublished({
       page: pageNum,
@@ -51,17 +77,14 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
       ...(industrySlug ? { industrySlug } : {}),
     });
   } catch (err) {
-    mongoLoadError = err instanceof Error ? err.message : "Unknown database error";
-    result = {
-      posts: [],
-      total: 0,
-      page: pageNum,
-      pageSize: PAGE_SIZE,
-      totalPages: 1,
-    };
+    const message = err instanceof Error ? err.message : "Unknown database error";
+    throw new Error(`Blog listing unavailable: ${message}`);
   }
 
   const { posts, page, totalPages, total } = result;
+  if (total > 0 && page > totalPages) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-[#EEF3FF]">
@@ -80,11 +103,7 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
             ) : null}
           </header>
 
-          {mongoLoadError ? (
-            <BlogMongoConnectionFailedNotice technical={mongoLoadError} />
-          ) : !isMongoConfigured() ? (
-            <MongoNotConfiguredNotice />
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <p className="text-center text-slate-700">No posts yet. Check back soon.</p>
           ) : (
             <>

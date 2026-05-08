@@ -23,7 +23,7 @@ export function BlogCard({ post }: BlogCardProps) {
             // eslint-disable-next-line @next/next/no-img-element -- arbitrary CDN URLs from CMS
             <img
               src={image}
-              alt=""
+              alt={post.title}
               className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
             />
           ) : (

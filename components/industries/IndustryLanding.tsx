@@ -265,21 +265,21 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   <motion.article
                     key={solution}
                     variants={fadeUp}
-                    whileHover={{ x: 4 }}
+                    whileHover={{ x: -4 }}
                     className="relative rounded-2xl border border-white/15 bg-[linear-gradient(150deg,rgba(25,39,132,0.75),rgba(11,17,74,0.96))] px-5 py-4"
                   >
                     <span
                       aria-hidden="true"
-                      className="absolute left-6 top-0 h-6 w-px -translate-y-full bg-gradient-to-t from-[#95adff] to-transparent"
+                      className="absolute right-[calc(1.25rem+0.875rem)] top-0 h-6 w-px -translate-x-1/2 -translate-y-full bg-gradient-to-t from-[#95adff] to-transparent"
                     />
-                    <div className="flex items-start gap-3">
-                      <span className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#9db5ff]/40 bg-[#84a2ff]/15 text-xs font-semibold text-[#d7e2ff]">
-                        {index + 1}
-                      </span>
-                      <div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#a9beff]">AI-powered action</p>
                         <p className="mt-1 text-sm leading-relaxed text-blue-50/95">{solution}</p>
                       </div>
+                      <span className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#9db5ff]/40 bg-[#84a2ff]/15 text-xs font-semibold text-[#d7e2ff]">
+                        {index + 1}
+                      </span>
                     </div>
                   </motion.article>
                 ))}

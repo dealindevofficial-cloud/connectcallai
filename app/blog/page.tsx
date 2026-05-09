@@ -45,12 +45,21 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
         "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
       type: "website",
       url: siteOrigin ? `${siteOrigin}${canonicalPath}` : undefined,
+      images: [
+        {
+          url: "/blog/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: "CCAI blogs",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: "Blogs | CCAI",
       description:
         "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+      images: ["/blog/opengraph-image"],
     },
   };
 }

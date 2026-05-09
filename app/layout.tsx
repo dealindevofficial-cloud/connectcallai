@@ -18,11 +18,17 @@ const geistMono = Geist_Mono({
 });
 
 const siteOrigin = getSiteOrigin();
+const defaultDescription =
+  "CCAI helps teams automate inbound and outbound customer conversations with AI voice agents.";
+const defaultOgImage = "/opengraph-image";
 
 export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
-  title: "CCAI",
-  description: "AI voice agent landing page for CCAI.",
+  title: {
+    default: "CCAI",
+    template: "%s | CCAI",
+  },
+  description: defaultDescription,
   alternates: {
     types: {
       "application/rss+xml": "/feed.xml",
@@ -33,11 +39,25 @@ export const metadata: Metadata = {
     apple: "/tab-logo.png",
   },
   openGraph: {
+    title: "CCAI",
+    description: defaultDescription,
     type: "website",
     siteName: "CCAI",
+    url: siteOrigin ?? undefined,
+    images: [
+      {
+        url: defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: "CCAI AI voice agent platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: "CCAI",
+    description: defaultDescription,
+    images: [defaultOgImage],
   },
 };
 

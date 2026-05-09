@@ -110,18 +110,17 @@ function normalizeIndustry(value: string | undefined): IndustrySlug | "" {
 function normalizePhone(value: string | undefined) {
   const raw = (value ?? "").trim();
   if (!raw) return "";
-  const compact = raw.replace(/[^\d+]/g, "");
-  const digitsOnly = compact.replace(/[^\d]/g, "");
-
-  if (compact.startsWith("+")) {
-    return `+${digitsOnly}`;
-  }
+  const digitsOnly = raw.replace(/\D/g, "");
 
   if (digitsOnly.length === 10) {
     return `+1${digitsOnly}`;
   }
 
-  return digitsOnly ? `+${digitsOnly}` : "";
+  if (digitsOnly.length === 11 && digitsOnly.startsWith("1")) {
+    return `+1${digitsOnly.slice(1)}`;
+  }
+
+  return "";
 }
 
 function validatePayload(body: DemoCallPayload) {
@@ -139,8 +138,8 @@ function validatePayload(body: DemoCallPayload) {
     errors.email = "Please enter a valid email address.";
   }
 
-  if (!phone || !/^\+[1-9]\d{7,14}$/.test(phone)) {
-    errors.phone = "Please enter a valid phone number with country code.";
+  if (!phone || !/^\+1\d{10}$/.test(phone)) {
+    errors.phone = "Please enter a valid US phone number.";
   }
 
   if (!industry) {

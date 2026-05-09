@@ -60,16 +60,36 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     : publishedTime;
 
   const ogUrl = siteOrigin ? `${siteOrigin}/blog/${post.slug}` : canonical;
+  const ogImage = post.featuredImage?.trim() || "/blog/opengraph-image";
   const noindex = Boolean(post.noindex);
-  const kw = [post.industrySlug, post.templateKey]
+  const normalizedTags = (post.tags ?? [])
+    .map((tag) => (typeof tag === "string" ? tag.trim() : ""))
+    .filter(Boolean);
+  const articleSection =
+    post.category?.name?.trim() || post.industrySlug?.trim() || undefined;
+  const articleTags = [
+    ...normalizedTags,
+    post.category?.name?.trim() ?? "",
+    post.industrySlug?.trim() ?? "",
+    post.templateKey?.trim() ?? "",
+  ].filter(Boolean);
+  const kw = [post.industrySlug, post.templateKey, ...normalizedTags]
     .map((s) => (typeof s === "string" ? s.trim() : ""))
     .filter(Boolean);
   const keywords = kw.length > 0 ? kw.join(", ") : undefined;
+  const twitterHandleRaw = process.env.NEXT_PUBLIC_TWITTER_HANDLE?.trim();
+  const twitterHandle = twitterHandleRaw
+    ? twitterHandleRaw.startsWith("@")
+      ? twitterHandleRaw
+      : `@${twitterHandleRaw}`
+    : undefined;
+  const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID?.trim();
 
   return {
     title: `${title} | CCAI`,
     description,
     ...(keywords ? { keywords } : {}),
+    ...(facebookAppId ? { facebook: { appId: facebookAppId } } : {}),
     robots: noindex
       ? { index: false, follow: true, googleBot: { index: false, follow: true } }
       : undefined,
@@ -82,9 +102,11 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       siteName: "CCAI",
       publishedTime,
       modifiedTime,
+      ...(articleSection ? { section: articleSection } : {}),
+      ...(articleTags.length > 0 ? { tags: articleTags } : {}),
       images: post.featuredImage?.trim()
         ? [{ url: post.featuredImage.trim(), alt: title }]
-        : undefined,
+        : [{ url: "/blog/opengraph-image", width: 1200, height: 630, alt: title }],
       ...(post.author?.name
         ? { authors: [post.author.name] }
         : {}),
@@ -93,7 +115,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: "summary_large_image",
       title,
       description,
-      images: post.featuredImage?.trim() ? [post.featuredImage.trim()] : undefined,
+      images: [ogImage],
+      ...(twitterHandle ? { site: twitterHandle, creator: twitterHandle } : {}),
     },
   };
 }

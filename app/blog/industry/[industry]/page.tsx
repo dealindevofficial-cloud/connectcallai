@@ -52,11 +52,20 @@ export async function generateMetadata({
       description: `Industry-specific AI voice and automation insights for ${label}.`,
       type: "website",
       url: base ? `${base}${canonicalPath}` : undefined,
+      images: [
+        {
+          url: "/blog/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: `${label} blogs`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${label} Blogs | CCAI`,
       description: `Industry-specific AI voice and automation insights for ${label}.`,
+      images: ["/blog/opengraph-image"],
     },
   };
 }

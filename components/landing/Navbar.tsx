@@ -165,13 +165,6 @@ export function Navbar() {
             Industries
           </Link>
           <Link
-            href="/blog"
-            onClick={(event) => onNavLinkClick(event, "/blog")}
-            className="transition hover:text-white"
-          >
-            Blogs
-          </Link>
-          <Link
             href="/contact-us"
             onClick={(event) => onNavLinkClick(event, "/contact-us")}
             className="transition hover:text-white"
@@ -184,6 +177,13 @@ export function Navbar() {
             className="transition hover:text-white"
           >
             Price estimator
+          </Link>
+          <Link
+            href="/blog"
+            onClick={(event) => onNavLinkClick(event, "/blog")}
+            className="transition hover:text-white"
+          >
+            Blogs
           </Link>
         </nav>
 
@@ -253,13 +253,6 @@ export function Navbar() {
                 Industries
               </Link>
               <Link
-                href="/blog"
-                onClick={(event) => onNavLinkClick(event, "/blog")}
-                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
-              >
-                Blogs
-              </Link>
-              <Link
                 href="/contact-us"
                 onClick={(event) => onNavLinkClick(event, "/contact-us")}
                 className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
@@ -272,6 +265,13 @@ export function Navbar() {
                 className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
               >
                 Price estimator
+              </Link>
+              <Link
+                href="/blog"
+                onClick={(event) => onNavLinkClick(event, "/blog")}
+                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
+              >
+                Blogs
               </Link>
               <Link
                 href="/contact-us"

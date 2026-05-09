@@ -30,6 +30,23 @@ type DemoCallResponse = {
 
 type RequestStatus = "idle" | "submitting" | "called_now" | "queued_fallback" | "error";
 
+function UsFlagIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 16"
+      className="mr-2 h-3.5 w-5 rounded-[2px] border border-white/20"
+    >
+      <rect width="24" height="16" fill="#ffffff" />
+      <rect y="0" width="24" height="2" fill="#B22234" />
+      <rect y="4" width="24" height="2" fill="#B22234" />
+      <rect y="8" width="24" height="2" fill="#B22234" />
+      <rect y="12" width="24" height="2" fill="#B22234" />
+      <rect width="10.5" height="8.8" fill="#3C3B6E" />
+    </svg>
+  );
+}
+
 export function Hero() {
   const reducedMotionPreference = useReducedMotion();
   const reducedMotion = Boolean(reducedMotionPreference);
@@ -50,11 +67,17 @@ export function Hero() {
     isMobile,
   });
   const [requestStatus, setRequestStatus] = useState<RequestStatus>("idle");
+  const [phoneDigits, setPhoneDigits] = useState("");
   const [industry, setIndustry] = useState("");
   const [isIndustryOpen, setIsIndustryOpen] = useState(false);
   const [statusMessage, setStatusMessage] = useState(
     "Your details are captured from this widget to request a demo call.",
   );
+  const formatUsPhone = (digits: string) => {
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  };
   const industryDropdownRef = useRef<HTMLDivElement>(null);
   const floatAnimation = createFloatLoop({
     reducedMotion,
@@ -71,7 +94,7 @@ export function Hero() {
 
     const formData = new FormData(form);
     const fullName = String(formData.get("name") ?? "").trim();
-    const phone = String(formData.get("phone") ?? "");
+    const phone = phoneDigits.length === 10 ? `+1${phoneDigits}` : "";
     const email = String(formData.get("email") ?? "");
     const selectedIndustry = String(formData.get("industry") ?? "");
 
@@ -79,6 +102,13 @@ export function Hero() {
       setRequestStatus("error");
       setStatusMessage("Please enter your full name to continue.");
       toast.error("Please enter your full name to continue.");
+      return;
+    }
+
+    if (phoneDigits.length !== 10) {
+      setRequestStatus("error");
+      setStatusMessage("Please enter a valid US phone number.");
+      toast.error("Please enter a valid US phone number.");
       return;
     }
 
@@ -108,6 +138,7 @@ export function Hero() {
         setStatusMessage(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         toast.success(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         form.reset();
+        setPhoneDigits("");
         setIndustry("");
         setIsIndustryOpen(false);
         return;
@@ -122,6 +153,7 @@ export function Hero() {
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
         form.reset();
+        setPhoneDigits("");
         setIndustry("");
         setIsIndustryOpen(false);
         return;
@@ -200,14 +232,19 @@ export function Hero() {
           animate={floatAnimation}
           className="glass-card relative overflow-hidden rounded-3xl p-7"
         >
-          <div className="absolute right-5 top-5 h-3 w-3 animate-pulse rounded-full bg-emerald-400" />
-          <p className="mb-2 text-sm text-blue-100/70">Free AI Call Demo</p>
-          <p className="text-xl font-semibold text-white">Live Assistant</p>
-          <div className="mt-6 rounded-2xl border border-white/15 bg-[#0e155f]/70 p-5">
-            <div className="mb-5 flex items-center justify-between">
-              <span className="text-sm text-blue-100/80">See it in action, takes 30 seconds</span>
-              <span className="text-xs text-emerald-300">Connected</span>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xl font-semibold text-white">Live Assistant</p>
+              <span className="mt-1 block text-sm text-blue-100/80">
+                See it in action, takes 30 seconds
+              </span>
             </div>
+            <div className="mt-1 flex items-center gap-2">
+              <span className="text-xs text-emerald-300">Connected</span>
+              <div className="h-3 w-3 animate-pulse rounded-full bg-emerald-400" />
+            </div>
+          </div>
+          <div className="mt-5">
             <div className="mb-6 flex h-16 items-end gap-1.5">
               {[28, 18, 46, 22, 34, 52, 20, 40, 27, 49].map((height, idx) => {
                 const waveAnimation = getWaveAnimationConfig(height, idx, {
@@ -232,13 +269,31 @@ export function Hero() {
                 placeholder="Name"
                 className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
               />
-              <input
-                name="phone"
-                required
-                type="tel"
-                placeholder="Phone number"
-                className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
-              />
+              <div className="flex items-center rounded-xl border border-white/15 bg-white/7 px-3 focus-within:border-[#96a9ff]">
+                <UsFlagIcon />
+                <span className="mr-2 text-sm font-medium text-blue-100/90">+1</span>
+                <input
+                  required
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  value={formatUsPhone(phoneDigits)}
+                  onChange={(event) => {
+                    const digits = event.target.value.replace(/\D/g, "").slice(0, 10);
+                    setPhoneDigits(digits);
+                  }}
+                  onPaste={(event) => {
+                    event.preventDefault();
+                    const pastedDigits = event.clipboardData
+                      .getData("text")
+                      .replace(/\D/g, "")
+                      .slice(0, 10);
+                    setPhoneDigits(pastedDigits);
+                  }}
+                  placeholder="(555) 123-4567"
+                  className="w-full bg-transparent py-2.5 text-sm text-white placeholder:text-blue-100/55 outline-none"
+                />
+              </div>
               <input
                 name="email"
                 required

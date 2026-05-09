@@ -3,11 +3,36 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 
+function UsFlagIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 16"
+      className="mr-2 h-3.5 w-5 rounded-[2px] border border-white/20"
+    >
+      <rect width="24" height="16" fill="#ffffff" />
+      <rect y="0" width="24" height="2" fill="#B22234" />
+      <rect y="4" width="24" height="2" fill="#B22234" />
+      <rect y="8" width="24" height="2" fill="#B22234" />
+      <rect y="12" width="24" height="2" fill="#B22234" />
+      <rect width="10.5" height="8.8" fill="#3C3B6E" />
+    </svg>
+  );
+}
+
 export function DemoForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [phoneDigits, setPhoneDigits] = useState("");
+
+  const formatUsPhone = (digits: string) => {
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (phoneDigits.length !== 10) return;
     setSubmitted(true);
   };
 
@@ -33,12 +58,28 @@ export function DemoForm() {
             placeholder="Your full name"
             className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-3 text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
           />
-          <input
-            required
-            type="tel"
-            placeholder="Phone number"
-            className="w-full rounded-xl border border-white/15 bg-white/7 px-4 py-3 text-white placeholder:text-blue-100/55 outline-none focus:border-[#96a9ff]"
-          />
+          <div className="flex items-center rounded-xl border border-white/15 bg-white/7 px-3 focus-within:border-[#96a9ff]">
+            <UsFlagIcon />
+            <span className="mr-2 text-sm font-medium text-blue-100/90">+1</span>
+            <input
+              required
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel-national"
+              value={formatUsPhone(phoneDigits)}
+              onChange={(event) => {
+                const digits = event.target.value.replace(/\D/g, "").slice(0, 10);
+                setPhoneDigits(digits);
+              }}
+              onPaste={(event) => {
+                event.preventDefault();
+                const pastedDigits = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, 10);
+                setPhoneDigits(pastedDigits);
+              }}
+              placeholder="(555) 123-4567"
+              className="w-full bg-transparent py-3 text-white placeholder:text-blue-100/55 outline-none"
+            />
+          </div>
           <button type="submit" className="btn-primary w-full justify-center">
             Get my demo
           </button>

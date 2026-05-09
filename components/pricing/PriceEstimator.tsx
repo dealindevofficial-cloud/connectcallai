@@ -19,7 +19,7 @@ function formatNumber(value: number) {
 
 export function PriceEstimator() {
   const [monthlyMinutes, setMonthlyMinutes] = useState(250);
-  const perMinuteCost = 0.45;
+  const perMinuteCost = 0.3;
 
   const estimate = useMemo(() => {
     const aiRuntimeFee = monthlyMinutes * perMinuteCost;
@@ -66,7 +66,7 @@ export function PriceEstimator() {
           Estimate your monthly calling cost
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-blue-100/80 md:text-base">
-          Slide minutes and get an instant estimate at $0.45 per minute.
+          {`Slide minutes and get an instant estimate at $${perMinuteCost.toFixed(2)} per minute.`}
         </p>
       </div>
 

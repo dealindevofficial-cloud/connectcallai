@@ -36,17 +36,18 @@ function FeatureCard({ title, detail, index }: FeatureCardProps) {
   ];
   const fromLeft = index % 2 === 0;
   const shouldReduceMotion = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
-  const offsetX = shouldReduceMotion ? 0 : isMobile ? (fromLeft ? -48 : 48) : fromLeft ? -140 : 140;
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const shouldAnimate = isMobile === false && !shouldReduceMotion;
+  const offsetX = shouldAnimate ? (fromLeft ? -140 : 140) : 0;
   const activeStickers = stickerSets[index % stickerSets.length];
   const activePositions = positionSets[index % positionSets.length];
   const viewportConfig = {
-    once: isMobile,
+    once: !shouldAnimate,
     amount: 0.25,
     margin: "-5% 0px -5% 0px",
   } as const;
-  const cardDuration = shouldReduceMotion ? 0.25 : isMobile ? 0.62 : 1.05;
-  const stickerDuration = shouldReduceMotion ? 0.2 : isMobile ? 0.5 : 0.8;
+  const cardDuration = shouldAnimate ? 1.05 : 0.01;
+  const stickerDuration = shouldAnimate ? 0.8 : 0.01;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -58,12 +59,13 @@ function FeatureCard({ title, detail, index }: FeatureCardProps) {
 
   return (
     <motion.div
-      initial={{ x: offsetX, opacity: 0 }}
-      whileInView={{ x: 0, opacity: 1 }}
+      initial={shouldAnimate ? { x: offsetX, opacity: 0 } : { x: 0, opacity: 1 }}
+      animate={!shouldAnimate ? { x: 0, opacity: 1 } : undefined}
+      whileInView={shouldAnimate ? { x: 0, opacity: 1 } : undefined}
       viewport={viewportConfig}
       transition={{
         duration: cardDuration,
-        delay: shouldReduceMotion ? 0 : index * (isMobile ? 0.08 : 0.14),
+        delay: shouldAnimate ? index * 0.14 : 0,
         ease: [0.22, 1, 0.36, 1],
       }}
       className="group relative h-full overflow-visible"
@@ -72,24 +74,25 @@ function FeatureCard({ title, detail, index }: FeatureCardProps) {
         <motion.span
           key={`${title}-sticker-${stickerIndex}`}
           aria-hidden
-          initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.7, y: shouldReduceMotion ? 0 : 8 }}
+          initial={shouldAnimate ? { opacity: 0, scale: 0.7, y: 8 } : { opacity: 0.75, scale: 1, y: 0 }}
+          animate={!shouldAnimate ? { opacity: 0.75, scale: 1, y: 0 } : undefined}
           whileInView={
-            shouldReduceMotion || isMobile
+            !shouldAnimate
               ? { opacity: 0.75, scale: 1, y: 0 }
               : { opacity: [0, 0.9, 0.7], scale: [0.6, 1.08, 1], y: [8, -4, 0] }
           }
           viewport={viewportConfig}
           transition={{
             duration: stickerDuration,
-            delay: shouldReduceMotion ? 0 : index * (isMobile ? 0.08 : 0.14) + 0.15 + stickerIndex * 0.08,
+            delay: shouldAnimate ? index * 0.14 + 0.15 + stickerIndex * 0.08 : 0,
             ease: [0.22, 1, 0.36, 1],
           }}
           className={`pointer-events-none absolute z-20 drop-shadow-[0_8px_14px_rgba(12,21,64,0.4)] ${activePositions[stickerIndex]} ${isMobile ? "hidden sm:inline-block" : ""}`}
         >
           <motion.span
-            animate={shouldReduceMotion || isMobile ? undefined : { y: [0, -6, 0], rotate: [-5, 4, -5] }}
+            animate={shouldAnimate ? { y: [0, -6, 0], rotate: [-5, 4, -5] } : undefined}
             transition={
-              shouldReduceMotion || isMobile
+              !shouldAnimate
                 ? undefined
                 : {
                     duration: 2 + stickerIndex * 0.45,
@@ -112,28 +115,30 @@ function FeatureCard({ title, detail, index }: FeatureCardProps) {
           className={`pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-gradient-to-br ${accents[index % accents.length]} opacity-70 blur-2xl`}
         />
         <motion.div
-          initial={{ x: fromLeft ? "-80%" : "80%", opacity: 0 }}
+          initial={shouldAnimate ? { x: fromLeft ? "-80%" : "80%", opacity: 0 } : { opacity: 0.25 }}
+          animate={!shouldAnimate ? { opacity: 0.25 } : undefined}
           whileInView={
-            shouldReduceMotion || isMobile
+            !shouldAnimate
               ? { opacity: 0.25 }
               : { x: fromLeft ? "135%" : "-135%", opacity: [0, 0.55, 0] }
           }
           viewport={viewportConfig}
           transition={{
-            duration: shouldReduceMotion ? 0.2 : isMobile ? 0.5 : 1.25,
-            delay: shouldReduceMotion ? 0 : index * (isMobile ? 0.08 : 0.14) + 0.2,
+            duration: shouldAnimate ? 1.25 : 0.01,
+            delay: shouldAnimate ? index * 0.14 + 0.2 : 0,
             ease: "easeOut",
           }}
           className="pointer-events-none absolute -top-8 h-[150%] w-24 rotate-12 bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md"
         />
         <div className="relative">
         <motion.div
-          initial={{ scale: shouldReduceMotion ? 1 : 0.82, opacity: 0 }}
-          whileInView={shouldReduceMotion || isMobile ? { scale: 1, opacity: 1 } : { scale: [0.75, 1.12, 1], opacity: 1 }}
+          initial={shouldAnimate ? { scale: 0.82, opacity: 0 } : { scale: 1, opacity: 1 }}
+          animate={!shouldAnimate ? { scale: 1, opacity: 1 } : undefined}
+          whileInView={shouldAnimate ? { scale: [0.75, 1.12, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
           viewport={viewportConfig}
           transition={{
-            duration: shouldReduceMotion ? 0.2 : isMobile ? 0.55 : 0.8,
-            delay: shouldReduceMotion ? 0 : index * (isMobile ? 0.08 : 0.14) + 0.22,
+            duration: shouldAnimate ? 0.8 : 0.01,
+            delay: shouldAnimate ? index * 0.14 + 0.22 : 0,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-lg text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"

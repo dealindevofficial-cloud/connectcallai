@@ -32,7 +32,7 @@ export async function generateMetadata({
   const slug = normalizeSlug(decodeURIComponent(industry));
   if (!slug) {
     return {
-      title: "Industry Blogs | CCAI",
+      title: "Industry Blogs",
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
@@ -43,12 +43,15 @@ export async function generateMetadata({
   const query = pageNum > 1 ? `?page=${pageNum}` : "";
   const canonicalPath = `/blog/industry/${encodeURIComponent(slug)}${query}`;
 
+  const listTitleSegment =
+    pageNum > 1 ? `${label} Blog · ${pageNum}` : `${label} Blog`;
+
   return {
-    title: `${label} Blogs | CCAI`,
+    title: listTitleSegment,
     description: `Industry-specific AI voice and automation insights for ${label}.`,
     alternates: base ? { canonical: `${base}${canonicalPath}` } : undefined,
     openGraph: {
-      title: `${label} Blogs | CCAI`,
+      title: `${listTitleSegment} | CCAI`,
       description: `Industry-specific AI voice and automation insights for ${label}.`,
       type: "website",
       url: base ? `${base}${canonicalPath}` : undefined,
@@ -63,7 +66,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${label} Blogs | CCAI`,
+      title: `${listTitleSegment} | CCAI`,
       description: `Industry-specific AI voice and automation insights for ${label}.`,
       images: ["/blog/opengraph-image"],
     },

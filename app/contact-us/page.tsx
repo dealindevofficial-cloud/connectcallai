@@ -5,7 +5,7 @@ import { CursorGlow } from "@/components/landing/CursorGlow";
 import { getCalendlyEmbedUrl } from "@/lib/config/calendly";
 
 export const metadata: Metadata = {
-  title: "Contact Us | CCAI",
+  title: "Contact & Demo",
   description: "Book a demo and connect with the CCAI team.",
 };
 

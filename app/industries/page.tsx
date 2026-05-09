@@ -4,7 +4,7 @@ import { CursorGlow } from "@/components/landing/CursorGlow";
 import { IndustriesHub } from "@/components/industries/IndustriesHub";
 
 export const metadata: Metadata = {
-  title: "Industries | CCAI",
+  title: "Industries",
   description:
     "Explore AI calling agents by industry. Discover tailored solutions for real estate, restaurants, hospitals, and pet clinics.",
 };

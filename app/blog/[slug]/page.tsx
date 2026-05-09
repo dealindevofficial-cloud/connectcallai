@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   if (!isMongoConfigured()) {
     return {
-      title: "Blogs setup | CCAI",
+      title: "Blog Setup",
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
@@ -30,13 +30,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     raw = await getCachedPostBySlug(slug);
   } catch {
     return {
-      title: "Blogs | CCAI",
+      title: "Blog Unavailable",
       description: "Unable to load this article right now.",
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
   if (!raw) {
-    return { title: "Post not found | CCAI" };
+    return {
+      title: "Post Not Found",
+    };
   }
   const post = raw as BlogPublicDoc;
 
@@ -86,7 +88,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID?.trim();
 
   return {
-    title: `${title} | CCAI`,
+    title,
     description,
     ...(keywords ? { keywords } : {}),
     ...(facebookAppId ? { facebook: { appId: facebookAppId } } : {}),

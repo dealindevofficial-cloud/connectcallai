@@ -26,7 +26,7 @@ const defaultOgImage = "/opengraph-image";
 export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
   title: {
-    default: "CCAI",
+    default: "AI Voice Agents | CCAI",
     template: "%s | CCAI",
   },
   description: defaultDescription,

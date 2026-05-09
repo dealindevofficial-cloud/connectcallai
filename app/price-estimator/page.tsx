@@ -5,7 +5,7 @@ import { FinalCta } from "@/components/landing/FinalCta";
 import { PriceEstimator } from "@/components/pricing/PriceEstimator";
 
 export const metadata: Metadata = {
-  title: "Price Estimator | CCAI",
+  title: "Pricing Estimator",
   description:
     "Estimate monthly AI call handling pricing using call volume, duration, and staffing assumptions.",
 };

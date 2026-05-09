@@ -4,6 +4,7 @@ import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { IndustryLanding } from "@/components/industries/IndustryLanding";
 import { getIndustryBySlug, industries } from "@/lib/industries-data";
+import { getSiteOrigin } from "@/lib/blog/site-url";
 
 type IndustryPageProps = {
   params: Promise<{ slug: string }>;
@@ -19,14 +20,39 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
 
   if (!industry) {
     return {
-      title: "Industry Not Found | CCAI",
+      title: "Industry Not Found",
     };
   }
 
+  const siteOrigin = getSiteOrigin();
+  const docTitle = `AI Voice · ${industry.name} | CCAI`;
+  const path = `/industries/${industry.slug}`;
+
   return {
-    title: `AI Calling for ${industry.name} | AI Phone Agent for ${industry.name} | CCAI`,
+    title: `AI Voice · ${industry.name}`,
     description: industry.longDescription,
     keywords: [...industry.seoKeywords],
+    alternates: siteOrigin ? { canonical: `${siteOrigin}${path}` } : undefined,
+    openGraph: {
+      title: docTitle,
+      description: industry.longDescription,
+      type: "website",
+      url: siteOrigin ? `${siteOrigin}${path}` : undefined,
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: `AI voice agents for ${industry.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: docTitle,
+      description: industry.longDescription,
+      images: ["/opengraph-image"],
+    },
   };
 }
 

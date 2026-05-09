@@ -14,13 +14,13 @@ const homeDescription =
   "Deploy AI voice agents for support, sales, and operations with CCAI's secure automation platform.";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "AI voice agents 24/7 | CCAI",
   description: homeDescription,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "CCAI",
+    title: "AI voice agents 24/7 | CCAI",
     description: homeDescription,
     type: "website",
     url: getSiteOrigin() ?? undefined,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CCAI",
+    title: "AI voice agents 24/7 | CCAI",
     description: homeDescription,
     images: ["/opengraph-image"],
   },

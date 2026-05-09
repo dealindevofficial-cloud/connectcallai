@@ -4,7 +4,7 @@ import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 
 export const metadata: Metadata = {
-  title: "Page not found | CCAI",
+  title: "Page Not Found",
   description: "The page you are looking for does not exist.",
 };
 

@@ -14,6 +14,14 @@ type BlogIndexProps = {
   searchParams: Promise<{ page?: string; industry?: string }>;
 };
 
+function labelFromIndustrySlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 function buildCanonicalPath(page: number, industrySlug?: string): string {
   const query = new URLSearchParams();
   if (industrySlug) {
@@ -34,13 +42,23 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
   const siteOrigin = getSiteOrigin();
   const canonicalPath = buildCanonicalPath(pageNum, industrySlug);
 
+  let titleSegment = "Blog";
+  if (industrySlug) {
+    titleSegment = `${labelFromIndustrySlug(industrySlug)} Blog`;
+  }
+  if (pageNum > 1) {
+    titleSegment = `${titleSegment} · ${pageNum}`;
+  }
+
+  const docTitle = `${titleSegment} | CCAI`;
+
   return {
-    title: "Blogs | CCAI",
+    title: titleSegment,
     description:
       "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
     alternates: siteOrigin ? { canonical: `${siteOrigin}${canonicalPath}` } : undefined,
     openGraph: {
-      title: "Blogs | CCAI",
+      title: docTitle,
       description:
         "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
       type: "website",
@@ -56,7 +74,7 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
     },
     twitter: {
       card: "summary_large_image",
-      title: "Blogs | CCAI",
+      title: docTitle,
       description:
         "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
       images: ["/blog/opengraph-image"],

@@ -20,6 +20,8 @@ declare namespace NodeJS {
     ADMIN_LOGIN_MAX_ATTEMPTS_PER_WINDOW?: string;
     /** Rolling window for login rate limit in ms (default 900000 = 15 minutes). */
     ADMIN_LOGIN_RATE_WINDOW_MS?: string;
+    /** Optional shared secret: when set, `/api/vapi/webhook` requires Bearer or `X-Vapi-Secret`. */
+    VAPI_WEBHOOK_SECRET?: string;
     /** Cloudinary cloud name (server-only; used by `/api/admin/upload`). */
     CLOUDINARY_CLOUD_NAME?: string;
     CLOUDINARY_API_KEY?: string;

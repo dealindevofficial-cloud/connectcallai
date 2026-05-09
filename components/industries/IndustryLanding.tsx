@@ -508,7 +508,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
           className="space-y-6"
         >
           <motion.h2 variants={fadeUp} className="text-3xl font-semibold text-white md:text-5xl">
-            Why {industry.name} Teams Choose Connect Call AI
+            Why {industry.name} Teams Choose Connect Call AI?
           </motion.h2>
           <div className="grid gap-4 md:grid-cols-2">
             {industry.benefits.map((benefit, index) => (

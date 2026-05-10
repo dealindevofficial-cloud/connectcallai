@@ -382,12 +382,20 @@ export function NewBlogForm() {
       {error ? <p className="text-sm text-rose-300">{error}</p> : null}
 
       {created ? (
-        <p className="text-sm text-emerald-300">
-          Post created successfully.{" "}
-          <Link href={`/blog/${created.slug}`} className="font-medium text-cyan-300 hover:text-cyan-200">
-            View published page
-          </Link>
-        </p>
+        <div className="space-y-3 rounded-xl border border-emerald-300/30 bg-emerald-500/10 p-3">
+          <p className="text-sm text-emerald-200">
+            Post created successfully.{" "}
+            <Link href={`/blog/${created.slug}`} className="font-medium text-cyan-300 hover:text-cyan-200">
+              View published page
+            </Link>
+          </p>
+          <ul className="space-y-1 text-xs text-emerald-100/90">
+            <li>1. Confirm the post appears on the blog listing.</li>
+            <li>2. Confirm `/sitemap.xml` includes the new post URL.</li>
+            <li>3. Confirm `/feed.xml` includes the new post item.</li>
+            <li>4. Add at least one internal link from an older relevant post.</li>
+          </ul>
+        </div>
       ) : null}
 
       <div className="flex flex-wrap items-center gap-3">

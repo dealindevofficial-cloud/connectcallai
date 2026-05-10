@@ -1,4 +1,4 @@
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { BLOG_LIST_TAG, blogPostCacheTag } from "./public-cache";
 
 /**
@@ -10,4 +10,7 @@ export function revalidateBlogPublic(slugs: string[]) {
   for (const slug of unique) {
     revalidateTag(blogPostCacheTag(slug), "max");
   }
+  revalidatePath("/blog");
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/feed.xml");
 }

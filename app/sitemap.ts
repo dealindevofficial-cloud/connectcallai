@@ -3,6 +3,11 @@ import { listPublishedForSitemap } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
 
+/**
+ * Keep sitemap fresh for daily publishing while still cache-friendly.
+ */
+export const revalidate = 900;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteOrigin();
   if (!base) {

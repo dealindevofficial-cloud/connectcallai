@@ -2,6 +2,8 @@ import { listPublishedForFeed } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
 
+export const revalidate = 900;
+
 function escapeXml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -17,7 +19,12 @@ export async function GET() {
     return new Response("Feed unavailable", { status: 503 });
   }
 
-  const posts = await listPublishedForFeed(200);
+  let posts: Awaited<ReturnType<typeof listPublishedForFeed>> = [];
+  try {
+    posts = await listPublishedForFeed(200);
+  } catch {
+    return new Response("Feed unavailable", { status: 503 });
+  }
   const itemsXml = posts
     .map((post) => {
       const url = `${siteOrigin}/blog/${post.slug}`;

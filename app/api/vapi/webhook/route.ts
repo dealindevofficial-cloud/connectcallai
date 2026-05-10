@@ -6,6 +6,11 @@ import { getSiteOrigin } from "@/lib/blog/site-url";
 
 export const runtime = "nodejs";
 
+/** Post-call customer emails are opt-in so deploys stay safe until VAPI + Resend are configured. */
+function isPostCallCustomerEmailEnabled() {
+  return process.env.VAPI_POST_CALL_EMAIL_ENABLED?.trim().toLowerCase() === "true";
+}
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -74,12 +79,18 @@ function isAuthorizedWebhook(request: Request): boolean {
 }
 
 function getPublicContactPageUrl(): string {
-  const origin = getSiteOrigin();
-  if (origin) return `${origin}/contact-us`;
+  try {
+    const origin = getSiteOrigin();
+    if (origin) return `${origin}/contact-us`;
+  } catch {
+    /* getSiteOrigin() throws in production when NEXT_PUBLIC_SITE_URL and VERCEL_URL are unset */
+  }
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  if (explicit) return `${explicit}/contact-us`;
   if (process.env.NODE_ENV !== "production") {
     return "http://localhost:3000/contact-us";
   }
-  return `${(process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "")}/contact-us`;
+  return "";
 }
 
 function formatStructuredDataHtml(data: unknown): string {
@@ -124,7 +135,11 @@ async function sendPostCallCustomerEmail(args: {
     return { ok: false as const, reason: "missing_resend_key" as const };
   }
 
-  const contactUrl = getPublicContactPageUrl();
+  let contactUrl = getPublicContactPageUrl();
+  if (!contactUrl) {
+    console.warn("[vapi-webhook] NEXT_PUBLIC_SITE_URL (or Vercel URL) unset; contact link omitted.");
+    contactUrl = "#";
+  }
   const firstName = args.leadName.trim().split(/\s+/)[0] ?? args.leadName;
   const escapedName = escapeHtml(firstName);
 
@@ -216,6 +231,15 @@ export async function POST(request: Request) {
   const message = body.message;
   if (!message || message.type !== "end-of-call-report") {
     return NextResponse.json({ ok: true, ignored: true }, { status: 200 });
+  }
+
+  if (!isPostCallCustomerEmailEnabled()) {
+    console.info("[vapi-webhook]", {
+      outcome: "post_call_email_feature_disabled",
+      callId: message.call?.id,
+      hint: "Set VAPI_POST_CALL_EMAIL_ENABLED=true when ready.",
+    });
+    return NextResponse.json({ ok: true, postCallEmail: "disabled" }, { status: 200 });
   }
 
   const meta = message.call?.metadata ?? {};

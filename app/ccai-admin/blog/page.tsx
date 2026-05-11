@@ -45,7 +45,11 @@ export default async function AdminBlogListPage() {
                 {posts.map((post) => (
                   <li
                     key={post._id.toString()}
-                    className="rounded-xl border border-white/15 bg-slate-950/35 p-4"
+                    className={`rounded-xl border p-4 ${
+                      post.status === "published"
+                        ? "border-emerald-300/30 bg-emerald-500/10"
+                        : "border-amber-300/30 bg-amber-500/10"
+                    }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
@@ -53,8 +57,17 @@ export default async function AdminBlogListPage() {
                           {String(post.title)}
                         </p>
                         <p className="mt-1 text-xs text-blue-100/70">/{String(post.slug)}</p>
-                        <p className="mt-1 text-xs text-blue-200/60">
-                          {post.status === "published" ? "Published" : "Draft"} · Updated{" "}
+                        <p className="mt-1 flex items-center gap-2 text-xs text-blue-200/70">
+                          <span
+                            className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                              post.status === "published"
+                                ? "border-emerald-300/40 bg-emerald-500/20 text-emerald-200"
+                                : "border-amber-300/40 bg-amber-500/20 text-amber-200"
+                            }`}
+                          >
+                            {post.status === "published" ? "Published" : "Draft"}
+                          </span>
+                          <span>Updated{" "}</span>
                           {formatDate(
                             post.updatedAt as Date | string | null | undefined
                           )}

@@ -9,6 +9,7 @@ export function revalidateBlogPublic(slugs: string[]) {
   const unique = [...new Set(slugs.map((s) => s.trim().toLowerCase()).filter(Boolean))];
   for (const slug of unique) {
     revalidateTag(blogPostCacheTag(slug), "max");
+    revalidatePath(`/blog/${slug}`);
   }
   revalidatePath("/blog");
   revalidatePath("/sitemap.xml");

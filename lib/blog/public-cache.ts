@@ -5,6 +5,7 @@ import type { ListPublishedResult } from "./repository";
 import { isPubliclyVisible } from "./visibility";
 
 export const BLOG_LIST_TAG = "blog-list";
+const BLOG_CACHE_TTL_SECONDS = 300;
 
 export function blogPostCacheTag(slug: string): string {
   return `blog-post-${slug.trim().toLowerCase()}`;
@@ -38,7 +39,7 @@ export function getCachedListPublished(params: ListPublishedParams) {
       tag,
       industrySlug,
     ],
-    { tags: [BLOG_LIST_TAG] }
+    { tags: [BLOG_LIST_TAG], revalidate: BLOG_CACHE_TTL_SECONDS }
   )(params);
 }
 
@@ -54,6 +55,6 @@ export function getCachedPostBySlug(slug: string) {
       return doc;
     },
     ["blog-post-by-slug", normalized],
-    { tags: [blogPostCacheTag(normalized)] }
+    { tags: [blogPostCacheTag(normalized)], revalidate: BLOG_CACHE_TTL_SECONDS }
   )(normalized);
 }

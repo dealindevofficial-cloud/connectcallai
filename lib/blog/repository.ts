@@ -278,8 +278,7 @@ export async function listAll(
 
 function applyPublishTimestamps<T extends Record<string, unknown>>(data: T): T {
   const status = data.status as string | undefined;
-  const publishedAt = data.publishedAt as Date | null | undefined;
-  if (status === "published" && publishedAt == null) {
+  if (status === "published") {
     return { ...data, publishedAt: new Date() } as T;
   }
   if (status === "draft") {

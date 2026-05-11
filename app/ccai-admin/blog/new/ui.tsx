@@ -37,7 +37,6 @@ export function NewBlogForm() {
   const [industrySlug, setIndustrySlug] = useState("");
   const [templateKey, setTemplateKey] = useState("");
   const [relatedPostIds, setRelatedPostIds] = useState("");
-  const [publishedAt, setPublishedAt] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<{ id: string; slug: string } | null>(null);
@@ -91,9 +90,6 @@ export function NewBlogForm() {
     if (noindex) payload.noindex = true;
     if (templateKey.trim()) payload.templateKey = templateKey.trim();
     if (industrySlug.trim()) payload.industrySlug = toSlug(industrySlug);
-    if (publishedAt.trim()) {
-      payload.publishedAt = new Date(publishedAt).toISOString();
-    }
 
     if (authorName.trim()) {
       payload.author = {
@@ -121,11 +117,20 @@ export function NewBlogForm() {
       const data = (await res.json().catch(() => ({}))) as {
         _id?: string;
         slug?: string;
+        status?: string;
+        publishedAt?: string | null;
         error?: string;
       };
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to create post.");
+        setError(data.error ?? `Failed to create post (HTTP ${res.status}).`);
+        return;
+      }
+
+      if (status === "published" && (data.status !== "published" || !data.publishedAt)) {
+        setError(
+          "Post was created, but publish did not complete. Please open it and save again."
+        );
         return;
       }
 
@@ -150,7 +155,6 @@ export function NewBlogForm() {
       setIndustrySlug("");
       setTemplateKey("");
       setRelatedPostIds("");
-      setPublishedAt("");
     } catch {
       setError("Could not reach the server. Please try again.");
     } finally {
@@ -344,15 +348,6 @@ export function NewBlogForm() {
             onChange={(e) => setAuthorImage(e.target.value)}
             className="w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
             placeholder="https://..."
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-blue-100">Publish at</span>
-          <input
-            type="datetime-local"
-            value={publishedAt}
-            onChange={(e) => setPublishedAt(e.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 text-sm text-white outline-none ring-cyan-300/40 focus:ring"
           />
         </label>
       </div>

@@ -19,13 +19,6 @@ export default async function EditBlogPage({ params }: EditPageProps) {
   const relatedIds = Array.isArray(post.relatedPostIds)
     ? post.relatedPostIds.map((id) => String(id)).join(", ")
     : "";
-  const toDateTimeLocal = (value: Date | string | null | undefined): string => {
-    if (!value) return "";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "";
-    const timezoneOffsetMs = date.getTimezoneOffset() * 60_000;
-    return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16);
-  };
 
   return (
     <main className="relative flex-1 overflow-hidden">
@@ -72,7 +65,6 @@ export default async function EditBlogPage({ params }: EditPageProps) {
                 industrySlug: String(post.industrySlug ?? ""),
                 templateKey: String(post.templateKey ?? ""),
                 relatedPostIds: relatedIds,
-                publishedAt: toDateTimeLocal(post.publishedAt as Date | null | undefined),
               }}
             />
           </div>

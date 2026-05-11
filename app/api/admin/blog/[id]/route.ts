@@ -49,6 +49,12 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
   const { id } = await context.params;
   const before = await getById(id);
+  if (!before) {
+    return NextResponse.json(
+      { error: "Post not found. It may have been deleted." },
+      { status: 404 }
+    );
+  }
 
   let body: unknown;
   try {
@@ -80,7 +86,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     if (!doc) {
       return NextResponse.json({ error: "Not found." }, { status: 404 });
     }
-    if (before && (isPubliclyVisible(before) || isPubliclyVisible(doc))) {
+    if (isPubliclyVisible(before) || isPubliclyVisible(doc)) {
       revalidateBlogPublic([String(before.slug), String(doc.slug)]);
     }
     return NextResponse.json(serializeBlogDoc(doc));

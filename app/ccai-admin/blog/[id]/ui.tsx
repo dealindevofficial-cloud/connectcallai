@@ -26,7 +26,6 @@ type InitialValues = {
   industrySlug: string;
   templateKey: string;
   relatedPostIds: string;
-  publishedAt: string;
 };
 
 type EditBlogFormProps = {
@@ -64,7 +63,6 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
   const [industrySlug, setIndustrySlug] = useState(initial.industrySlug);
   const [templateKey, setTemplateKey] = useState(initial.templateKey);
   const [relatedPostIds, setRelatedPostIds] = useState(initial.relatedPostIds);
-  const [publishedAt, setPublishedAt] = useState(initial.publishedAt);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedSlug, setSavedSlug] = useState<string | null>(null);
@@ -97,7 +95,6 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
       canonicalUrl: canonicalUrl.trim(),
       noindex,
       templateKey: templateKey.trim(),
-      publishedAt: publishedAt ? new Date(publishedAt).toISOString() : null,
     };
     if (industrySlug.trim()) {
       payload.industrySlug = toSlug(industrySlug);
@@ -139,6 +136,8 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
 
       const data = (await res.json().catch(() => ({}))) as {
         slug?: string;
+        status?: string;
+        publishedAt?: string | null;
         error?: string;
         details?: {
           formErrors?: string[];
@@ -155,7 +154,18 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
         ]
           .filter(Boolean)
           .join(" ");
-        setError(detailMessage || data.error || "Failed to save post.");
+        setError(
+          detailMessage ||
+            data.error ||
+            `Failed to save post (HTTP ${res.status}).`
+        );
+        return;
+      }
+
+      if (status === "published" && (data.status !== "published" || !data.publishedAt)) {
+        setError(
+          "Post save succeeded, but publish did not complete. Please try again."
+        );
         return;
       }
 
@@ -346,15 +356,6 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
             onChange={(e) => setAuthorImage(e.target.value)}
             className="w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
             placeholder="https://..."
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-blue-100">Publish at</span>
-          <input
-            type="datetime-local"
-            value={publishedAt}
-            onChange={(e) => setPublishedAt(e.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-slate-950/45 px-3.5 py-2.5 text-sm text-white outline-none ring-cyan-300/40 focus:ring"
           />
         </label>
       </div>

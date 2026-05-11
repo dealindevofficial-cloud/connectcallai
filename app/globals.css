@@ -401,6 +401,14 @@ body::-webkit-scrollbar-corner,
   padding-left: 1.35em;
 }
 
+.blog-prose :where(ul) {
+  list-style: disc;
+}
+
+.blog-prose :where(ol) {
+  list-style: decimal;
+}
+
 .blog-prose :where(li) {
   margin-top: 0.35em;
   margin-bottom: 0.35em;

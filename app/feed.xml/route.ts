@@ -1,8 +1,10 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { listPublishedForFeed } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
 
-export const revalidate = 900;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function escapeXml(value: string): string {
   return value
@@ -14,6 +16,7 @@ function escapeXml(value: string): string {
 }
 
 export async function GET() {
+  noStore();
   const siteOrigin = getSiteOrigin();
   if (!siteOrigin || !isMongoConfigured()) {
     return new Response("Feed unavailable", { status: 503 });

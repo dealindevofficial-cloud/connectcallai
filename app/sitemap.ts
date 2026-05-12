@@ -1,14 +1,17 @@
 import type { MetadataRoute } from "next";
+import { unstable_noStore as noStore } from "next/cache";
 import { listPublishedForSitemap } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
 
 /**
- * Keep sitemap fresh for daily publishing while still cache-friendly.
+ * Keep sitemap fresh for active publishing.
  */
-export const revalidate = 900;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  noStore();
   const base = getSiteOrigin();
   if (!base) {
     return [];

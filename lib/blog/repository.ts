@@ -378,13 +378,15 @@ export type FeedPostEntry = {
 };
 
 /**
- * All published posts meant for discovery (excludes `noindex` posts).
+ * All published posts meant for discovery.
+ *
+ * Note: We intentionally do not filter by `noindex` here so sitemap/feed stay in
+ * sync with the public blog list shown at `/blog`.
  */
 export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
   await connectDB();
   const filter: Record<string, unknown> = {
     ...publishedFilter(),
-    noindex: { $ne: true },
   };
   const rows = await Blog.find(filter as never)
     .select({ slug: 1, updatedAt: 1, publishedAt: 1 })
@@ -404,14 +406,13 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
 }
 
 /**
- * Published posts for RSS/Atom discovery (excludes `noindex` posts).
+ * Published posts for RSS/Atom discovery.
  */
 export async function listPublishedForFeed(limit = 100): Promise<FeedPostEntry[]> {
   await connectDB();
   const safeLimit = Math.min(500, Math.max(1, limit));
   const filter: Record<string, unknown> = {
     ...publishedFilter(),
-    noindex: { $ne: true },
   };
   const rows = await Blog.find(filter as never)
     .select({ slug: 1, title: 1, excerpt: 1, publishedAt: 1, updatedAt: 1 })

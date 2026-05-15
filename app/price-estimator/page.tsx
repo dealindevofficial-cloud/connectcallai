@@ -3,11 +3,11 @@ import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { FinalCta } from "@/components/landing/FinalCta";
 import { PriceEstimator } from "@/components/pricing/PriceEstimator";
+import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
 export const metadata: Metadata = {
-  title: "Pricing Estimator",
-  description:
-    "Estimate monthly AI call handling pricing using call volume, duration, and staffing assumptions.",
+  title: pageTitles.pricing,
+  description: pageDescriptions.pricing,
 };
 
 export default function PriceEstimatorPage() {

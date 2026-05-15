@@ -7,6 +7,12 @@ import type { BlogPublicDoc } from "@/lib/blog/public-types";
 import { normalizeSlug } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
+import {
+  fullTitle,
+  pageDescriptions,
+  pageTitles,
+  paginatedTitle,
+} from "@/lib/seo/page-metadata";
 
 const PAGE_SIZE = 10;
 
@@ -42,25 +48,22 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
   const siteOrigin = getSiteOrigin();
   const canonicalPath = buildCanonicalPath(pageNum, industrySlug);
 
-  let titleSegment = "Blog";
-  if (industrySlug) {
-    titleSegment = `${labelFromIndustrySlug(industrySlug)} Blog`;
-  }
-  if (pageNum > 1) {
-    titleSegment = `${titleSegment} · ${pageNum}`;
-  }
-
-  const docTitle = `${titleSegment} | CCAI`;
+  const baseSegment = industrySlug
+    ? pageTitles.blogIndustry(labelFromIndustrySlug(industrySlug))
+    : pageTitles.blog;
+  const titleSegment = paginatedTitle(baseSegment, pageNum);
+  const docTitle = fullTitle(titleSegment);
+  const description = industrySlug
+    ? pageDescriptions.blogIndustry(labelFromIndustrySlug(industrySlug))
+    : pageDescriptions.blog;
 
   return {
     title: titleSegment,
-    description:
-      "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+    description,
     alternates: siteOrigin ? { canonical: `${siteOrigin}${canonicalPath}` } : undefined,
     openGraph: {
       title: docTitle,
-      description:
-        "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+      description,
       type: "website",
       url: siteOrigin ? `${siteOrigin}${canonicalPath}` : undefined,
       images: [
@@ -68,15 +71,14 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
           url: "/blog/opengraph-image",
           width: 1200,
           height: 630,
-          alt: "CCAI blogs",
+          alt: "Connect Call AI blogs",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
       title: docTitle,
-      description:
-        "Insights on AI voice agents, automation, and customer conversations from the CCAI team.",
+      description,
       images: ["/blog/opengraph-image"],
     },
   };
@@ -84,7 +86,7 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
 
 export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
   if (!isMongoConfigured()) {
-    throw new Error("Blog listing unavailable: MongoDB is not configured.");
+    throw new Error("Blogs listing unavailable: MongoDB is not configured.");
   }
 
   const sp = await searchParams;
@@ -105,7 +107,7 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown database error";
-    throw new Error(`Blog listing unavailable: ${message}`);
+    throw new Error(`Blogs listing unavailable: ${message}`);
   }
 
   const { posts, page, totalPages, total } = result;

@@ -385,7 +385,7 @@ export function NewBlogForm() {
             </Link>
           </p>
           <ul className="space-y-1 text-xs text-emerald-100/90">
-            <li>1. Confirm the post appears on the blog listing.</li>
+            <li>1. Confirm the post appears on the blogs listing.</li>
             <li>2. Confirm `/sitemap.xml` includes the new post URL.</li>
             <li>3. Confirm `/feed.xml` includes the new post item.</li>
             <li>4. Add at least one internal link from an older relevant post.</li>

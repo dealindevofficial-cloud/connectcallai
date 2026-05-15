@@ -5,6 +5,7 @@ import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/landing/Navbar";
 import { AppToaster } from "@/components/ui/app-toaster";
 import { getSiteOrigin } from "@/lib/blog/site-url";
+import { pageDescriptions, pageTitles, SITE_NAME } from "@/lib/seo/page-metadata";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -19,15 +20,13 @@ const geistMono = Geist_Mono({
 });
 
 const siteOrigin = getSiteOrigin();
-const defaultDescription =
-  "CCAI helps teams automate inbound and outbound customer conversations with AI voice agents.";
+const defaultDescription = pageDescriptions.home;
 const defaultOgImage = "/opengraph-image";
 
 export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
   title: {
-    default: "AI Voice Agents | CCAI",
-    template: "%s | CCAI",
+    default: pageTitles.home,
   },
   description: defaultDescription,
   alternates: {
@@ -40,23 +39,23 @@ export const metadata: Metadata = {
     apple: "/tab-logo.png",
   },
   openGraph: {
-    title: "CCAI",
+    title: pageTitles.home,
     description: defaultDescription,
     type: "website",
-    siteName: "CCAI",
+    siteName: SITE_NAME,
     url: siteOrigin ?? undefined,
     images: [
       {
         url: defaultOgImage,
         width: 1200,
         height: 630,
-        alt: "CCAI AI voice agent platform",
+        alt: "Connect Call AI voice agent platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CCAI",
+    title: pageTitles.home,
     description: defaultDescription,
     images: [defaultOgImage],
   },

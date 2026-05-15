@@ -3,10 +3,11 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { getCalendlyEmbedUrl } from "@/lib/config/calendly";
+import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
 export const metadata: Metadata = {
-  title: "Contact & Demo",
-  description: "Book a demo and connect with the CCAI team.",
+  title: pageTitles.contact,
+  description: pageDescriptions.contact,
 };
 
 function getEmbedDomain(): string | undefined {

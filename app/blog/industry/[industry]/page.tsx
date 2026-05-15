@@ -7,6 +7,12 @@ import type { BlogPublicDoc } from "@/lib/blog/public-types";
 import { normalizeSlug } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
+import {
+  fullTitle,
+  pageDescriptions,
+  pageTitles,
+  paginatedTitle,
+} from "@/lib/seo/page-metadata";
 
 const PAGE_SIZE = 10;
 
@@ -32,7 +38,8 @@ export async function generateMetadata({
   const slug = normalizeSlug(decodeURIComponent(industry));
   if (!slug) {
     return {
-      title: "Industry Blogs",
+      title: pageTitles.blog,
+      description: pageDescriptions.blog,
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
@@ -43,16 +50,16 @@ export async function generateMetadata({
   const query = pageNum > 1 ? `?page=${pageNum}` : "";
   const canonicalPath = `/blog/industry/${encodeURIComponent(slug)}${query}`;
 
-  const listTitleSegment =
-    pageNum > 1 ? `${label} Blog · ${pageNum}` : `${label} Blog`;
+  const listTitleSegment = paginatedTitle(pageTitles.blogIndustry(label), pageNum);
+  const description = pageDescriptions.blogIndustry(label);
 
   return {
     title: listTitleSegment,
-    description: `Industry-specific AI voice and automation insights for ${label}.`,
+    description,
     alternates: base ? { canonical: `${base}${canonicalPath}` } : undefined,
     openGraph: {
-      title: `${listTitleSegment} | CCAI`,
-      description: `Industry-specific AI voice and automation insights for ${label}.`,
+      title: fullTitle(listTitleSegment),
+      description,
       type: "website",
       url: base ? `${base}${canonicalPath}` : undefined,
       images: [
@@ -66,8 +73,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${listTitleSegment} | CCAI`,
-      description: `Industry-specific AI voice and automation insights for ${label}.`,
+      title: fullTitle(listTitleSegment),
+      description,
       images: ["/blog/opengraph-image"],
     },
   };

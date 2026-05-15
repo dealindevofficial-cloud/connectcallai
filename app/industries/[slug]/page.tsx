@@ -5,6 +5,7 @@ import { CursorGlow } from "@/components/landing/CursorGlow";
 import { IndustryLanding } from "@/components/industries/IndustryLanding";
 import { getIndustryBySlug, industries } from "@/lib/industries-data";
 import { getSiteOrigin } from "@/lib/blog/site-url";
+import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
 type IndustryPageProps = {
   params: Promise<{ slug: string }>;
@@ -20,22 +21,23 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
 
   if (!industry) {
     return {
-      title: "Industry Not Found",
+      title: pageTitles.industryNotFound,
+      description: pageDescriptions.notFound,
     };
   }
 
   const siteOrigin = getSiteOrigin();
-  const docTitle = `AI Voice · ${industry.name} | CCAI`;
+  const docTitle = pageTitles.industry(industry.name);
   const path = `/industries/${industry.slug}`;
 
   return {
-    title: `AI Voice · ${industry.name}`,
-    description: industry.longDescription,
+    title: docTitle,
+    description: industry.shortDescription,
     keywords: [...industry.seoKeywords],
     alternates: siteOrigin ? { canonical: `${siteOrigin}${path}` } : undefined,
     openGraph: {
       title: docTitle,
-      description: industry.longDescription,
+      description: industry.shortDescription,
       type: "website",
       url: siteOrigin ? `${siteOrigin}${path}` : undefined,
       images: [
@@ -50,7 +52,7 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
     twitter: {
       card: "summary_large_image",
       title: docTitle,
-      description: industry.longDescription,
+      description: industry.shortDescription,
       images: ["/opengraph-image"],
     },
   };

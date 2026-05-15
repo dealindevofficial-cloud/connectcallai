@@ -12,6 +12,12 @@ import { blogDocumentToCardPost } from "@/lib/blog/serialize";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import type { BlogDocument } from "@/lib/db/models/Blog";
 import { isMongoConfigured } from "@/lib/db/connect";
+import {
+  fullTitle,
+  pageDescriptions,
+  pageTitles,
+  seoTitleSegment,
+} from "@/lib/seo/page-metadata";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -21,7 +27,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   if (!isMongoConfigured()) {
     return {
-      title: "Blog Setup",
+      title: pageTitles.blogSetup,
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
@@ -30,14 +36,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     raw = await getCachedPostBySlug(slug);
   } catch {
     return {
-      title: "Blog Unavailable",
-      description: "Unable to load this article right now.",
+      title: pageTitles.blogUnavailable,
+      description: pageDescriptions.blogUnavailable,
       robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     };
   }
   if (!raw) {
     return {
-      title: "Post Not Found",
+      title: pageTitles.postNotFound,
+      description: pageDescriptions.notFound,
     };
   }
   const post = raw as BlogPublicDoc;
@@ -48,8 +55,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const canonicalUrl = post.canonicalUrl?.trim() ?? "";
   const siteOrigin = getSiteOrigin();
 
-  const title = metaTitle || post.title;
-  const description = metaDesc || excerpt || "Article on the CCAI blogs.";
+  const articleTitle = metaTitle || post.title;
+  const titleSegment = seoTitleSegment(articleTitle);
+  const docTitle = fullTitle(titleSegment);
+  const description = metaDesc || excerpt || pageDescriptions.postFallback;
   const canonical =
     canonicalUrl ||
     (siteOrigin ? `${siteOrigin}/blog/${post.slug}` : undefined);
@@ -88,7 +97,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID?.trim();
 
   return {
-    title,
+    title: titleSegment,
     description,
     ...(keywords ? { keywords } : {}),
     ...(facebookAppId ? { facebook: { appId: facebookAppId } } : {}),
@@ -97,25 +106,25 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       : undefined,
     alternates: canonical ? { canonical } : undefined,
     openGraph: {
-      title,
+      title: docTitle,
       description,
       type: "article",
       url: ogUrl,
-      siteName: "CCAI",
+      siteName: "Connect Call AI",
       publishedTime,
       modifiedTime,
       ...(articleSection ? { section: articleSection } : {}),
       ...(articleTags.length > 0 ? { tags: articleTags } : {}),
       images: post.featuredImage?.trim()
-        ? [{ url: post.featuredImage.trim(), alt: title }]
-        : [{ url: "/blog/opengraph-image", width: 1200, height: 630, alt: title }],
+        ? [{ url: post.featuredImage.trim(), alt: articleTitle }]
+        : [{ url: "/blog/opengraph-image", width: 1200, height: 630, alt: articleTitle }],
       ...(post.author?.name
         ? { authors: [post.author.name] }
         : {}),
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: docTitle,
       description,
       images: [ogImage],
       ...(twitterHandle ? { site: twitterHandle, creator: twitterHandle } : {}),
@@ -151,7 +160,7 @@ function BlogBreadcrumb({ currentLabel }: { currentLabel?: string }) {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   if (!isMongoConfigured()) {
-    throw new Error("Blog post unavailable: MongoDB is not configured.");
+    throw new Error("Blogs post unavailable: MongoDB is not configured.");
   }
 
   let raw: Awaited<ReturnType<typeof getCachedPostBySlug>>;
@@ -159,7 +168,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     raw = await getCachedPostBySlug(slug);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Database connection failed";
-    throw new Error(`Blog post unavailable: ${message}`);
+    throw new Error(`Blogs post unavailable: ${message}`);
   }
 
   if (!raw) {
@@ -248,7 +257,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           <footer className="mt-14 border-t border-[#BFDBFE] pt-10">
             <Link href="/blog" className="font-medium text-[#1E3A8A] hover:text-slate-950">
-              ← All posts
+              ← All blogs
             </Link>
           </footer>
         </div>

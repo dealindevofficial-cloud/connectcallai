@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "CCAI blog insights";
+export const alt = "Connect Call AI blogs insights";
 export const size = {
   width: 1200,
   height: 630,

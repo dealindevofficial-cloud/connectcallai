@@ -45,7 +45,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-  <title>CCAI Blog</title>
+  <title>Connect Call AI Blogs</title>
   <link>${escapeXml(`${siteOrigin}/blog`)}</link>
   <description>Insights on AI voice agents, automation, and customer conversations from the CCAI team.</description>
   <language>en-us</language>

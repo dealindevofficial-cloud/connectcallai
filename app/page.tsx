@@ -9,19 +9,17 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { UseCases } from "@/components/landing/UseCases";
 import type { Metadata } from "next";
 import { getSiteOrigin } from "@/lib/blog/site-url";
-
-const homeDescription =
-  "Deploy AI voice agents for support, sales, and operations with CCAI's secure automation platform.";
+import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
 export const metadata: Metadata = {
-  title: "AI voice agents 24/7 | CCAI",
-  description: homeDescription,
+  title: pageTitles.home,
+  description: pageDescriptions.home,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "AI voice agents 24/7 | CCAI",
-    description: homeDescription,
+    title: pageTitles.home,
+    description: pageDescriptions.home,
     type: "website",
     url: getSiteOrigin() ?? undefined,
     images: [
@@ -29,14 +27,14 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "CCAI home page",
+        alt: "Connect Call AI home page",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI voice agents 24/7 | CCAI",
-    description: homeDescription,
+    title: pageTitles.home,
+    description: pageDescriptions.home,
     images: ["/opengraph-image"],
   },
 };

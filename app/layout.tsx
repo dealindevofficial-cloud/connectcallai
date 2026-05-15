@@ -5,7 +5,12 @@ import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/landing/Navbar";
 import { AppToaster } from "@/components/ui/app-toaster";
 import { getSiteOrigin } from "@/lib/blog/site-url";
-import { pageDescriptions, pageTitles, SITE_NAME } from "@/lib/seo/page-metadata";
+import {
+  pageDescriptions,
+  pageTitles,
+  SITE_NAME,
+  TITLE_TEMPLATE,
+} from "@/lib/seo/page-metadata";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -27,6 +32,7 @@ export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
   title: {
     default: pageTitles.home,
+    template: TITLE_TEMPLATE,
   },
   description: defaultDescription,
   alternates: {

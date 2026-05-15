@@ -1,6 +1,9 @@
 /** Site name used in titles and meta descriptions. */
 export const SITE_NAME = "Connect Call AI";
 
+/** Pass-through layout template (each page sets its full title; nothing is appended). */
+export const TITLE_TEMPLATE = "%s";
+
 /** Target max length for document titles in SERPs. */
 const MAX_TITLE_SEGMENT = 60;
 

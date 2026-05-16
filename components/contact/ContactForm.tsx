@@ -1,13 +1,54 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
 export function ContactForm() {
+  const searchParams = useSearchParams();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const prefilledMessage = useMemo(() => {
+    const minutes = searchParams.get("minutes");
+    const estimate = searchParams.get("estimate");
+    const rate = searchParams.get("rate");
+
+    if (!minutes || !estimate || !rate) return "";
+
+    const parsedMinutes = Number(minutes);
+    const parsedEstimate = Number(estimate);
+    const parsedRate = Number(rate);
+
+    if (
+      !Number.isFinite(parsedMinutes) ||
+      parsedMinutes < 0 ||
+      !Number.isFinite(parsedEstimate) ||
+      parsedEstimate < 0 ||
+      !Number.isFinite(parsedRate) ||
+      parsedRate <= 0
+    ) {
+      return "";
+    }
+
+    const safeMinutes = new Intl.NumberFormat("en-US").format(Math.round(parsedMinutes));
+    const safeEstimate = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(Math.round(parsedEstimate));
+    const safeRate = parsedRate.toFixed(2);
+
+    return `Hi, I used the price estimator and selected ${safeMinutes} minutes per month. The estimate shown was ${safeEstimate} at $${safeRate} per minute. Please share a custom quote for my business.`;
+  }, [searchParams]);
+
+  const [messageValue, setMessageValue] = useState(prefilledMessage);
+
+  useEffect(() => {
+    setMessageValue(prefilledMessage);
+  }, [prefilledMessage]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,7 +61,7 @@ export function ContactForm() {
     const payload = {
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
-      message: String(formData.get("message") ?? "").trim(),
+      message: messageValue.trim(),
     };
 
     const loadingToast = toast.loading("Sending your message…");
@@ -41,6 +82,7 @@ export function ContactForm() {
 
       toast.dismiss(loadingToast);
       form.reset();
+      setMessageValue(prefilledMessage);
       setSubmitState("success");
       toast.success("Message sent. Our team will get back to you soon.");
     } catch (error) {
@@ -81,6 +123,8 @@ export function ContactForm() {
             name="message"
             rows={6}
             placeholder="Tell us about your business, call volume, and what you need."
+            value={messageValue}
+            onChange={(event) => setMessageValue(event.target.value)}
             className="w-full resize-y rounded-xl border border-white/22 bg-white/8 px-4 py-3 text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none"
           />
           <button

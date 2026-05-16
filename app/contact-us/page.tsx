@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
@@ -41,7 +42,15 @@ export default function ContactUsPage() {
           </section>
 
           <section className="space-y-6 md:space-y-8">
-            <ContactForm />
+            <Suspense
+              fallback={
+                <div className="rounded-3xl border border-white/18 bg-[linear-gradient(135deg,rgba(67,84,175,0.38),rgba(20,31,106,0.52))] p-6 text-blue-100/80 shadow-[0_18px_60px_rgba(9,16,65,0.45)] backdrop-blur-xl md:p-8">
+                  Loading contact form...
+                </div>
+              }
+            >
+              <ContactForm />
+            </Suspense>
 
             <div>
               <h2 className="text-center text-3xl font-semibold text-white md:text-4xl">

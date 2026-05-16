@@ -207,7 +207,7 @@ export function Hero() {
           variants={fadeUp}
           className="text-4xl font-extrabold leading-tight tracking-tight text-white drop-shadow-[0_8px_26px_rgba(90,118,255,0.45)] md:text-6xl"
         >
-          Never Miss a Call Again with AI Agents That Answer, Book & Convert 24/7.
+          Pre-Built AI Voice Agents for 24/7 Call Answering, Booking & Lead Conversion.
         </motion.h1>
         <motion.p variants={fadeUp} className="max-w-xl text-lg text-blue-100/80">
         No setup. No training. Just plug & play AI agents for your business..

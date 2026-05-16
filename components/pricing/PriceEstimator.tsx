@@ -72,7 +72,7 @@ export function PriceEstimator() {
           $
         </span>
         <h1 className="mx-auto max-w-3xl text-balance text-3xl font-semibold text-white md:text-5xl">
-          Estimate your monthly calling cost
+          AI Voice Agent Pricing Calculator for Monthly Call Costs
         </h1>
       </div>
 

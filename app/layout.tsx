@@ -41,8 +41,12 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/tab-logo.png",
-    apple: "/tab-logo.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/tab-logo.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/tab-logo.png", type: "image/png", sizes: "180x180" }],
   },
   openGraph: {
     title: pageTitles.home,

@@ -51,7 +51,7 @@ export function IndustriesHub() {
                   icon={industry.icon}
                   title={industry.name}
                   description={industry.shortDescription}
-                  href={`/industries/${industry.slug}`}
+                  href={`/industries/${industry.pageSlug}`}
                 />
               </motion.div>
             ))}

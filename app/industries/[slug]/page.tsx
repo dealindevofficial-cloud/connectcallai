@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { IndustryLanding } from "@/components/industries/IndustryLanding";
-import { getIndustryBySlug, industries } from "@/lib/industries-data";
+import { getIndustryByRouteSlug, industries } from "@/lib/industries-data";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
@@ -12,12 +12,12 @@ type IndustryPageProps = {
 };
 
 export async function generateStaticParams() {
-  return industries.map((industry) => ({ slug: industry.slug }));
+  return industries.map((industry) => ({ slug: industry.pageSlug }));
 }
 
 export async function generateMetadata({ params }: IndustryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const industry = getIndustryBySlug(slug);
+  const industry = getIndustryByRouteSlug(slug);
 
   if (!industry) {
     return {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
 
   const siteOrigin = getSiteOrigin();
   const docTitle = pageTitles.industry(industry.name);
-  const path = `/industries/${industry.slug}`;
+  const path = `/industries/${industry.pageSlug}`;
 
   return {
     title: docTitle,
@@ -60,10 +60,14 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
 
 export default async function IndustryPage({ params }: IndustryPageProps) {
   const { slug } = await params;
-  const industry = getIndustryBySlug(slug);
+  const industry = getIndustryByRouteSlug(slug);
 
   if (!industry) {
     notFound();
+  }
+
+  if (slug !== industry.pageSlug) {
+    permanentRedirect(`/industries/${industry.pageSlug}`);
   }
 
   return (

@@ -1,5 +1,6 @@
 export type Industry = {
   slug: string;
+  pageSlug: string;
   name: string;
   icon: string;
   shortDescription: string;
@@ -23,6 +24,7 @@ export type Industry = {
 export const industries = [
   {
     slug: "real-estate",
+    pageSlug: "ai-calling-agents-for-real-estate",
     name: "Real Estate",
     icon: "🏙️",
     shortDescription:
@@ -90,6 +92,7 @@ export const industries = [
   },
   {
     slug: "restaurants",
+    pageSlug: "ai-calling-agents-for-restaurants",
     name: "Restaurants",
     icon: "🍽️",
     shortDescription:
@@ -157,6 +160,7 @@ export const industries = [
   },
   {
     slug: "hospitals",
+    pageSlug: "ai-calling-agents-for-hospitals",
     name: "Hospitals",
     icon: "🏥",
     shortDescription:
@@ -224,6 +228,7 @@ export const industries = [
   },
   {
     slug: "pet-clinics",
+    pageSlug: "ai-calling-agents-for-pet-clinics",
     name: "Pet Clinics",
     icon: "🐾",
     shortDescription:
@@ -293,4 +298,10 @@ export const industries = [
 
 export function getIndustryBySlug(slug: string) {
   return industries.find((industry) => industry.slug === slug);
+}
+
+export function getIndustryByRouteSlug(routeSlug: string) {
+  return industries.find(
+    (industry) => industry.pageSlug === routeSlug || industry.slug === routeSlug
+  );
 }

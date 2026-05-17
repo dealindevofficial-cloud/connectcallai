@@ -389,20 +389,22 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <div>
+          <div className="relative grid gap-6 md:gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+            <div className="text-center md:text-left">
               <p className="inline-flex items-center rounded-full border border-[#9cb7ff]/35 bg-[#84a1ff]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#dce5ff]">
                 Live demo
               </p>
-              <h2 className="mt-4 text-3xl font-semibold text-white md:text-4xl">Talk to your AI call agent</h2>
-              <p className="mt-3 max-w-md text-blue-100/85">
+              <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
+                Talk to your AI call agent
+              </h2>
+              <p className="mx-auto mt-3 max-w-md text-blue-100/85 md:mx-0">
                 Enter your details and preview how an AI phone agent for {industry.name.toLowerCase()} can
                 handle real customer conversations.
               </p>
 
-              <div className="mt-6 max-w-md rounded-2xl border border-white/15 bg-[#0c1869]/50 p-5">
+              <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/15 bg-[#0c1869]/50 p-4 sm:p-5 md:mx-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b8cbff]">What happens next</p>
-                <ul className="mt-3 space-y-2 text-sm text-blue-50/90">
+                <ul className="mt-3 space-y-2 text-[13px] text-blue-50/90 sm:text-sm">
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
                     Instant call routing to the AI voice workflow
@@ -419,8 +421,8 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/20 bg-[#0a145b]/65 p-5 md:p-6">
-              <form onSubmit={onRequestDemo} className="grid gap-4">
+            <div className="rounded-2xl border border-white/20 bg-[#0a145b]/65 p-4 sm:p-5 md:p-6">
+              <form onSubmit={onRequestDemo} className="grid gap-3 sm:gap-4">
                 <label className="sr-only" htmlFor="demo-name">
                   Name
                 </label>
@@ -430,12 +432,12 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   name="name"
                   required
                   placeholder={industry.demoPlaceholderName}
-                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none"
+                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
                 />
                 <label className="sr-only" htmlFor="demo-phone">
                   Phone
                 </label>
-                <div className="flex h-12 items-center rounded-xl border border-white/20 bg-[#0b145f]/70 px-3 focus-within:border-[#9ab1ff]">
+                <div className="flex h-12 min-w-0 items-center rounded-xl border border-white/20 bg-[#0b145f]/70 px-3 focus-within:border-[#9ab1ff]">
                   <UsFlagIcon />
                   <span className="mr-2 text-sm font-medium text-blue-100/95">+1</span>
                   <input
@@ -459,7 +461,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                       setPhoneDigits(pastedDigits);
                     }}
                     placeholder="(555) 123-4567"
-                    className="h-full w-full bg-transparent text-white placeholder:text-blue-200/60 focus:outline-none"
+                    className="h-full min-w-0 w-full bg-transparent text-sm text-white placeholder:text-blue-200/60 focus:outline-none sm:text-base"
                   />
                 </div>
                 <label className="sr-only" htmlFor="demo-email">
@@ -471,11 +473,11 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   name="email"
                   required
                   placeholder="e.g., you@company.com"
-                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none"
+                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
                 />
                 <button
                   type="submit"
-                  className="btn-primary mt-1 h-12 w-full justify-center"
+                  className="btn-primary mt-1 h-12 w-full justify-center text-sm sm:text-base"
                   disabled={requestStatus === "submitting"}
                 >
                   {requestStatus === "submitting"

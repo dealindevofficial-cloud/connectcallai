@@ -68,6 +68,16 @@ html {
   scroll-padding-top: 7rem;
   scrollbar-color: #9daeff transparent;
   scrollbar-width: thin;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 /* WebKit scrollbar styling (Chrome, Edge, Safari) */

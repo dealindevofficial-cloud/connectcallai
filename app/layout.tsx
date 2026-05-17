@@ -81,7 +81,7 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col overflow-x-clip">
         <Navbar />
         <AppToaster />
         {children}

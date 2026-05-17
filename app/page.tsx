@@ -8,6 +8,7 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { UseCases } from "@/components/landing/UseCases";
 import type { Metadata } from "next";
+import { faqs } from "@/lib/landing-data";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
@@ -40,8 +41,25 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#070b3a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <BackgroundFX />
       <CursorGlow />
       <main className="relative z-10">

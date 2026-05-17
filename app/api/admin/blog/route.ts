@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
     templateKey: data.templateKey,
     industrySlug: data.industrySlug,
     relatedPostIds: data.relatedPostIds,
+    faqs: data.faqs,
   };
 
   try {

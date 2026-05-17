@@ -22,6 +22,11 @@ const imageEntrySchema = z.object({
   alt: z.string().max(300).optional(),
 });
 
+const faqEntrySchema = z.object({
+  question: z.string().min(1).max(300),
+  answer: z.string().min(1).max(2000),
+});
+
 /** 24-char hex MongoDB ObjectId */
 const mongoObjectIdString = z
   .string()
@@ -50,6 +55,7 @@ export const createBlogBodySchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use a lowercase slug (letters, numbers, hyphens).")
     .optional(),
   relatedPostIds: z.array(mongoObjectIdString).max(8).optional(),
+  faqs: z.array(faqEntrySchema).max(20).optional(),
 });
 
 export const updateBlogBodySchema = createBlogBodySchema

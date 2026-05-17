@@ -21,6 +21,7 @@ export type BlogPublicDoc = {
   tags?: string[] | null;
   /** Admin-curated related doc ids; may be empty. */
   relatedPostIds?: Types.ObjectId[] | null;
+  faqs?: { question: string; answer: string }[] | null;
   /** Optional programmatic / industry metadata. */
   templateKey?: string | null;
   industrySlug?: string | null;

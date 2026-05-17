@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 
 type Status = "draft" | "published";
+type FaqItem = { question: string; answer: string };
 
 function toSlug(value: string): string {
   return value
@@ -37,6 +38,7 @@ export function NewBlogForm() {
   const [industrySlug, setIndustrySlug] = useState("");
   const [templateKey, setTemplateKey] = useState("");
   const [relatedPostIds, setRelatedPostIds] = useState("");
+  const [faqs, setFaqs] = useState<FaqItem[]>([{ question: "", answer: "" }]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<{ id: string; slug: string } | null>(null);
@@ -45,6 +47,16 @@ export function NewBlogForm() {
     if (slugEdited) return slug;
     return toSlug(title);
   }, [slug, slugEdited, title]);
+
+  function normalizeFaqItems(items: FaqItem[]): FaqItem[] {
+    return items
+      .map((item) => ({
+        question: item.question.trim(),
+        answer: item.answer.trim(),
+      }))
+      .filter((item) => item.question.length > 0 && item.answer.length > 0)
+      .slice(0, 20);
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -107,6 +119,11 @@ export function NewBlogForm() {
       payload.relatedPostIds = parsedRelated;
     }
 
+    const parsedFaqs = normalizeFaqItems(faqs);
+    if (parsedFaqs.length > 0) {
+      payload.faqs = parsedFaqs;
+    }
+
     try {
       const res = await fetch("/api/admin/blog", {
         method: "POST",
@@ -155,6 +172,7 @@ export function NewBlogForm() {
       setIndustrySlug("");
       setTemplateKey("");
       setRelatedPostIds("");
+      setFaqs([{ question: "", answer: "" }]);
     } catch {
       setError("Could not reach the server. Please try again.");
     } finally {
@@ -363,6 +381,69 @@ export function NewBlogForm() {
           placeholder="665a... , 665b..."
         />
       </label>
+
+      <div className="space-y-3 rounded-xl border border-white/15 bg-slate-950/25 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-blue-100">FAQs</p>
+            <p className="text-xs text-blue-200/70">
+              Add FAQs to show on the blog page and generate FAQ schema.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFaqs((prev) => [...prev, { question: "", answer: "" }])}
+            className="rounded-lg border border-white/25 px-3 py-1.5 text-xs font-medium text-blue-100 transition hover:border-cyan-300/60 hover:text-cyan-200"
+          >
+            Add FAQ
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {faqs.map((faq, idx) => (
+            <div key={`faq-${idx}`} className="rounded-lg border border-white/10 bg-slate-900/40 p-3">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-blue-200/80">
+                  FAQ {idx + 1}
+                </span>
+                {faqs.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => setFaqs((prev) => prev.filter((_, i) => i !== idx))}
+                    className="text-xs font-medium text-rose-300 transition hover:text-rose-200"
+                  >
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+              <input
+                value={faq.question}
+                onChange={(e) =>
+                  setFaqs((prev) =>
+                    prev.map((item, i) =>
+                      i === idx ? { ...item, question: e.target.value } : item
+                    )
+                  )
+                }
+                className="w-full rounded-lg border border-white/20 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
+                placeholder="Question"
+              />
+              <textarea
+                value={faq.answer}
+                onChange={(e) =>
+                  setFaqs((prev) =>
+                    prev.map((item, i) =>
+                      i === idx ? { ...item, answer: e.target.value } : item
+                    )
+                  )
+                }
+                className="mt-2 min-h-20 w-full rounded-lg border border-white/20 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
+                placeholder="Answer"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
       <label className="flex items-center gap-3">
         <input

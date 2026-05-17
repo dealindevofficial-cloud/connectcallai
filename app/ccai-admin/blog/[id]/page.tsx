@@ -19,6 +19,14 @@ export default async function EditBlogPage({ params }: EditPageProps) {
   const relatedIds = Array.isArray(post.relatedPostIds)
     ? post.relatedPostIds.map((id) => String(id)).join(", ")
     : "";
+  const faqs = Array.isArray(post.faqs)
+    ? post.faqs
+        .map((item) => ({
+          question: String(item?.question ?? ""),
+          answer: String(item?.answer ?? ""),
+        }))
+        .filter((item) => item.question.length > 0 || item.answer.length > 0)
+    : [];
 
   return (
     <main className="relative flex-1 overflow-hidden">
@@ -65,6 +73,7 @@ export default async function EditBlogPage({ params }: EditPageProps) {
                 industrySlug: String(post.industrySlug ?? ""),
                 templateKey: String(post.templateKey ?? ""),
                 relatedPostIds: relatedIds,
+                faqs,
               }}
             />
           </div>

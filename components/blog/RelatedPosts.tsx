@@ -13,9 +13,9 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
     <section className="mt-14 border-t border-[#BFDBFE] pt-10" aria-label="Related posts">
       <h2 className="mb-6 text-xl font-semibold text-slate-950">Related blogs</h2>
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((p) => (
-          <BlogCard key={p.slug} post={p} />
+          <BlogCard key={p.slug} post={p} compact />
         ))}
       </div>
     </section>

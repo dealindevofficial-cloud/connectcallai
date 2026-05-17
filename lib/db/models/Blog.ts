@@ -27,6 +27,14 @@ const categorySchema = new Schema(
   { _id: false }
 );
 
+const faqEntrySchema = new Schema(
+  {
+    question: { type: String, required: true, maxlength: 300 },
+    answer: { type: String, required: true, maxlength: 2000 },
+  },
+  { _id: false }
+);
+
 const blogSchema = new Schema(
   {
     title: { type: String, required: true, maxlength: 300 },
@@ -79,6 +87,14 @@ const blogSchema = new Schema(
         message: "At most 8 related post ids.",
       },
     },
+    faqs: {
+      type: [faqEntrySchema],
+      default: [],
+      validate: {
+        validator: (arr: unknown[]) => arr.length <= 20,
+        message: "At most 20 FAQs allowed.",
+      },
+    },
   },
   {
     timestamps: true,
@@ -121,6 +137,11 @@ function ensurePublishedDates(this: BlogDocument) {
 }
 
 blogSchema.pre("save", ensurePublishedDates);
+
+const existingBlogModel = mongoose.models.Blog as BlogModel | undefined;
+if (existingBlogModel && !existingBlogModel.schema.path("faqs")) {
+  mongoose.deleteModel("Blog");
+}
 
 export const Blog: BlogModel =
   (mongoose.models.Blog as BlogModel | undefined) ??

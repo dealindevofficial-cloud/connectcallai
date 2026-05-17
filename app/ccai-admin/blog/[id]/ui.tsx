@@ -5,6 +5,7 @@ import { useState } from "react";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 
 type Status = "draft" | "published";
+type FaqItem = { question: string; answer: string };
 
 type InitialValues = {
   title: string;
@@ -26,6 +27,7 @@ type InitialValues = {
   industrySlug: string;
   templateKey: string;
   relatedPostIds: string;
+  faqs: FaqItem[];
 };
 
 type EditBlogFormProps = {
@@ -63,6 +65,9 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
   const [industrySlug, setIndustrySlug] = useState(initial.industrySlug);
   const [templateKey, setTemplateKey] = useState(initial.templateKey);
   const [relatedPostIds, setRelatedPostIds] = useState(initial.relatedPostIds);
+  const [faqs, setFaqs] = useState<FaqItem[]>(
+    initial.faqs.length > 0 ? initial.faqs : [{ question: "", answer: "" }]
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedSlug, setSavedSlug] = useState<string | null>(null);
@@ -126,6 +131,13 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
       .map((id) => id.trim())
       .filter(Boolean);
     payload.relatedPostIds = parsedRelated;
+    payload.faqs = faqs
+      .map((item) => ({
+        question: item.question.trim(),
+        answer: item.answer.trim(),
+      }))
+      .filter((item) => item.question.length > 0 && item.answer.length > 0)
+      .slice(0, 20);
 
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
@@ -371,6 +383,69 @@ export function EditBlogForm({ postId, initial }: EditBlogFormProps) {
           placeholder="665a... , 665b..."
         />
       </label>
+
+      <div className="space-y-3 rounded-xl border border-white/15 bg-slate-950/25 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-blue-100">FAQs</p>
+            <p className="text-xs text-blue-200/70">
+              FAQs shown on this blog page and used for FAQ schema.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFaqs((prev) => [...prev, { question: "", answer: "" }])}
+            className="rounded-lg border border-white/25 px-3 py-1.5 text-xs font-medium text-blue-100 transition hover:border-cyan-300/60 hover:text-cyan-200"
+          >
+            Add FAQ
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {faqs.map((faq, idx) => (
+            <div key={`faq-${idx}`} className="rounded-lg border border-white/10 bg-slate-900/40 p-3">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-blue-200/80">
+                  FAQ {idx + 1}
+                </span>
+                {faqs.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => setFaqs((prev) => prev.filter((_, i) => i !== idx))}
+                    className="text-xs font-medium text-rose-300 transition hover:text-rose-200"
+                  >
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+              <input
+                value={faq.question}
+                onChange={(e) =>
+                  setFaqs((prev) =>
+                    prev.map((item, i) =>
+                      i === idx ? { ...item, question: e.target.value } : item
+                    )
+                  )
+                }
+                className="w-full rounded-lg border border-white/20 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
+                placeholder="Question"
+              />
+              <textarea
+                value={faq.answer}
+                onChange={(e) =>
+                  setFaqs((prev) =>
+                    prev.map((item, i) =>
+                      i === idx ? { ...item, answer: e.target.value } : item
+                    )
+                  )
+                }
+                className="mt-2 min-h-20 w-full rounded-lg border border-white/20 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none ring-cyan-300/40 placeholder:text-blue-200/50 focus:ring"
+                placeholder="Answer"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
       <label className="flex items-center gap-3">
         <input

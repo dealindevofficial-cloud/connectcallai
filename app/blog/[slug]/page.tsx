@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogFaqAccordion } from "@/components/blog/BlogFaqAccordion";
 import { BlogPostBody } from "@/components/blog/BlogPostBody";
 import { JsonLdArticle } from "@/components/blog/JsonLdArticle";
+import { JsonLdFaq } from "@/components/blog/JsonLdFaq";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { markdownToSafeHtml } from "@/lib/blog/markdown";
 import { listRelatedForPost } from "@/lib/blog/repository";
@@ -192,6 +194,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const html = await markdownToSafeHtml(post.content);
   const image = post.featuredImage?.trim() ?? "";
+  const faqItems = Array.isArray(post.faqs)
+    ? post.faqs
+        .map((item) => ({
+          question: String(item?.question ?? "").trim(),
+          answer: String(item?.answer ?? "").trim(),
+        }))
+        .filter((item) => item.question.length > 0 && item.answer.length > 0)
+    : [];
   const siteOrigin = getSiteOrigin();
   const pageUrl =
     siteOrigin != null && siteOrigin.length > 0
@@ -202,6 +212,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <div className="min-h-screen bg-[#EEF3FF]">
       {pageUrl && siteOrigin && !post.noindex ? (
         <JsonLdArticle post={post} pageUrl={pageUrl} siteOrigin={siteOrigin} />
+      ) : null}
+      {!post.noindex ? (
+        <JsonLdFaq faqs={faqItems} />
       ) : null}
       <article className="px-5 pb-20 pt-14 md:px-8 md:pt-20">
         <div className="mx-auto w-full max-w-5xl">
@@ -252,6 +265,107 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           ) : null}
 
           <BlogPostBody html={html} />
+
+          <section
+            className="relative mt-14 overflow-hidden rounded-3xl border border-[#1E3A8A]/25 bg-gradient-to-br from-[#0B144E] via-[#172574] to-[#281C74] p-6 text-white shadow-[0_22px_60px_rgba(15,23,89,0.35)] md:p-8"
+            aria-labelledby="blog-cta-heading"
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-[#A5B4FC]/20 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-20 right-0 h-56 w-56 rounded-full bg-[#60A5FA]/20 blur-3xl"
+            />
+
+            <div className="relative">
+              <span className="inline-flex rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-blue-100/95">
+                Next step
+              </span>
+              <h2 id="blog-cta-heading" className="mt-4 text-2xl font-bold text-white md:text-3xl">
+                Turn this insight into real calls and conversions
+              </h2>
+              <p className="mt-3 max-w-3xl text-blue-100/90">
+                Connect Call AI gives you pre-built AI voice agents that are ready to launch for
+                call answering, booking, and lead conversion without setup delays or model training.
+                And if your process is unique, we build a custom agent for your exact call flow and
+                handle the full technical setup end-to-end.
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2.5 text-xs font-medium text-blue-50">
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+                  Pre-built agents
+                </span>
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+                  Custom call flows
+                </span>
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+                  No setup on your side
+                </span>
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+                  No upfront cost
+                </span>
+                <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5">
+                  Pay as you go
+                </span>
+              </div>
+            </div>
+
+            <div className="relative mt-7 grid gap-4 md:grid-cols-3">
+              <Link
+                href="/contact-us"
+                className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
+              >
+                <p className="text-sm font-semibold text-blue-100">Talk to our team</p>
+                <h3 className="mt-2 text-xl font-semibold text-white">Contact Us</h3>
+                <p className="mt-2 text-sm text-blue-100/90">
+                  Tell us your goals and we will suggest the right AI call flow for your business.
+                </p>
+                <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
+                  Start consultation {"->"}
+                </p>
+              </Link>
+
+              <Link
+                href="/price-estimator"
+                className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
+              >
+                <p className="text-sm font-semibold text-blue-100">Estimate cost</p>
+                <h3 className="mt-2 text-xl font-semibold text-white">View Pricing</h3>
+                <p className="mt-2 text-sm text-blue-100/90">
+                  Calculate your monthly AI calling cost with pay-as-you-go pricing and request a
+                  custom quote for your call volume.
+                </p>
+                <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
+                  Open estimator {"->"}
+                </p>
+              </Link>
+
+              <Link
+                href="/"
+                className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
+              >
+                <p className="text-sm font-semibold text-blue-100">Start instantly</p>
+                <h3 className="mt-2 text-xl font-semibold text-white">Try Demo</h3>
+                <p className="mt-2 text-sm text-blue-100/90">
+                  Visit our home page and see how our AI voice experience works in real-world flows.
+                </p>
+                <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
+                  Try live demo {"->"}
+                </p>
+              </Link>
+            </div>
+          </section>
+
+          {faqItems.length > 0 ? (
+            <section className="mt-14 rounded-3xl border border-[#BFDBFE] bg-white p-6 md:p-8" aria-labelledby="blog-faq-heading">
+              <h2 id="blog-faq-heading" className="text-2xl font-bold text-slate-950 md:text-3xl">
+                Frequently asked questions
+              </h2>
+              <BlogFaqAccordion faqs={faqItems} />
+            </section>
+          ) : null}
 
           <RelatedPosts posts={relatedCards} />
 

@@ -22,12 +22,26 @@ export type CreateBlogInput = {
   templateKey?: string;
   industrySlug?: string;
   relatedPostIds?: string[];
+  faqs?: { question: string; answer: string }[];
 };
 
 export type UpdateBlogInput = Partial<CreateBlogInput>;
 
 export function normalizeSlug(slug: string): string {
   return slug.trim().toLowerCase();
+}
+
+function normalizeFaqs(
+  faqs: { question: string; answer: string }[] | undefined
+): { question: string; answer: string }[] {
+  if (!faqs?.length) return [];
+  return faqs
+    .map((item) => ({
+      question: item.question.trim(),
+      answer: item.answer.trim(),
+    }))
+    .filter((item) => item.question.length > 0 && item.answer.length > 0)
+    .slice(0, 20);
 }
 
 const RELATED_LIMIT = 4;
@@ -300,6 +314,7 @@ export async function create(
     slug: normalizeSlug(input.slug),
     tags: (input.tags ?? []).map((t: string) => t.trim()).filter(Boolean),
     relatedPostIds: relatedIds,
+    faqs: normalizeFaqs(input.faqs),
   } as Record<string, unknown>);
   if (input.industrySlug != null && input.industrySlug.trim() !== "") {
     (payload as { industrySlug: string }).industrySlug = normalizeSlug(
@@ -331,6 +346,9 @@ export async function update(
     (next as Record<string, unknown>).relatedPostIds = toObjectIdList(
       next.relatedPostIds
     );
+  }
+  if (next.faqs !== undefined) {
+    next.faqs = normalizeFaqs(next.faqs);
   }
   const withTimes = applyPublishTimestamps({ ...next } as Record<string, unknown>);
   return Blog.findByIdAndUpdate(

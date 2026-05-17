@@ -154,7 +154,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
   };
 
   return (
-    <main className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-20 md:px-8 md:pt-28">
+    <main className="relative z-10 mx-auto w-full max-w-6xl overflow-x-clip px-5 pb-24 pt-20 md:px-8 md:pt-28">
       <section className="relative pb-2 pt-2 md:pb-4 md:pt-4">
         <motion.div
           variants={staggerContainer}
@@ -374,7 +374,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={motionViewport}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-3xl border border-[#92abff]/30 bg-[linear-gradient(145deg,rgba(19,30,112,0.8),rgba(9,14,62,0.96))] p-6 md:p-8 lg:p-10"
+          className="relative mx-auto w-full max-w-full overflow-hidden rounded-3xl border border-[#92abff]/30 bg-[linear-gradient(145deg,rgba(19,30,112,0.8),rgba(9,14,62,0.96))] p-6 md:p-8 lg:p-10"
         >
           <motion.div
             aria-hidden="true"
@@ -389,39 +389,41 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative grid gap-6 md:gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <div className="text-center md:text-left">
+          <div className="relative grid min-w-0 gap-6 md:gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+            <div className="min-w-0 text-center md:text-left">
               <p className="inline-flex items-center rounded-full border border-[#9cb7ff]/35 bg-[#84a1ff]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#dce5ff]">
                 Live demo
               </p>
               <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
                 Talk to your AI call agent
               </h2>
-              <p className="mx-auto mt-3 max-w-md text-blue-100/85 md:mx-0">
+              <p className="mx-auto mt-3 max-w-md break-words text-blue-100/85 md:mx-0">
                 Enter your details and preview how an AI phone agent for {industry.name.toLowerCase()} can
                 handle real customer conversations.
               </p>
 
-              <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/15 bg-[#0c1869]/50 p-4 sm:p-5 md:mx-0">
+              <div className="mx-auto mt-6 w-full max-w-md rounded-2xl border border-white/15 bg-[#0c1869]/50 p-4 sm:p-5 md:mx-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b8cbff]">What happens next</p>
                 <ul className="mt-3 space-y-2 text-[13px] text-blue-50/90 sm:text-sm">
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
-                    Instant call routing to the AI voice workflow
+                    <span className="min-w-0 break-words">Instant call routing to the AI voice workflow</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
-                    Natural conversation aligned to {industry.name} use cases
+                    <span className="min-w-0 break-words">
+                      Natural conversation aligned to {industry.name} use cases
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
-                    Follow-up actions captured for your team
+                    <span className="min-w-0 break-words">Follow-up actions captured for your team</span>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/20 bg-[#0a145b]/65 p-4 sm:p-5 md:p-6">
+            <div className="min-w-0 w-full max-w-full rounded-2xl border border-white/20 bg-[#0a145b]/65 p-4 sm:p-5 md:p-6">
               <form onSubmit={onRequestDemo} className="grid gap-3 sm:gap-4">
                 <label className="sr-only" htmlFor="demo-name">
                   Name

@@ -423,8 +423,8 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
               </div>
             </div>
 
-            <div className="min-w-0 w-full max-w-full rounded-2xl border border-white/20 bg-[#0a145b]/65 p-4 sm:p-5 md:p-6">
-              <form onSubmit={onRequestDemo} className="grid gap-3 sm:gap-4">
+            <div className="min-w-0 w-full max-w-full overflow-hidden rounded-2xl border border-white/20 bg-[#0a145b]/65 p-4 sm:p-5 md:p-6">
+              <form onSubmit={onRequestDemo} className="grid w-full min-w-0 gap-3 sm:gap-4">
                 <label className="sr-only" htmlFor="demo-name">
                   Name
                 </label>
@@ -434,12 +434,12 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   name="name"
                   required
                   placeholder={industry.demoPlaceholderName}
-                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
+                  className="box-border h-12 w-full min-w-0 max-w-full rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
                 />
                 <label className="sr-only" htmlFor="demo-phone">
                   Phone
                 </label>
-                <div className="flex h-12 min-w-0 items-center rounded-xl border border-white/20 bg-[#0b145f]/70 px-3 focus-within:border-[#9ab1ff]">
+                <div className="box-border flex h-12 w-full min-w-0 max-w-full items-center overflow-hidden rounded-xl border border-white/20 bg-[#0b145f]/70 px-3 focus-within:border-[#9ab1ff]">
                   <UsFlagIcon />
                   <span className="mr-2 text-sm font-medium text-blue-100/95">+1</span>
                   <input
@@ -463,7 +463,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                       setPhoneDigits(pastedDigits);
                     }}
                     placeholder="(555) 123-4567"
-                    className="h-full min-w-0 w-full bg-transparent text-sm text-white placeholder:text-blue-200/60 focus:outline-none sm:text-base"
+                    className="h-full w-full min-w-0 max-w-full bg-transparent text-sm text-white placeholder:text-blue-200/60 focus:outline-none sm:text-base"
                   />
                 </div>
                 <label className="sr-only" htmlFor="demo-email">
@@ -475,11 +475,11 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   name="email"
                   required
                   placeholder="e.g., you@company.com"
-                  className="h-12 rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
+                  className="box-border h-12 w-full min-w-0 max-w-full rounded-xl border border-white/20 bg-[#0b145f]/70 px-4 text-sm text-white placeholder:text-blue-200/60 focus:border-[#9ab1ff] focus:outline-none sm:text-base"
                 />
                 <button
                   type="submit"
-                  className="btn-primary mt-1 h-12 w-full justify-center text-sm sm:text-base"
+                  className="btn-primary box-border mt-1 h-12 w-full min-w-0 max-w-full justify-center text-sm sm:text-base"
                   disabled={requestStatus === "submitting"}
                 >
                   {requestStatus === "submitting"

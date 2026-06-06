@@ -6,10 +6,36 @@ import { CursorGlow } from "@/components/landing/CursorGlow";
 import { getCalendlyEmbedUrl } from "@/lib/config/calendly";
 import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
-  title: pageTitles.contact,
-  description: pageDescriptions.contact,
+type ContactUsPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: ContactUsPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const hasQueryParams = Object.values(params).some((value) =>
+    Array.isArray(value) ? value.some((entry) => entry.trim() !== "") : (value ?? "").trim() !== ""
+  );
+
+  return {
+    title: pageTitles.contact,
+    description: pageDescriptions.contact,
+    alternates: {
+      canonical: "/contact-us",
+    },
+    robots: hasQueryParams
+      ? {
+          index: false,
+          follow: true,
+          googleBot: {
+            index: false,
+            follow: true,
+          },
+        }
+      : undefined,
+  };
+}
 
 function getEmbedDomain(): string | undefined {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();

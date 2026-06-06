@@ -385,6 +385,8 @@ export async function slugExists(
 export type SitemapPostEntry = {
   slug: string;
   lastModified: Date;
+  canonicalUrl?: string | null;
+  noindex?: boolean;
 };
 
 export type FeedPostEntry = {
@@ -396,10 +398,7 @@ export type FeedPostEntry = {
 };
 
 /**
- * All published posts meant for discovery.
- *
- * Note: We intentionally do not filter by `noindex` here so sitemap/feed stay in
- * sync with the public blog list shown at `/blog`.
+ * Published posts plus SEO flags needed to build sitemap entries.
  */
 export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
   await connectDB();
@@ -407,7 +406,7 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
     ...publishedFilter(),
   };
   const rows = await Blog.find(filter as never)
-    .select({ slug: 1, updatedAt: 1, publishedAt: 1 })
+    .select({ slug: 1, updatedAt: 1, publishedAt: 1, canonicalUrl: 1, noindex: 1 })
     .sort({ publishedAt: -1 })
     .lean()
     .exec();
@@ -419,6 +418,9 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
     return {
       slug,
       lastModified: updatedAt ?? publishedAt ?? new Date(),
+      canonicalUrl:
+        typeof row.canonicalUrl === "string" ? row.canonicalUrl : null,
+      noindex: Boolean(row.noindex),
     };
   });
 }

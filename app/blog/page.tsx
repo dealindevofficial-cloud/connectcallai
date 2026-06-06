@@ -53,9 +53,11 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
     : pageTitles.blog;
   const titleSegment = paginatedTitle(baseSegment, pageNum);
   const docTitle = fullTitle(titleSegment);
-  const description = industrySlug
+  const baseDescription = industrySlug
     ? pageDescriptions.blogIndustry(labelFromIndustrySlug(industrySlug))
     : pageDescriptions.blog;
+  const description =
+    pageNum > 1 ? `${baseDescription} Page ${pageNum} of the archive.` : baseDescription;
 
   return {
     title: titleSegment,

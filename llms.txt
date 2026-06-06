@@ -1,0 +1,28 @@
+# ConnectCallAI Website
+
+> Public crawling guidance for humans and AI agents. Use canonical URLs from `getSiteOrigin()` via `NEXT_PUBLIC_SITE_URL`.
+
+## Discovery Endpoints
+- [Robots](/robots.txt): Crawl policy source of truth.
+- [Sitemap](/sitemap.xml): Canonical URL inventory for public pages.
+- [RSS Feed](/feed.xml): Blog updates stream.
+
+## Priority Public Pages
+- [Home](/): Main product landing page.
+- [Blog](/blog): Blog index and discovery hub.
+- [Industries](/industries): Industry solutions overview.
+- [Contact Us](/contact-us): Primary conversion/contact page.
+- [Price Estimator](/price-estimator): Pricing-related entry point.
+
+## Dynamic Public Collections
+- [Industry Pages](/industries/*): Generated from `industries` data.
+- [Published Blog Posts](/blog/*): Generated from published blog content.
+
+## Crawl Boundaries
+- Allowed: `/`
+- Disallowed: `/ccai-admin` and `/ccai-admin/` (matches `app/robots.ts`)
+- Ignore operational endpoints as content: `/api/*`
+
+## Canonicalization Notes
+- Prefer URLs listed in `/sitemap.xml` when duplicates exist.
+- Treat admin/auth flows and API responses as non-document content.

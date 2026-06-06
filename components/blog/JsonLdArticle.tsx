@@ -12,7 +12,7 @@ export function JsonLdArticle({ post, pageUrl, siteOrigin }: JsonLdArticleProps)
     post.excerpt?.trim() ||
     undefined;
 
-  const publisherLogo = `${siteOrigin}/tab-logo.png`;
+  const publisherLogo = `${siteOrigin}/icon.png`;
 
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",

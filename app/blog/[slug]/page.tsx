@@ -252,13 +252,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </header>
 
           {image ? (
-            <div className="relative mb-10 aspect-[21/9] w-full overflow-hidden rounded-2xl border border-[#BFDBFE] bg-white md:aspect-[3/1]">
+            <div className="relative mb-10 w-full overflow-hidden rounded-2xl border border-[#BFDBFE] bg-white p-2 md:p-3">
               {/* Use native img for external CMS URLs that may block Next image optimizer fetches. */}
               {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary external URLs from CMS */}
               <img
                 src={image}
                 alt={post.title}
-                className="h-full w-full object-cover"
+                className="mx-auto block h-auto w-full rounded-xl object-contain"
                 loading="eager"
               />
             </div>

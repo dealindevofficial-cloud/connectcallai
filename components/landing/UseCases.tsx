@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useCases } from "@/lib/landing-data";
@@ -26,6 +27,12 @@ const useCaseVisuals: Record<
     accent: "from-[#8a9bff]/45 via-[#6c7eff]/18 to-transparent",
     chip: "from-[#a5b3ff]/30 to-[#7c90ff]/15",
     metricGlow: "shadow-[0_0_22px_rgba(132,145,255,0.35)]",
+  },
+  "Dental Offices": {
+    icon: "🦷",
+    accent: "from-[#96b8ff]/45 via-[#748cff]/18 to-transparent",
+    chip: "from-[#b4c9ff]/30 to-[#8098ff]/15",
+    metricGlow: "shadow-[0_0_22px_rgba(142,166,255,0.35)]",
   },
   "Pet Clinics": {
     icon: "🐾",
@@ -116,6 +123,7 @@ export function UseCases() {
   const onMouseDown = (event: MouseEvent<HTMLDivElement>) => {
     const track = trackRef.current;
     if (!track) return;
+    if (event.target instanceof HTMLElement && event.target.closest("a, button")) return;
 
     event.preventDefault();
     isDraggingRef.current = true;
@@ -178,46 +186,55 @@ export function UseCases() {
           onMouseLeave={stopDragging}
           className="-mt-2 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 pt-2 select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:cursor-grab md:active:cursor-grabbing"
         >
-        {useCases.map((item) => {
-          const visual = useCaseVisuals[item.name] ?? {
-            icon: "✨",
-            accent: "from-[#7d8eff]/40 via-[#6377ff]/15 to-transparent",
-            chip: "from-[#9dadff]/25 to-[#7085ff]/10",
-            metricGlow: "shadow-[0_0_18px_rgba(124,141,255,0.3)]",
-          };
+          {useCases.map((item) => {
+            const visual = useCaseVisuals[item.name] ?? {
+              icon: "✨",
+              accent: "from-[#7d8eff]/40 via-[#6377ff]/15 to-transparent",
+              chip: "from-[#9dadff]/25 to-[#7085ff]/10",
+              metricGlow: "shadow-[0_0_18px_rgba(124,141,255,0.3)]",
+            };
 
-          return (
-          <motion.article
-            key={item.name}
-            variants={fadeUp}
-            whileHover={cardHover.whileHover}
-            className="group relative w-full shrink-0 snap-start overflow-hidden rounded-2xl border border-white/14 bg-[#0f155f]/75 p-6 select-none md:w-[calc(50%-0.625rem)]"
-            draggable={false}
-          >
-            <div className="absolute inset-0 rounded-2xl border border-transparent transition group-hover:border-[#93a6ff]/70" />
-            <div
-              className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${visual.accent} blur-2xl`}
-            />
-            <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white opacity-20 drop-shadow-[0_6px_20px_rgba(126,146,255,0.45)] transition-opacity duration-300 group-hover:opacity-30">
-              {renderUseCaseIcon(visual.icon, "text-6xl md:text-7xl")}
-            </div>
-            <div className="relative flex items-center justify-between gap-3">
-              <div
-                className={`inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-br ${visual.chip} px-3 py-1.5 text-sm font-medium text-blue-100`}
+            return (
+              <motion.article
+                key={item.name}
+                variants={fadeUp}
+                whileHover={cardHover.whileHover}
+                className="group relative w-full shrink-0 snap-start overflow-hidden rounded-2xl border border-white/14 bg-[#0f155f]/75 p-6 select-none md:w-[calc(50%-0.625rem)]"
+                draggable={false}
               >
-                {renderUseCaseIcon(visual.icon, "text-base")}
-                {item.name}
-              </div>
-            </div>
-            <p className="relative mt-3 text-lg font-semibold text-white">{item.outcome}</p>
-            <p
-              className={`relative mt-5 inline-flex rounded-full border border-white/20 bg-[#1a2a8a]/60 px-3 py-1.5 text-sm font-semibold text-[#d8e2ff] ${visual.metricGlow}`}
-            >
-              {item.metric}
-            </p>
-          </motion.article>
-          );
-        })}
+                <div className="absolute inset-0 rounded-2xl border border-transparent transition group-hover:border-[#93a6ff]/70" />
+                <div
+                  className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${visual.accent} blur-2xl`}
+                />
+                <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white opacity-20 drop-shadow-[0_6px_20px_rgba(126,146,255,0.45)] transition-opacity duration-300 group-hover:opacity-30">
+                  {renderUseCaseIcon(visual.icon, "text-6xl md:text-7xl")}
+                </div>
+                <div className="relative flex items-center justify-between gap-3">
+                  <div
+                    className={`inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-br ${visual.chip} px-3 py-1.5 text-sm font-medium text-blue-100`}
+                  >
+                    {renderUseCaseIcon(visual.icon, "text-base")}
+                    {item.name}
+                  </div>
+                </div>
+                <p className="relative mt-3 text-lg font-semibold text-white">{item.outcome}</p>
+                <div className="relative mt-5 flex flex-wrap items-center gap-3">
+                  <p
+                    className={`inline-flex rounded-full border border-white/20 bg-[#1a2a8a]/60 px-3 py-1.5 text-sm font-semibold text-[#d8e2ff] ${visual.metricGlow}`}
+                  >
+                    {item.metric}
+                  </p>
+                  <Link
+                    href={item.href}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#c8d6ff] transition-colors duration-200 hover:text-white"
+                  >
+                    Explore page
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </motion.article>
+            );
+          })}
         </motion.div>
 
         <div className="mt-5 flex items-center justify-center gap-2">

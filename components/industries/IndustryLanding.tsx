@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { fadeUp, motionViewport, staggerContainer } from "@/lib/motion";
 import type { Industry } from "@/lib/industries-data";
@@ -40,6 +40,7 @@ function UsFlagIcon() {
 export function IndustryLanding({ industry }: IndustryLandingProps) {
   const [requestStatus, setRequestStatus] = useState<RequestStatus>("idle");
   const [phoneDigits, setPhoneDigits] = useState("");
+  const [activeFaqIndex, setActiveFaqIndex] = useState<number | null>(0);
   const [statusMessage, setStatusMessage] = useState(
     "Your details are captured from this widget to request a demo call.",
   );
@@ -163,7 +164,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
           className="relative mx-auto flex max-w-4xl flex-col items-center text-center"
         >
           <motion.h1 variants={fadeUp} className="text-4xl font-semibold text-white md:text-6xl">
-            AI Calling Agents for {industry.name} Businesses
+            {industry.seoTitle}
           </motion.h1>
           <motion.p variants={fadeUp} className="mt-4 max-w-3xl text-lg text-blue-100/85">
             {industry.heroSubtext}
@@ -196,17 +197,17 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
               variants={fadeUp}
               className="inline-flex items-center rounded-full border border-[#ff9cb5]/40 bg-[#ff7a99]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#ffd5df]"
             >
-              Critical friction points
+              Missed-call problems
             </motion.p>
             <motion.h2
               variants={fadeUp}
               className="relative mt-4 max-w-md text-3xl font-semibold text-white md:text-5xl"
             >
-              Challenges in {industry.name}
+              Phone Answering Problems in {industry.name}
             </motion.h2>
             <motion.p variants={fadeUp} className="relative mt-4 max-w-md text-base leading-relaxed text-blue-100/85">
-              These operational gaps create delayed responses, missed opportunities, and inconsistent customer
-              experience.
+              These are the gaps buyers expect an AI receptionist to solve: faster pickup, clearer intake,
+              smarter routing, and fewer lost opportunities.
             </motion.p>
           </div>
 
@@ -226,7 +227,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                   </span>
                   <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#ffd9e3]">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#ff93b0]" />
-                    Operational Gap
+                    Call Gap
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-blue-50/95 md:text-base">{problem}</p>
                 </motion.article>
@@ -288,12 +289,12 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
 
             <motion.div variants={fadeUp} className="order-1 space-y-4 lg:order-2">
               <p className="inline-flex items-center rounded-full border border-[#8ea7ff]/40 bg-[#6f8eff]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#d6e0ff]">
-                Solution architecture
+                AI receptionist workflow
               </p>
-              <h2 className="text-3xl font-semibold text-white md:text-5xl">How Connect Call AI Helps</h2>
+              <h2 className="text-3xl font-semibold text-white md:text-5xl">How an AI Receptionist Helps</h2>
               <p className="max-w-lg text-base leading-relaxed text-blue-100/85">
-                Your AI phone agent acts as a control tower: it picks up instantly, manages intent, and routes
-                outcomes into the right business workflow without delays.
+                Your AI phone agent answers instantly, understands caller intent, books or routes the next step,
+                and hands off to humans when the conversation needs your team.
               </p>
             </motion.div>
           </div>
@@ -317,10 +318,10 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
 
           <motion.div variants={fadeUp} className="mb-8 max-w-3xl">
             <p className="inline-flex items-center rounded-full border border-[#9fb5ff]/35 bg-[#6f8eff]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#d9e2ff]">
-              Deployment playbook
+              Industry use cases
             </p>
             <h2 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
-              Top AI Calling Use Cases for {industry.name}
+              AI Receptionist Use Cases for {industry.name}
             </h2>
           </motion.div>
 
@@ -395,11 +396,11 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                 Live demo
               </p>
               <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
-                Talk to your AI call agent
+                Talk to an AI receptionist for {industry.name}
               </h2>
               <p className="mx-auto mt-3 max-w-md break-words text-blue-100/85 md:mx-0">
-                Enter your details and preview how an AI phone agent for {industry.name.toLowerCase()} can
-                handle real customer conversations.
+                Enter your details and preview how AI phone answering can handle real {industry.name.toLowerCase()}
+                caller conversations.
               </p>
 
               <div className="mx-auto mt-6 w-full max-w-md rounded-2xl border border-white/15 bg-[#0c1869]/50 p-4 sm:p-5 md:mx-0">
@@ -407,12 +408,12 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
                 <ul className="mt-3 space-y-2 text-[13px] text-blue-50/90 sm:text-sm">
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
-                    <span className="min-w-0 break-words">Instant call routing to the AI voice workflow</span>
+                    <span className="min-w-0 break-words">Instant pickup by the AI receptionist workflow</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#9eb6ff]" />
                     <span className="min-w-0 break-words">
-                      Natural conversation aligned to {industry.name} use cases
+                      Natural intake, booking, and routing aligned to {industry.name} use cases
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -512,7 +513,7 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
           className="space-y-6"
         >
           <motion.h2 variants={fadeUp} className="text-3xl font-semibold text-white md:text-5xl">
-            Why {industry.name} Teams Choose Connect Call AI?
+            Why {industry.name} Teams Choose AI Phone Answering
           </motion.h2>
           <div className="grid gap-4 md:grid-cols-2">
             {industry.benefits.map((benefit, index) => (
@@ -537,6 +538,100 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
 
       <section className="mt-14 md:mt-20">
         <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={motionViewport}
+          className="relative"
+        >
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(136,164,255,0.22),rgba(136,164,255,0)_70%)] blur-2xl"
+            animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.85, 0.5] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div variants={fadeUp} className="relative mb-8 space-y-3 text-center md:mb-10">
+            <p className="inline-flex items-center rounded-full border border-[#9fb5ff]/35 bg-[#6f8eff]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#d9e2ff]">
+              FAQs
+            </p>
+            <h2 className="text-4xl font-bold text-white md:text-5xl">
+              Questions About AI Receptionists for {industry.name}
+            </h2>
+            <p className="mx-auto max-w-2xl text-sm leading-6 text-blue-100/75 md:text-base">
+              Clear answers for teams comparing AI phone answering, booking, routing, and human
+              handoff workflows.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="relative overflow-hidden rounded-3xl border border-white/12 bg-gradient-to-b from-white/10 via-white/5 to-transparent p-5 shadow-[0_24px_80px_rgba(5,10,50,0.28)] md:p-8"
+          >
+            <div className="space-y-3">
+              {industry.faqs.map((faq, index) => {
+                const isOpen = activeFaqIndex === index;
+
+                return (
+                  <article
+                    key={faq.question}
+                    className={`rounded-2xl border px-5 py-4 backdrop-blur-sm transition-colors ${
+                      isOpen
+                        ? "border-[#93a6ff]/55 bg-[#101a70]/80"
+                        : "border-white/12 bg-[#0e145d]/60 hover:border-[#93a6ff]/45"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setActiveFaqIndex(isOpen ? null : index)}
+                      className="flex w-full items-center justify-between gap-4 text-left"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="flex min-w-0 items-start gap-4">
+                        <span className="mt-0.5 hidden text-xs font-semibold uppercase tracking-[0.18em] text-[#9fb5ff] sm:inline">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="text-base font-semibold text-white md:text-lg">
+                          {faq.question}
+                        </h3>
+                      </span>
+                      <span
+                        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-sm transition ${
+                          isOpen
+                            ? "border-[#8ea3ff] bg-[#2a3ba8] text-white"
+                            : "border-white/20 text-blue-100/80"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        {isOpen ? "-" : "+"}
+                      </span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen ? (
+                        <motion.div
+                          key={`${faq.question}-answer`}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <p className="pt-3 text-sm leading-6 text-blue-100/80 md:pl-10 md:text-base">
+                            {faq.answer}
+                          </p>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </article>
+                );
+              })}
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      <section className="mt-14 md:mt-20">
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={motionViewport}
@@ -547,11 +642,10 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
           <div className="relative text-center">
             <h2 className="text-3xl font-semibold text-white md:text-5xl">{industry.ctaHeadline}</h2>
             <p className="mx-auto mt-4 max-w-2xl text-blue-100/90">
-              Launch a premium AI calling workflow that captures every opportunity, improves response
-              speed, and boosts conversion rates.
+              {industry.ctaBody}
             </p>
             <Link href="/contact-us" className="btn-primary mt-8 inline-flex">
-              Get Started
+              Get a Demo Call
             </Link>
           </div>
         </motion.div>

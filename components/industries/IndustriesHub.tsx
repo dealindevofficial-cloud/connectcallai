@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { IndustryCard } from "@/components/industries/IndustryCard";
 import { fadeUp, motionViewport, staggerContainer } from "@/lib/motion";
-import { industries } from "@/lib/industries-data";
+import { getIndustryPath, industries } from "@/lib/industries-data";
 
 export function IndustriesHub() {
   return (
@@ -51,7 +51,7 @@ export function IndustriesHub() {
                   icon={industry.icon}
                   title={industry.name}
                   description={industry.shortDescription}
-                  href={`/industries/${industry.pageSlug}`}
+                  href={getIndustryPath(industry)}
                 />
               </motion.div>
             ))}

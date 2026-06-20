@@ -14,7 +14,7 @@ type DemoCallPayload = {
   industry?: string;
 };
 
-type IndustrySlug = "real-estate" | "restaurants" | "hospitals" | "pet-clinics";
+type IndustrySlug = "real-estate" | "restaurants" | "hospitals" | "dental-offices" | "pet-clinics";
 
 type ValidationErrors = Partial<Record<"name" | "phone" | "email" | "industry", string>>;
 
@@ -40,6 +40,8 @@ const INDUSTRY_TO_ASSISTANT_ENV: Record<IndustrySlug, string | undefined> = {
   "real-estate": process.env.VAPI_ASSISTANT_REAL_ESTATE_ID,
   restaurants: process.env.VAPI_ASSISTANT_RESTAURANTS_ID,
   hospitals: process.env.VAPI_ASSISTANT_HOSPITALS_ID,
+  // TODO: Replace with a dedicated dental Vapi assistant env var when it is ready.
+  "dental-offices": process.env.VAPI_ASSISTANT_HOSPITALS_ID,
   "pet-clinics": process.env.VAPI_ASSISTANT_PET_CLINICS_ID,
 };
 
@@ -100,6 +102,7 @@ function normalizeIndustry(value: string | undefined): IndustrySlug | "" {
     normalized === "real-estate" ||
     normalized === "restaurants" ||
     normalized === "hospitals" ||
+    normalized === "dental-offices" ||
     normalized === "pet-clinics"
   ) {
     return normalized;

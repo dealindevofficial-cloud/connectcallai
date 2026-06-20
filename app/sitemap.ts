@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { listPublishedForSitemap } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
-import { industries } from "@/lib/industries-data";
+import { getIndustryCanonicalUrl, industries } from "@/lib/industries-data";
 
 /**
  * Keep sitemap fresh for active publishing.
@@ -94,7 +94,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
-    url: `${base}/industries/${industry.pageSlug}`,
+    url: getIndustryCanonicalUrl(base, industry),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));

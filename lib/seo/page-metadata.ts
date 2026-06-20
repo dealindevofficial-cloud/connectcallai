@@ -25,7 +25,7 @@ export const pageTitles = {
   contact: "Book a Free AI Voice Agent Demo & Contact - Connect Call AI",
   pricing: "AI Voice Agent Pricing Estimator - Connect Call AI",
   industries: "Custom AI Voice Agents for Real Estate, Restaurants, and More - Connect Call AI",
-  industry: (name: string) => `AI Phone Agent for ${name}`,
+  industry: (title: string) => `${title} - Connect Call AI`,
   blog: "AI Voice Agent Blogs - Connect Call AI",
   blogIndustry: (label: string) => `${label} AI Voice Agent Blogs - Connect Call AI`,
   notFound: "Page Not Found - Connect Call AI",
@@ -44,7 +44,7 @@ export const pageDescriptions = {
   pricing:
     "Estimate monthly AI voice agent and call-handling costs with Connect Call AI. Compare automation savings by call volume, duration, and team size.",
   industries:
-    "Explore Connect Call AI voice agents by industry—real estate, restaurants, hospitals, pet clinics, and more. Tailored calling automation for your vertical.",
+    "Explore Connect Call AI voice agents by industry—real estate, restaurants, hospitals, dental offices, pet clinics, and more. Tailored calling automation for your vertical.",
   blog:
     "Read the Connect Call AI blogs for guides on AI voice agents, phone automation, lead qualification, and 24/7 customer call workflows.",
   blogIndustry: (label: string) =>

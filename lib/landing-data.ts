@@ -1,3 +1,14 @@
+import { getIndustryBySlug, getIndustryPath } from "@/lib/industries-data";
+
+function requireIndustryPath(slug: string) {
+  const industry = getIndustryBySlug(slug);
+  if (!industry) {
+    throw new Error(`Missing landing page industry link for "${slug}".`);
+  }
+
+  return getIndustryPath(industry);
+}
+
 export const navLinks = [
   { label: "Industries", href: "/industries" },
   { label: "How it works", href: "/#how-it-works" },
@@ -38,21 +49,31 @@ export const useCases = [
     name: "Real Estate",
     outcome: "Qualify leads instantly and auto-book property tours.",
     metric: "+43% tour bookings",
+    href: requireIndustryPath("real-estate"),
   },
   {
     name: "Restaurants",
     outcome: "Answer peak-hour calls and fill more tables automatically.",
     metric: "+31% reservation conversions",
+    href: requireIndustryPath("restaurants"),
   },
   {
     name: "Hospitals",
     outcome: "Handle patient scheduling and reminder calls with empathy.",
     metric: "-92% missed appointments",
+    href: requireIndustryPath("hospitals"),
+  },
+  {
+    name: "Dental Offices",
+    outcome: "Book patient appointments and route urgent dental calls.",
+    metric: "+37% booked calls",
+    href: requireIndustryPath("dental-offices"),
   },
   {
     name: "Pet Clinics",
     outcome: "Book visits, triage requests, and reduce front-desk overload.",
     metric: "2.4x faster response time",
+    href: requireIndustryPath("pet-clinics"),
   },
 ] as const;
 

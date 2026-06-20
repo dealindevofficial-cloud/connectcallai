@@ -3,7 +3,12 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { IndustryLanding } from "@/components/industries/IndustryLanding";
-import { getIndustryByRouteSlug, industries } from "@/lib/industries-data";
+import {
+  getIndustryByRouteSlug,
+  getIndustryCanonicalUrl,
+  getIndustryPath,
+  industries,
+} from "@/lib/industries-data";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 
@@ -27,19 +32,19 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
   }
 
   const siteOrigin = getSiteOrigin();
-  const docTitle = pageTitles.industry(industry.name);
-  const path = `/industries/${industry.pageSlug}`;
+  const docTitle = pageTitles.industry(industry.seoTitle);
+  const canonicalUrl = siteOrigin ? getIndustryCanonicalUrl(siteOrigin, industry) : undefined;
 
   return {
     title: docTitle,
-    description: industry.shortDescription,
-    keywords: [...industry.seoKeywords],
-    alternates: siteOrigin ? { canonical: `${siteOrigin}${path}` } : undefined,
+    description: industry.metaDescription,
+    keywords: [industry.primaryKeyword, ...industry.secondaryKeywords],
+    alternates: canonicalUrl ? { canonical: canonicalUrl } : undefined,
     openGraph: {
       title: docTitle,
-      description: industry.shortDescription,
+      description: industry.metaDescription,
       type: "website",
-      url: siteOrigin ? `${siteOrigin}${path}` : undefined,
+      url: canonicalUrl,
       images: [
         {
           url: "/opengraph-image",
@@ -52,7 +57,7 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
     twitter: {
       card: "summary_large_image",
       title: docTitle,
-      description: industry.shortDescription,
+      description: industry.metaDescription,
       images: ["/opengraph-image"],
     },
   };
@@ -67,7 +72,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
   }
 
   if (slug !== industry.pageSlug) {
-    permanentRedirect(`/industries/${industry.pageSlug}`);
+    permanentRedirect(getIndustryPath(industry));
   }
 
   return (

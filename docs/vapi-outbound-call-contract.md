@@ -43,6 +43,7 @@ This app should trigger outbound calls from server-side code only (Node.js runti
   - `VAPI_ASSISTANT_RESTAURANTS_ID`
   - `VAPI_ASSISTANT_HOSPITALS_ID`
   - `VAPI_ASSISTANT_PET_CLINICS_ID`
+  - Dental office demo calls temporarily reuse `VAPI_ASSISTANT_HOSPITALS_ID` until a dedicated dental Vapi assistant is available.
 - Recommended:
   - `VAPI_API_BASE_URL` (default `https://api.vapi.ai`)
   - `VAPI_REQUEST_TIMEOUT_MS` (fetch timeout guard)

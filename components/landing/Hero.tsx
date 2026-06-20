@@ -18,6 +18,7 @@ const industryOptions = [
   { value: "real-estate", label: "Real Estate" },
   { value: "restaurants", label: "Restaurants" },
   { value: "hospitals", label: "Hospitals" },
+  { value: "dental-offices", label: "Dental Offices" },
   { value: "pet-clinics", label: "Pet Clinics" },
 ];
 

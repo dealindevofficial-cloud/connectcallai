@@ -55,6 +55,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${base}/about`,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${base}/contact-us`,
       changeFrequency: "monthly",
       priority: 0.7,
@@ -68,6 +73,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${base}/price-estimator`,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${base}/trust-center`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${base}/privacy-policy`,
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
+    {
+      url: `${base}/terms-of-service`,
+      changeFrequency: "yearly",
+      priority: 0.4,
     },
   ];
 

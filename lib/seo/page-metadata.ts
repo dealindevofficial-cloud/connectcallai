@@ -22,8 +22,12 @@ export function seoTitleSegment(text: string, maxLen = MAX_TITLE_SEGMENT): strin
 /** Page document titles (used as-is; no automatic suffix). */
 export const pageTitles = {
   home: "Build Custom AI Voice Agents for Your Business - Connect Call AI",
+  about: "About Connect Call AI - AI Voice Agent Company",
   contact: "Book a Free AI Voice Agent Demo & Contact - Connect Call AI",
+  privacy: "Privacy Policy - Connect Call AI",
   pricing: "AI Voice Agent Pricing Estimator - Connect Call AI",
+  terms: "Terms of Service - Connect Call AI",
+  trust: "Trust Center for Responsible AI Voice Agents - Connect Call AI",
   industries: "Custom AI Voice Agents for Real Estate, Restaurants, and More - Connect Call AI",
   industry: (title: string) => `${title} - Connect Call AI`,
   blog: "AI Voice Agent Blogs - Connect Call AI",
@@ -39,10 +43,18 @@ export const pageTitles = {
 export const pageDescriptions = {
   home:
     "Never miss a call. Connect Call AI answers, books, and qualifies leads 24/7 with natural AI voice agents built for sales, support, and operations teams.",
+  about:
+    "Learn about Connect Call AI, the AI voice agent company helping businesses answer calls, qualify leads, book appointments, and improve customer follow-up.",
   contact:
     "Book a free Connect Call AI demo. See how AI voice agents automate inbound calls, appointment booking, and follow-ups for your business.",
+  privacy:
+    "Read the Connect Call AI privacy policy covering website forms, demo bookings, analytics, call-flow details, service providers, and data choices.",
   pricing:
     "Estimate monthly AI voice agent and call-handling costs with Connect Call AI. Compare automation savings by call volume, duration, and team size.",
+  terms:
+    "Review the Connect Call AI terms of service for website use, demo requests, AI voice agent responsibilities, third-party services, and public content.",
+  trust:
+    "Explore Connect Call AI trust practices for responsible AI voice automation, including caller disclosure, escalation rules, data handling, and integrations.",
   industries:
     "Explore Connect Call AI voice agents by industry—real estate, restaurants, hospitals, dental offices, pet clinics, and more. Tailored calling automation for your vertical.",
   blog:

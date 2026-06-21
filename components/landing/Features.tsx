@@ -169,7 +169,7 @@ export function Features() {
       <div className="relative">
         <h2 className="mt-3 text-center text-4xl font-bold text-white md:text-5xl">Core features</h2>
         <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-blue-100/80 md:text-base">
-          Every ConnectCallAI deployment ships with production-ready capabilities designed for
+          Every Connect Call AI deployment ships with production-ready capabilities designed for
           speed, reliability, and natural customer conversations.
         </p>
 

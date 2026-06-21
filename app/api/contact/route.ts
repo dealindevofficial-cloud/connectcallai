@@ -12,7 +12,7 @@ type ContactPayload = {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const resend = new Resend(process.env.RESEND_API_KEY);
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "connectcallaiofficial@gmail.com";
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "ConnectCall AI <onboarding@resend.dev>";
+const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Connect Call AI <onboarding@resend.dev>";
 
 function escapeHtml(value: string) {
   return value

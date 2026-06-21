@@ -35,7 +35,7 @@ type QueuedLeadRecord = {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const resend = new Resend(process.env.RESEND_API_KEY);
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "connectcallaiofficial@gmail.com";
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "ConnectCall AI <onboarding@resend.dev>";
+const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Connect Call AI <onboarding@resend.dev>";
 const INDUSTRY_TO_ASSISTANT_ENV: Record<IndustrySlug, string | undefined> = {
   "real-estate": process.env.VAPI_ASSISTANT_REAL_ESTATE_ID,
   restaurants: process.env.VAPI_ASSISTANT_RESTAURANTS_ID,

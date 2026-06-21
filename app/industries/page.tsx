@@ -7,6 +7,9 @@ import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 export const metadata: Metadata = {
   title: pageTitles.industries,
   description: pageDescriptions.industries,
+  alternates: {
+    canonical: "/industries",
+  },
 };
 
 export default function IndustriesPage() {

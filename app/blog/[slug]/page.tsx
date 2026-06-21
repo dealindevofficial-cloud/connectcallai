@@ -20,6 +20,7 @@ import {
   pageDescriptions,
   pageTitles,
   seoTitleSegment,
+  SITE_NAME,
 } from "@/lib/seo/page-metadata";
 
 type BlogPostPageProps = {
@@ -113,7 +114,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       description,
       type: "article",
       url: ogUrl,
-      siteName: "Connect Call AI",
+      siteName: SITE_NAME,
       publishedTime,
       modifiedTime,
       ...(articleSection ? { section: articleSection } : {}),

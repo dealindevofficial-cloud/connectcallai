@@ -387,6 +387,7 @@ export type SitemapPostEntry = {
   lastModified: Date;
   canonicalUrl?: string | null;
   noindex?: boolean;
+  industrySlug?: string | null;
 };
 
 export type FeedPostEntry = {
@@ -406,7 +407,14 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
     ...publishedFilter(),
   };
   const rows = await Blog.find(filter as never)
-    .select({ slug: 1, updatedAt: 1, publishedAt: 1, canonicalUrl: 1, noindex: 1 })
+    .select({
+      slug: 1,
+      updatedAt: 1,
+      publishedAt: 1,
+      canonicalUrl: 1,
+      noindex: 1,
+      industrySlug: 1,
+    })
     .sort({ publishedAt: -1 })
     .lean()
     .exec();
@@ -421,6 +429,8 @@ export async function listPublishedForSitemap(): Promise<SitemapPostEntry[]> {
       canonicalUrl:
         typeof row.canonicalUrl === "string" ? row.canonicalUrl : null,
       noindex: Boolean(row.noindex),
+      industrySlug:
+        typeof row.industrySlug === "string" ? normalizeSlug(row.industrySlug) : null,
     };
   });
 }

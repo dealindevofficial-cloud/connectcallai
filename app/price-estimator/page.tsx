@@ -8,6 +8,9 @@ import { pageDescriptions, pageTitles } from "@/lib/seo/page-metadata";
 export const metadata: Metadata = {
   title: pageTitles.pricing,
   description: pageDescriptions.pricing,
+  alternates: {
+    canonical: "/price-estimator",
+  },
 };
 
 export default function PriceEstimatorPage() {

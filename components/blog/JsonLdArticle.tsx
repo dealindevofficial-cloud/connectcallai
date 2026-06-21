@@ -1,4 +1,5 @@
 import type { BlogPublicDoc } from "@/lib/blog/public-types";
+import { SITE_NAME } from "@/lib/seo/page-metadata";
 
 type JsonLdArticleProps = {
   post: BlogPublicDoc;
@@ -36,7 +37,7 @@ export function JsonLdArticle({ post, pageUrl, siteOrigin }: JsonLdArticleProps)
     },
     publisher: {
       "@type": "Organization",
-      name: "CCAI",
+      name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
         url: publisherLogo,

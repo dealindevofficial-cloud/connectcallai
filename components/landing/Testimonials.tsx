@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { testimonials } from "@/lib/landing-data";
@@ -23,7 +24,7 @@ export function Testimonials() {
     >
       <h2 className="text-center text-4xl font-bold text-white md:text-5xl">What customers say?</h2>
       <p className="mx-auto mt-4 max-w-2xl text-center text-blue-100/80">
-        Real teams share how ConnectCallAI improved response times, bookings, and customer
+        Real teams share how Connect Call AI improved response times, bookings, and customer
         experience.
       </p>
       <div className="mt-8 rounded-2xl border border-white/12 bg-white/6 p-7">
@@ -39,9 +40,11 @@ export function Testimonials() {
               &ldquo;{current.quote}&rdquo;
             </p>
             <footer className="mt-6 flex items-center gap-4">
-              <img
+              <Image
                 src={current.image}
                 alt={`${current.name} profile`}
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded-full border border-white/20 object-cover"
               />
               <div>

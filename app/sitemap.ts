@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { unstable_noStore as noStore } from "next/cache";
+import { getBlogIndustryArchiveCanonicalUrl } from "@/lib/blog/industry-archives";
 import { listPublishedForSitemap } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
@@ -106,7 +107,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
   const seenBlogUrls = new Set<string>();
   const blogRoutes: MetadataRoute.Sitemap = [];
+  const blogIndustrySlugs = new Set<string>();
   for (const p of posts) {
+    if (p.industrySlug) {
+      blogIndustrySlugs.add(p.industrySlug);
+    }
+
     const url = resolveCanonicalSitemapUrl(baseUrl, p.slug, p.canonicalUrl, p.noindex);
     if (!url || seenBlogUrls.has(url)) continue;
     seenBlogUrls.add(url);
@@ -118,11 +124,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  const blogIndustryRoutes: MetadataRoute.Sitemap = Array.from(blogIndustrySlugs)
+    .sort()
+    .map((slug) => ({
+      url: getBlogIndustryArchiveCanonicalUrl(base, slug),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
+
   const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
     url: getIndustryCanonicalUrl(base, industry),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...industryRoutes, ...blogRoutes];
+  return [...staticRoutes, ...industryRoutes, ...blogIndustryRoutes, ...blogRoutes];
 }

@@ -31,7 +31,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           <p className="mb-4 inline-flex rounded-full border border-[rgba(147,164,255,0.45)] bg-[rgba(22,35,118,0.55)] px-3 py-1.5 text-xs text-[rgba(221,231,255,0.95)]">
             Application error
           </p>
-          <h1 className="text-xl font-bold text-white sm:text-2xl">ConnectCall AI</h1>
+          <h1 className="text-xl font-bold text-white sm:text-2xl">Connect Call AI</h1>
           <p className="mt-3 text-sm leading-relaxed text-[rgba(221,231,255,0.78)]">
             A critical error prevented this page from loading. Please refresh or try again shortly.
           </p>

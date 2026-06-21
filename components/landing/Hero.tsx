@@ -222,7 +222,7 @@ export function Hero() {
           Pre-Built AI Voice Agents for 24/7 Call Answering, Booking & Lead Conversion.
         </motion.h1>
         <motion.p variants={fadeUp} className="max-w-xl text-lg text-blue-100/80">
-        No setup. No training. Just plug & play AI agents for your business..
+          No setup. No training. Just plug & play AI agents for your business.
         </motion.p>
         <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
           <Link

@@ -151,7 +151,7 @@ export function UseCases() {
     >
       <h2 className="text-center text-4xl font-bold text-white md:text-5xl">Use cases</h2>
       <p className="mx-auto mt-4 max-w-2xl text-center text-blue-100/80">
-        See how teams across industries use ConnectCallAI to convert more calls into outcomes.
+        See how teams across industries use Connect Call AI to convert more calls into outcomes.
       </p>
       <div className="mt-8">
         <div className="mb-4 flex items-center justify-end gap-2">

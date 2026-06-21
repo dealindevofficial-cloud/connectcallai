@@ -14,7 +14,7 @@ function isPostCallCustomerEmailEnabled() {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "ConnectCall AI <onboarding@resend.dev>";
+const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Connect Call AI <onboarding@resend.dev>";
 
 type VapiEndOfCallMessage = {
   type?: string;
@@ -158,12 +158,12 @@ async function sendPostCallCustomerEmail(args: {
       ? `<p style="margin:0 0 20px;font-size:12px;line-height:1.5;color:#6b7280">${args.endedReason ? `Status: ${escapeHtml(args.endedReason)}` : ""}${args.endedReason && args.callId ? " · " : ""}${args.callId ? `Call ID: ${escapeHtml(args.callId)}` : ""}</p>`
       : "";
 
-  const subject = "Your ConnectCall AI demo — call recap";
+  const subject = "Your Connect Call AI demo — call recap";
 
   const html = `
   <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:560px;color:#111827">
     <p style="margin:0 0 12px;font-size:16px;line-height:1.5">Hi ${escapedName},</p>
-    <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#374151">Thanks for taking a demo call with ConnectCall AI (CCAI). Below is a recap of what we captured from your conversation.</p>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#374151">Thanks for taking a demo call with Connect Call AI (CCAI). Below is a recap of what we captured from your conversation.</p>
     ${summaryBlock}
     ${evalBlock}
     ${metaLine}
@@ -183,7 +183,7 @@ async function sendPostCallCustomerEmail(args: {
   const textParts = [
     `Hi ${firstName},`,
     "",
-    "Thanks for taking a demo call with ConnectCall AI (CCAI). Below is a recap.",
+    "Thanks for taking a demo call with Connect Call AI (CCAI). Below is a recap.",
     "",
     args.summary?.trim() ? `Summary:\n${args.summary.trim()}\n` : "",
     args.successEvaluation ? `Call outcome: ${String(args.successEvaluation).trim()}\n` : "",

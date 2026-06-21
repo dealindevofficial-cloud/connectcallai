@@ -1,4 +1,4 @@
-# ConnectCallAI Website
+# Connect Call AI Website
 
 > Public crawling guidance for humans and AI agents. Use canonical URLs from `getSiteOrigin()` via `NEXT_PUBLIC_SITE_URL`.
 

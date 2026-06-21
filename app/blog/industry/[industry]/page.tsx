@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Pagination } from "@/components/blog/Pagination";
+import {
+  getBlogIndustryArchivePath,
+  labelFromIndustrySlug,
+} from "@/lib/blog/industry-archives";
 import { getCachedListPublished } from "@/lib/blog/public-cache";
 import type { BlogPublicDoc } from "@/lib/blog/public-types";
 import { normalizeSlug } from "@/lib/blog/repository";
@@ -21,14 +25,6 @@ type IndustryBlogPageProps = {
   searchParams: Promise<{ page?: string }>;
 };
 
-function titleFromSlug(slug: string): string {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 export async function generateMetadata({
   params,
   searchParams,
@@ -45,10 +41,9 @@ export async function generateMetadata({
   }
 
   const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
-  const label = titleFromSlug(slug);
+  const label = labelFromIndustrySlug(slug);
   const base = getSiteOrigin();
-  const query = pageNum > 1 ? `?page=${pageNum}` : "";
-  const canonicalPath = `/blog/industry/${encodeURIComponent(slug)}${query}`;
+  const canonicalPath = getBlogIndustryArchivePath(slug, pageNum);
 
   const listTitleSegment = paginatedTitle(pageTitles.blogIndustry(label), pageNum);
   const description = pageDescriptions.blogIndustry(label);
@@ -96,7 +91,7 @@ export default async function IndustryBlogPage({
 
   const sp = await searchParams;
   const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
-  const label = titleFromSlug(slug);
+  const label = labelFromIndustrySlug(slug);
 
   let result: Awaited<ReturnType<typeof getCachedListPublished>>;
   try {

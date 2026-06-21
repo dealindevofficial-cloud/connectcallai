@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Pagination } from "@/components/blog/Pagination";
+import {
+  getBlogIndustryArchivePath,
+  labelFromIndustrySlug,
+} from "@/lib/blog/industry-archives";
 import { getCachedListPublished } from "@/lib/blog/public-cache";
 import type { BlogPublicDoc } from "@/lib/blog/public-types";
 import { normalizeSlug } from "@/lib/blog/repository";
@@ -20,19 +24,12 @@ type BlogIndexProps = {
   searchParams: Promise<{ page?: string; industry?: string }>;
 };
 
-function labelFromIndustrySlug(slug: string): string {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 function buildCanonicalPath(page: number, industrySlug?: string): string {
-  const query = new URLSearchParams();
   if (industrySlug) {
-    query.set("industry", industrySlug);
+    return getBlogIndustryArchivePath(industrySlug, page);
   }
+
+  const query = new URLSearchParams();
   if (page > 1) {
     query.set("page", String(page));
   }
@@ -62,6 +59,9 @@ export async function generateMetadata({ searchParams }: BlogIndexProps): Promis
   return {
     title: titleSegment,
     description,
+    robots: industrySlug
+      ? { index: false, follow: true, googleBot: { index: false, follow: true } }
+      : undefined,
     alternates: siteOrigin ? { canonical: `${siteOrigin}${canonicalPath}` } : undefined,
     openGraph: {
       title: docTitle,
@@ -99,6 +99,9 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
     rawIndustry !== ""
       ? normalizeSlug(rawIndustry)
       : undefined;
+  if (industrySlug) {
+    permanentRedirect(getBlogIndustryArchivePath(industrySlug, pageNum));
+  }
 
   let result: Awaited<ReturnType<typeof getCachedListPublished>>;
   try {

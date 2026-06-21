@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import logo from "@/public/logo.png";
+import { trackConversionEvent } from "@/lib/analytics/conversions";
 
 const SECTION_LINKS = [
   { label: "Home", href: "/" },
@@ -214,6 +215,13 @@ export function Navbar() {
           >
             <Link
               href="/contact-us"
+              onClick={() =>
+                trackConversionEvent("cta_click", {
+                  source: "desktop_nav",
+                  destination: "/contact-us",
+                  label: "Book a demo",
+                })
+              }
               className="rounded-full border border-[#8ca0ff]/50 bg-gradient-to-r from-[#556fff] to-[#8a6dff] px-4 py-2 text-sm font-medium text-white shadow-[0_0_28px_rgba(108,126,255,0.45)]"
             >
               Book a demo
@@ -275,7 +283,14 @@ export function Navbar() {
               </Link>
               <Link
                 href="/contact-us"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  trackConversionEvent("cta_click", {
+                    source: "mobile_nav",
+                    destination: "/contact-us",
+                    label: "Book a demo",
+                  });
+                }}
                 className="mt-1 rounded-full border border-[#8ca0ff]/50 bg-gradient-to-r from-[#556fff] to-[#8a6dff] px-4 py-2 text-center text-sm font-medium text-white shadow-[0_0_28px_rgba(108,126,255,0.45)]"
               >
                 Book a demo

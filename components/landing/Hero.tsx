@@ -12,6 +12,7 @@ import {
   getWaveAnimationConfig,
   staggerContainer,
 } from "@/lib/motion";
+import { trackConversionEvent } from "@/lib/analytics/conversions";
 
 const status = ["Calling customer...", "Understanding request...", "Sharing next steps..."];
 const industryOptions = [
@@ -137,6 +138,11 @@ export function Hero() {
       if (result.status === "called_now") {
         setRequestStatus("called_now");
         setStatusMessage(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
+        trackConversionEvent("demo_call_form_submit", {
+          source: "home_hero",
+          industry: selectedIndustry,
+          outcome: "called_now",
+        });
         toast.success(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         form.reset();
         setPhoneDigits("");
@@ -150,6 +156,11 @@ export function Hero() {
         setStatusMessage(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
+        trackConversionEvent("demo_call_form_submit", {
+          source: "home_hero",
+          industry: selectedIndustry,
+          outcome: "queued_fallback",
+        });
         toast.success(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
@@ -214,7 +225,17 @@ export function Hero() {
         No setup. No training. Just plug & play AI agents for your business..
         </motion.p>
         <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
-          <Link href="/contact-us" className="btn-primary">
+          <Link
+            href="/contact-us"
+            onClick={() =>
+              trackConversionEvent("cta_click", {
+                source: "home_hero",
+                destination: "/contact-us",
+                label: "Start your demo",
+              })
+            }
+            className="btn-primary"
+          >
             Start your demo
           </Link>
           <Link href="/#how-it-works" className="btn-secondary">

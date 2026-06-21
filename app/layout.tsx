@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Geist_Mono, Poppins } from "next/font/google";
 import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/landing/Navbar";
@@ -27,6 +28,8 @@ const geistMono = Geist_Mono({
 const siteOrigin = getSiteOrigin();
 const defaultDescription = pageDescriptions.home;
 const defaultOgImage = "/opengraph-image";
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
 
 export const metadata: Metadata = {
   metadataBase: siteOrigin ? new URL(`${siteOrigin}/`) : undefined,
@@ -48,6 +51,11 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
     apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
   },
+  verification: googleSiteVerification
+    ? {
+        google: googleSiteVerification,
+      }
+    : undefined,
   openGraph: {
     title: pageTitles.home,
     description: defaultDescription,
@@ -87,6 +95,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <Analytics />
+        <GoogleAnalytics measurementId={gaMeasurementId} />
       </body>
     </html>
   );

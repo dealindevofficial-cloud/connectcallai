@@ -1,9 +1,14 @@
 "use client";
 
-import parse, { type DOMNode, type HTMLReactParserOptions } from "html-react-parser";
+import parse, {
+  domToReact,
+  type DOMNode,
+  type HTMLReactParserOptions,
+} from "html-react-parser";
 import { isTag } from "domhandler";
 import Image from "next/image";
 
+import { isInternalServiceHref, trackConversionEvent } from "@/lib/analytics/conversions";
 import { parseImageRemoteHostsFromEnv } from "@/lib/cdn/image-remote-hosts";
 
 type BlogPostBodyProps = {
@@ -41,9 +46,36 @@ function parseDimension(value: string | undefined, fallback: number): number {
 }
 
 function buildParserOptions(): HTMLReactParserOptions {
-  return {
+  const options: HTMLReactParserOptions = {
     replace(domNode: DOMNode) {
-      if (!isTag(domNode) || domNode.name !== "img") {
+      if (!isTag(domNode)) {
+        return undefined;
+      }
+
+      if (domNode.name === "a") {
+        const { href, class: className, ...attributes } = domNode.attribs;
+        if (!href || !isInternalServiceHref(href)) {
+          return undefined;
+        }
+
+        return (
+          <a
+            {...attributes}
+            href={href}
+            className={className}
+            onClick={() =>
+              trackConversionEvent("blog_to_service_click", {
+                source: "blog_body",
+                destination: href,
+              })
+            }
+          >
+            {domToReact(domNode.children as DOMNode[], options)}
+          </a>
+        );
+      }
+
+      if (domNode.name !== "img") {
         return undefined;
       }
 
@@ -87,6 +119,8 @@ function buildParserOptions(): HTMLReactParserOptions {
       );
     },
   };
+
+  return options;
 }
 
 /** HTML must already be sanitized server-side (see `markdownToSafeHtml`). */

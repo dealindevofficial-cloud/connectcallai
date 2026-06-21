@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { trackConversionEvent } from "@/lib/analytics/conversions";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -46,10 +47,6 @@ export function ContactForm() {
 
   const [messageValue, setMessageValue] = useState(prefilledMessage);
 
-  useEffect(() => {
-    setMessageValue(prefilledMessage);
-  }, [prefilledMessage]);
-
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitState("submitting");
@@ -84,6 +81,9 @@ export function ContactForm() {
       form.reset();
       setMessageValue(prefilledMessage);
       setSubmitState("success");
+      trackConversionEvent("contact_form_submit", {
+        source: prefilledMessage ? "price_estimator" : "contact_page",
+      });
       toast.success("Message sent. Our team will get back to you soon.");
     } catch (error) {
       toast.dismiss(loadingToast);

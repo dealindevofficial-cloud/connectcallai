@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TrackedCtaLink } from "@/components/analytics/TrackedLink";
 
 export function FinalCta() {
   return (
@@ -13,9 +13,16 @@ export function FinalCta() {
             Move from missed opportunities to always-on conversations that
             book, confirm, and convert.
           </p>
-          <Link href="/contact-us" className="btn-primary inline-flex">
+          <TrackedCtaLink
+            href="/contact-us"
+            eventProperties={{
+              source: "final_cta",
+              label: "Book my setup",
+            }}
+            className="btn-primary inline-flex"
+          >
             Book my setup
-          </Link>
+          </TrackedCtaLink>
         </div>
       </div>
     </section>

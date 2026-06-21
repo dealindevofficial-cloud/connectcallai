@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
+import { trackConversionEvent } from "@/lib/analytics/conversions";
 import { fadeUp, motionViewport, staggerContainer } from "@/lib/motion";
 import type { Industry } from "@/lib/industries-data";
 
@@ -111,6 +112,11 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
       if (result.status === "called_now") {
         setRequestStatus("called_now");
         setStatusMessage(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
+        trackConversionEvent("demo_call_form_submit", {
+          source: "industry_page",
+          industry: industry.slug,
+          outcome: "called_now",
+        });
         toast.success(`Thanks, ${fullName}. Your AI demo call is being placed now.`);
         form.reset();
         setPhoneDigits("");
@@ -122,6 +128,11 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
         setStatusMessage(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
+        trackConversionEvent("demo_call_form_submit", {
+          source: "industry_page",
+          industry: industry.slug,
+          outcome: "queued_fallback",
+        });
         toast.success(
           `Thanks, ${fullName}. We queued your request and will call you as soon as possible.`,
         );
@@ -644,7 +655,18 @@ export function IndustryLanding({ industry }: IndustryLandingProps) {
             <p className="mx-auto mt-4 max-w-2xl text-blue-100/90">
               {industry.ctaBody}
             </p>
-            <Link href="/contact-us" className="btn-primary mt-8 inline-flex">
+            <Link
+              href="/contact-us"
+              onClick={() =>
+                trackConversionEvent("cta_click", {
+                  source: "industry_page",
+                  industry: industry.slug,
+                  destination: "/contact-us",
+                  label: "Get a Demo Call",
+                })
+              }
+              className="btn-primary mt-8 inline-flex"
+            >
               Get a Demo Call
             </Link>
           </div>

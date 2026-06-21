@@ -12,6 +12,10 @@ declare namespace NodeJS {
     NEXT_PUBLIC_SITE_URL?: string;
     /** Public Calendly booking page URL used for embed and booking links. */
     NEXT_PUBLIC_CALENDLY_URL?: string;
+    /** Google Analytics measurement ID (for example, G-XXXXXXXXXX). */
+    NEXT_PUBLIC_GA_MEASUREMENT_ID?: string;
+    /** Google Search Console verification token. */
+    NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?: string;
     /**
      * Comma-separated hostnames allowed for `next/image` (markdown/CDN). Example: `res.cloudinary.com,images.example.com`
      */

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { CalendlyTracker } from "@/components/analytics/CalendlyTracker";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
@@ -88,6 +89,7 @@ export default function ContactUsPage() {
               </p>
 
               <div className="mt-6 overflow-hidden rounded-2xl border border-white/15 bg-[#0b145f]/65">
+                <CalendlyTracker />
                 <iframe
                   src={calendlyUrl}
                   title="Book a consultation with Calendly"

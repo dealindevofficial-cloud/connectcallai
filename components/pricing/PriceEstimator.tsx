@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { trackConversionEvent } from "@/lib/analytics/conversions";
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -189,6 +190,15 @@ export function PriceEstimator() {
             <div className="grid gap-3 sm:grid-cols-2">
               <Link
                 href={quoteHref}
+                onClick={() =>
+                  trackConversionEvent("quote_request_click", {
+                    source: "price_estimator",
+                    minutes: estimate.minutes,
+                    estimate: Math.round(estimate.aiTotal),
+                    rate: perMinuteCost,
+                    destination: quoteHref,
+                  })
+                }
                 className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-[#c4d0ff]/50 bg-gradient-to-r from-[#4c67ff] via-[#6d67ff] to-[#915eff] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(93,110,255,0.4)] transition duration-300 hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-[#5b74ff] hover:via-[#7a70ff] hover:to-[#a56cff] hover:shadow-[0_20px_48px_rgba(110,126,255,0.58)]"
               >
                 <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_22%,rgba(255,255,255,0.35)_48%,transparent_78%)] opacity-0 transition duration-500 group-hover:translate-x-8 group-hover:opacity-100" />

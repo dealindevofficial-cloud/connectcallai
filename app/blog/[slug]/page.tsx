@@ -6,6 +6,7 @@ import { BlogPostBody } from "@/components/blog/BlogPostBody";
 import { JsonLdArticle } from "@/components/blog/JsonLdArticle";
 import { JsonLdFaq } from "@/components/blog/JsonLdFaq";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { TrackedCtaLink } from "@/components/analytics/TrackedLink";
 import { markdownToSafeHtml } from "@/lib/blog/markdown";
 import { listRelatedForPost } from "@/lib/blog/repository";
 import { getCachedPostBySlug } from "@/lib/blog/public-cache";
@@ -313,8 +314,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             <div className="relative mt-7 grid gap-4 md:grid-cols-3">
-              <Link
+              <TrackedCtaLink
                 href="/contact-us"
+                eventProperties={{
+                  source: "blog_post_cta",
+                  label: "Contact Us",
+                }}
                 className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
               >
                 <p className="text-sm font-semibold text-blue-100">Talk to our team</p>
@@ -325,10 +330,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
                   Start consultation {"->"}
                 </p>
-              </Link>
+              </TrackedCtaLink>
 
-              <Link
+              <TrackedCtaLink
                 href="/price-estimator"
+                eventProperties={{
+                  source: "blog_post_cta",
+                  label: "View Pricing",
+                }}
                 className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
               >
                 <p className="text-sm font-semibold text-blue-100">Estimate cost</p>
@@ -340,10 +349,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
                   Open estimator {"->"}
                 </p>
-              </Link>
+              </TrackedCtaLink>
 
-              <Link
+              <TrackedCtaLink
                 href="/"
+                eventProperties={{
+                  source: "blog_post_cta",
+                  label: "Try Demo",
+                }}
                 className="group rounded-2xl border border-white/20 bg-white/[0.08] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.16]"
               >
                 <p className="text-sm font-semibold text-blue-100">Start instantly</p>
@@ -354,7 +367,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <p className="mt-4 text-sm font-semibold text-white transition-colors group-hover:text-blue-200">
                   Try live demo {"->"}
                 </p>
-              </Link>
+              </TrackedCtaLink>
             </div>
           </section>
 

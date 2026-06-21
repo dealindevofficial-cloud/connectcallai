@@ -1,32 +1,37 @@
 import Link from "next/link";
+import { industryNavLinks, legalLinks, resourceLinks, serviceLinks } from "@/lib/site-navigation";
+
+const footerServiceLinks = serviceLinks.slice(0, 4);
 
 const footerGroups = [
   {
-    title: "Explore",
+    title: "Services",
     links: [
-      { label: "Industries", href: "/industries" },
+      { label: "All services", href: "/services" },
+      ...footerServiceLinks,
+    ],
+  },
+  {
+    title: "Industries",
+    links: [
+      { label: "All industries", href: "/industries" },
+      ...industryNavLinks,
+    ],
+  },
+  {
+    title: "Resources",
+    links: resourceLinks,
+  },
+  {
+    title: "Contact",
+    links: [
       { label: "Pricing estimator", href: "/price-estimator" },
-      { label: "Blogs", href: "/blog" },
       { label: "Contact", href: "/contact-us" },
     ],
   },
   {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Trust center", href: "/trust-center" },
-      { label: "Privacy policy", href: "/privacy-policy" },
-      { label: "Terms of service", href: "/terms-of-service" },
-    ],
-  },
-  {
-    title: "Popular use cases",
-    links: [
-      { label: "Real estate AI calling", href: "/industries/real-estate" },
-      { label: "Restaurant phone automation", href: "/industries/restaurants" },
-      { label: "Hospital call handling", href: "/industries/hospitals" },
-      { label: "Pet clinic reception", href: "/industries/pet-clinics" },
-    ],
+    title: "Legal",
+    links: legalLinks,
   },
 ] as const;
 
@@ -47,7 +52,7 @@ export function Footer() {
           </Link>
         </div>
 
-        <nav className="grid gap-6 sm:grid-cols-3" aria-label="Footer navigation">
+        <nav className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5" aria-label="Footer navigation">
           {footerGroups.map((group) => (
             <div key={group.title}>
               <h2 className="footer-detail text-xs font-semibold uppercase tracking-[0.2em]">

@@ -26,6 +26,7 @@ export const pageTitles = {
   contact: "Book a Free AI Voice Agent Demo & Contact - Connect Call AI",
   privacy: "Privacy Policy - Connect Call AI",
   pricing: "AI Voice Agent Pricing Estimator - Connect Call AI",
+  services: "AI Voice Agent Services - Connect Call AI",
   terms: "Terms of Service - Connect Call AI",
   trust: "Trust Center for Responsible AI Voice Agents - Connect Call AI",
   industries: "Custom AI Voice Agents for Real Estate, Restaurants, and More - Connect Call AI",
@@ -51,6 +52,8 @@ export const pageDescriptions = {
     "Read the Connect Call AI privacy policy covering website forms, demo bookings, analytics, call-flow details, service providers, and data choices.",
   pricing:
     "Estimate monthly AI voice agent and call-handling costs with Connect Call AI. Compare automation savings by call volume, duration, and team size.",
+  services:
+    "Explore Connect Call AI services for AI receptionists, phone answering, appointment booking, lead qualification, after-hours coverage, and custom voice agents.",
   terms:
     "Review the Connect Call AI terms of service for website use, demo requests, AI voice agent responsibilities, third-party services, and public content.",
   trust:

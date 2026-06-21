@@ -6,26 +6,20 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import logo from "@/public/logo.png";
 import { trackConversionEvent } from "@/lib/analytics/conversions";
-
-const SECTION_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "Use cases", href: "/#use-cases" },
-  { label: "Features", href: "/#features" },
-  { label: "Testimonials", href: "/#testimonials" },
-] as const;
+import { industryNavLinks, legalLinks, resourceLinks, serviceLinks } from "@/lib/site-navigation";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSectionsOpen, setIsSectionsOpen] = useState(false);
-  const [activeSectionLabel, setActiveSectionLabel] = useState("Sections");
-  const sectionsDropdownRef = useRef<HTMLDivElement>(null);
+  const [activeDesktopMenu, setActiveDesktopMenu] = useState<
+    "services" | "industries" | "resources" | null
+  >(null);
+  const desktopNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onDocumentClick = (event: MouseEvent) => {
-      if (!sectionsDropdownRef.current) return;
-      if (!sectionsDropdownRef.current.contains(event.target as Node)) {
-        setIsSectionsOpen(false);
+      if (!desktopNavRef.current) return;
+      if (!desktopNavRef.current.contains(event.target as Node)) {
+        setActiveDesktopMenu(null);
       }
     };
 
@@ -34,38 +28,21 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const resolveActiveSectionLabel = () => {
-      if (window.location.pathname !== "/") {
-        setActiveSectionLabel("Sections");
-        return;
-      }
+    if (!isMobileMenuOpen) {
+      return;
+    }
 
-      const hash = window.location.hash;
-      if (!hash) {
-        setActiveSectionLabel("Home");
-        return;
-      }
-
-      const matchingSection = SECTION_LINKS.find((link) => link.href === `/${hash}`);
-      setActiveSectionLabel(matchingSection?.label ?? "Sections");
-    };
-
-    resolveActiveSectionLabel();
-    window.addEventListener("hashchange", resolveActiveSectionLabel);
-    window.addEventListener("popstate", resolveActiveSectionLabel);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     return () => {
-      window.removeEventListener("hashchange", resolveActiveSectionLabel);
-      window.removeEventListener("popstate", resolveActiveSectionLabel);
+      document.body.style.overflow = previousOverflow;
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
   const onNavLinkClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
     setIsMobileMenuOpen(false);
-    const selected = SECTION_LINKS.find((link) => link.href === href);
-    if (selected) {
-      setActiveSectionLabel(selected.label);
-    }
+    setActiveDesktopMenu(null);
 
     if (!href.startsWith("/#")) {
       return;
@@ -94,6 +71,10 @@ export function Navbar() {
     window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
   };
 
+  const toggleDesktopMenu = (menu: NonNullable<typeof activeDesktopMenu>) => {
+    setActiveDesktopMenu((current) => (current === menu ? null : menu));
+  };
+
   const onLogoClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
     if (!window.location.hash) {
       return;
@@ -120,35 +101,44 @@ export function Navbar() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm text-blue-100/80 md:flex">
-          <div ref={sectionsDropdownRef} className="relative">
+        <nav
+          ref={desktopNavRef}
+          className="hidden items-center gap-5 text-sm text-blue-100/80 md:flex lg:gap-7"
+          aria-label="Primary navigation"
+        >
+          <div className="relative">
             <button
               type="button"
-              onClick={() => setIsSectionsOpen((prev) => !prev)}
+              onClick={() => toggleDesktopMenu("services")}
               className="inline-flex items-center gap-2 transition hover:text-white"
+              aria-expanded={activeDesktopMenu === "services"}
             >
-              {activeSectionLabel}
-              <span className={`text-[10px] transition-transform ${isSectionsOpen ? "rotate-180" : ""}`}>
+              Services
+              <span className={`text-[10px] transition-transform ${activeDesktopMenu === "services" ? "rotate-180" : ""}`}>
                 ▼
               </span>
             </button>
             <AnimatePresence>
-              {isSectionsOpen ? (
+              {activeDesktopMenu === "services" ? (
                 <motion.div
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.18, ease: "easeOut" }}
-                  className="absolute left-0 top-[calc(100%+10px)] z-30 w-48 overflow-hidden rounded-2xl border border-[#9fb3ff]/35 bg-[#121d74]/95 shadow-[0_16px_42px_rgba(4,10,40,0.52)] backdrop-blur-md"
+                  className="absolute left-0 top-[calc(100%+10px)] z-30 w-72 overflow-hidden rounded-2xl border border-[#9fb3ff]/35 bg-[#121d74]/95 shadow-[0_16px_42px_rgba(4,10,40,0.52)] backdrop-blur-md"
                 >
-                  {SECTION_LINKS.map((link) => (
+                  <Link
+                    href="/services"
+                    onClick={(event) => onNavLinkClick(event, "/services")}
+                    className="block border-b border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#d7e1ff] hover:text-[#12216f]"
+                  >
+                    All services
+                  </Link>
+                  {serviceLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      onClick={(event) => {
-                        onNavLinkClick(event, link.href);
-                        setIsSectionsOpen(false);
-                      }}
+                      onClick={(event) => onNavLinkClick(event, link.href)}
                       className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-[#d7e1ff] hover:text-[#12216f]"
                     >
                       {link.label}
@@ -158,27 +148,50 @@ export function Navbar() {
               ) : null}
             </AnimatePresence>
           </div>
-          <Link
-            href="/industries"
-            onClick={(event) => onNavLinkClick(event, "/industries")}
-            className="transition hover:text-white"
-          >
-            Industries
-          </Link>
-          <Link
-            href="/about"
-            onClick={(event) => onNavLinkClick(event, "/about")}
-            className="transition hover:text-white"
-          >
-            About
-          </Link>
-          <Link
-            href="/contact-us"
-            onClick={(event) => onNavLinkClick(event, "/contact-us")}
-            className="transition hover:text-white"
-          >
-            Contact us
-          </Link>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => toggleDesktopMenu("industries")}
+              className="inline-flex items-center gap-2 transition hover:text-white"
+              aria-expanded={activeDesktopMenu === "industries"}
+            >
+              Industries
+              <span className={`text-[10px] transition-transform ${activeDesktopMenu === "industries" ? "rotate-180" : ""}`}>
+                ▼
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeDesktopMenu === "industries" ? (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute left-0 top-[calc(100%+10px)] z-30 w-64 overflow-hidden rounded-2xl border border-[#9fb3ff]/35 bg-[#121d74]/95 shadow-[0_16px_42px_rgba(4,10,40,0.52)] backdrop-blur-md"
+                >
+                  <Link
+                    href="/industries"
+                    onClick={(event) => onNavLinkClick(event, "/industries")}
+                    className="block border-b border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#d7e1ff] hover:text-[#12216f]"
+                  >
+                    All industries
+                  </Link>
+                  {industryNavLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={(event) => onNavLinkClick(event, link.href)}
+                      className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-[#d7e1ff] hover:text-[#12216f]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
+
           <Link
             href="/price-estimator"
             onClick={(event) => onNavLinkClick(event, "/price-estimator")}
@@ -187,12 +200,47 @@ export function Navbar() {
             Price estimator
           </Link>
           <Link
-            href="/blog"
-            onClick={(event) => onNavLinkClick(event, "/blog")}
+            href="/contact-us"
+            onClick={(event) => onNavLinkClick(event, "/contact-us")}
             className="transition hover:text-white"
           >
-            Blogs
+            Contact
           </Link>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => toggleDesktopMenu("resources")}
+              className="inline-flex items-center gap-2 transition hover:text-white"
+              aria-expanded={activeDesktopMenu === "resources"}
+            >
+              Resources
+              <span className={`text-[10px] transition-transform ${activeDesktopMenu === "resources" ? "rotate-180" : ""}`}>
+                ▼
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeDesktopMenu === "resources" ? (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute right-0 top-[calc(100%+10px)] z-30 w-56 overflow-hidden rounded-2xl border border-[#9fb3ff]/35 bg-[#121d74]/95 shadow-[0_16px_42px_rgba(4,10,40,0.52)] backdrop-blur-md"
+                >
+                  {[...resourceLinks, ...legalLinks].map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={(event) => onNavLinkClick(event, link.href)}
+                      className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-[#d7e1ff] hover:text-[#12216f]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -244,13 +292,20 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="border-t border-white/10 bg-[#0b1054]/95 px-5 py-4 md:hidden"
+            className="absolute inset-x-0 top-full z-50 max-h-[calc(100vh-73px)] overflow-y-auto overscroll-contain border-t border-white/10 bg-[#0b1054] px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 shadow-[0_24px_70px_rgba(3,7,35,0.55)] md:hidden"
           >
-            <nav className="mx-auto flex w-full max-w-6xl flex-col gap-2">
+            <nav className="mx-auto flex w-full max-w-6xl flex-col gap-2 pb-8">
               <div className="px-3 pt-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
-                Sections
+                Services
               </div>
-              {SECTION_LINKS.map((link) => (
+              <Link
+                href="/services"
+                onClick={(event) => onNavLinkClick(event, "/services")}
+                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
+              >
+                All services
+              </Link>
+              {serviceLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -260,27 +315,29 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <div className="px-3 pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
+                Industries
+              </div>
               <Link
                 href="/industries"
                 onClick={(event) => onNavLinkClick(event, "/industries")}
                 className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
               >
-                Industries
+                All industries
               </Link>
-              <Link
-                href="/about"
-                onClick={(event) => onNavLinkClick(event, "/about")}
-                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
-              >
-                About
-              </Link>
-              <Link
-                href="/contact-us"
-                onClick={(event) => onNavLinkClick(event, "/contact-us")}
-                className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
-              >
-                Contact us
-              </Link>
+              {industryNavLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(event) => onNavLinkClick(event, link.href)}
+                  className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="px-3 pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
+                Contact and pricing
+              </div>
               <Link
                 href="/price-estimator"
                 onClick={(event) => onNavLinkClick(event, "/price-estimator")}
@@ -289,12 +346,25 @@ export function Navbar() {
                 Price estimator
               </Link>
               <Link
-                href="/blog"
-                onClick={(event) => onNavLinkClick(event, "/blog")}
+                href="/contact-us"
+                onClick={(event) => onNavLinkClick(event, "/contact-us")}
                 className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
               >
-                Blogs
+                Contact
               </Link>
+              <div className="px-3 pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
+                Resources
+              </div>
+              {[...resourceLinks, ...legalLinks].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(event) => onNavLinkClick(event, link.href)}
+                  className="rounded-xl px-3 py-2 text-sm font-medium text-blue-100/90 transition hover:bg-white/10 hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              ))}
               <Link
                 href="/contact-us"
                 onClick={() => {

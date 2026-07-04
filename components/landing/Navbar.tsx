@@ -14,6 +14,8 @@ export function Navbar() {
     "services" | "industries" | "resources" | null
   >(null);
   const desktopNavRef = useRef<HTMLElement>(null);
+  const headerBarRef = useRef<HTMLDivElement>(null);
+  const [mobileMenuTop, setMobileMenuTop] = useState(0);
 
   useEffect(() => {
     const onDocumentClick = (event: MouseEvent) => {
@@ -39,6 +41,30 @@ export function Navbar() {
       document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen || !headerBarRef.current) {
+      return;
+    }
+
+    const updateMobileMenuTop = () => {
+      setMobileMenuTop(headerBarRef.current?.getBoundingClientRect().bottom ?? 0);
+    };
+
+    updateMobileMenuTop();
+    window.addEventListener("resize", updateMobileMenuTop);
+    return () => window.removeEventListener("resize", updateMobileMenuTop);
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((open) => {
+      const nextOpen = !open;
+      if (nextOpen && headerBarRef.current) {
+        setMobileMenuTop(headerBarRef.current.getBoundingClientRect().bottom);
+      }
+      return nextOpen;
+    });
+  };
 
   const onNavLinkClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
     setIsMobileMenuOpen(false);
@@ -87,7 +113,10 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0b1054]/70 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 md:px-8">
+      <div
+        ref={headerBarRef}
+        className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 md:px-8"
+      >
         <Link
           href="/"
           onClick={onLogoClick}
@@ -248,7 +277,7 @@ export function Navbar() {
             type="button"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
-            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            onClick={toggleMobileMenu}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition hover:border-white/35 md:hidden"
           >
             <span className="relative h-3.5 w-4">
@@ -292,9 +321,15 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute inset-x-0 top-full z-50 max-h-[calc(100vh-73px)] overflow-y-auto overscroll-contain border-t border-white/10 bg-[#0b1054] px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 shadow-[0_24px_70px_rgba(3,7,35,0.55)] md:hidden"
+            style={{
+              maxHeight:
+                mobileMenuTop > 0
+                  ? `calc(100dvh - ${mobileMenuTop}px)`
+                  : "calc(100dvh - 4.5rem)",
+            }}
+            className="absolute inset-x-0 top-full z-50 overflow-y-auto overscroll-contain border-t border-white/10 bg-[#0b1054] px-5 pt-4 shadow-[0_24px_70px_rgba(3,7,35,0.55)] [-webkit-overflow-scrolling:touch] md:hidden"
           >
-            <nav className="mx-auto flex w-full max-w-6xl flex-col gap-2 pb-8">
+            <nav className="mx-auto flex w-full max-w-6xl flex-col gap-2 pb-[calc(2.5rem+env(safe-area-inset-bottom,0px))]">
               <div className="px-3 pt-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
                 Services
               </div>

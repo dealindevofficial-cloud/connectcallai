@@ -27,6 +27,7 @@ export const pageTitles = {
   privacy: "Privacy Policy - Connect Call AI",
   pricing: "AI Voice Agent Pricing Estimator - Connect Call AI",
   services: "AI Voice Agent Services - Connect Call AI",
+  service: (title: string) => `${title} - Connect Call AI`,
   terms: "Terms of Service - Connect Call AI",
   trust: "Trust Center for Responsible AI Voice Agents - Connect Call AI",
   industries: "Custom AI Voice Agents for Real Estate, Restaurants, and More - Connect Call AI",
@@ -38,6 +39,7 @@ export const pageTitles = {
   blogUnavailable: "Blogs Unavailable - Connect Call AI",
   postNotFound: "Blogs Post Not Found - Connect Call AI",
   industryNotFound: "Industry Not Found - Connect Call AI",
+  serviceNotFound: "Service Not Found - Connect Call AI",
 } as const;
 
 /** Meta descriptions (~150–160 characters for search snippets). */

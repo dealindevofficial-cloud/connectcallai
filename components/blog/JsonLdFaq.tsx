@@ -4,7 +4,7 @@ type FaqItem = {
 };
 
 type JsonLdFaqProps = {
-  faqs: FaqItem[];
+  faqs: readonly FaqItem[];
 };
 
 export function JsonLdFaq({ faqs }: JsonLdFaqProps) {

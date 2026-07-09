@@ -5,6 +5,7 @@ import { listPublishedForSitemap } from "@/lib/blog/repository";
 import { getSiteOrigin } from "@/lib/blog/site-url";
 import { isMongoConfigured } from "@/lib/db/connect";
 import { getIndustryCanonicalUrl, industries } from "@/lib/industries-data";
+import { getServiceCanonicalUrl, services } from "@/lib/services-data";
 
 /**
  * Keep sitemap fresh for active publishing.
@@ -138,5 +139,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...industryRoutes, ...blogIndustryRoutes, ...blogRoutes];
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
+    url: getServiceCanonicalUrl(base, service),
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...industryRoutes, ...blogIndustryRoutes, ...blogRoutes];
 }

@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { industryNavLinks, legalLinks, resourceLinks, serviceLinks } from "@/lib/site-navigation";
 
-const footerServiceLinks = serviceLinks.slice(0, 4);
-
 const footerGroups = [
   {
     title: "Services",
     links: [
       { label: "All services", href: "/services" },
-      ...footerServiceLinks,
+      ...serviceLinks,
     ],
   },
   {

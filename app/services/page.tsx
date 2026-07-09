@@ -42,7 +42,6 @@ export default function ServicesPage() {
             {serviceLinks.map((service) => (
               <article
                 key={service.href}
-                id={service.href.split("#")[1]}
                 className="scroll-mt-28 rounded-3xl border border-white/12 bg-[linear-gradient(145deg,rgba(20,30,112,0.62),rgba(9,14,66,0.72))] p-6 shadow-[0_24px_70px_rgba(3,7,35,0.28)]"
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-100/55">
@@ -51,11 +50,11 @@ export default function ServicesPage() {
                 <h2 className="mt-3 text-2xl font-semibold text-white">{service.label}</h2>
                 <p className="mt-3 text-sm leading-7 text-blue-100/80">{service.description}</p>
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <Link href="/contact-us" className="btn-primary">
-                    Book a Free Demo
+                  <Link href={service.href} className="btn-primary">
+                    View Service
                   </Link>
-                  <Link href="/price-estimator" className="btn-secondary">
-                    Estimate Pricing
+                  <Link href="/contact-us" className="btn-secondary">
+                    Get a Demo Call
                   </Link>
                 </div>
               </article>

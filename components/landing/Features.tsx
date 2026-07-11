@@ -1,189 +1,228 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useState, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { features } from "@/lib/landing-data";
+import { fadeUp, staggerContainer } from "@/lib/motion";
+
+const featureIcons: Array<() => ReactNode> = [
+  AgentMark,
+  ConfigMark,
+  DeployMark,
+  VoiceMark,
+  ClockMark,
+];
+
+function AgentMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <rect x="6" y="7" width="12" height="11" rx="3" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M12 7V4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="12" cy="3.5" r="1.2" stroke="currentColor" strokeWidth="1.4" />
+      <circle cx="9.5" cy="12" r="1.1" fill="currentColor" />
+      <circle cx="14.5" cy="12" r="1.1" fill="currentColor" />
+      <path d="M4.5 12h1.5M18 12h1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ConfigMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M5 8h8M17 8h2M5 16h2M11 16h8"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <circle cx="15" cy="8" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="9" cy="16" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+function DeployMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M12 3.5 5.5 13h4.2v7.5h4.6V13h4.2L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function VoiceMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M8 10v4M11 7.5v9M14 9v6M17 11v2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <rect x="4.5" y="4.5" width="15" height="15" rx="4" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function ClockMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="7.5" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M12 8.2v4.1l2.8 1.7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 type FeatureCardProps = {
   title: string;
   detail: string;
   index: number;
+  featured?: boolean;
+  enableHover?: boolean;
 };
 
-function FeatureCard({ title, detail, index }: FeatureCardProps) {
-  const accents = [
-    "from-[#d5d7ff]/65 to-[#9da9ff]/20",
-    "from-[#cde7ff]/65 to-[#89beff]/20",
-    "from-[#f0d6ff]/65 to-[#b590ff]/20",
-    "from-[#ccf7ff]/65 to-[#72d2ff]/20",
-    "from-[#e8dcff]/65 to-[#91a0ff]/20",
-  ];
-  const glyphs = ["✦", "◎", "◈", "✧", "⬢"];
-  const stickerSets = [
-    ["🤖", "🛰️", "✨"],
-    ["📞", "🔔", "📡"],
-    ["⚡", "🧠", "🌀"],
-    ["🎧", "💬", "🌟"],
-    ["🛡️", "🚀", "🔷"],
-  ];
-  const positionSets = [
-    ["-left-20 top-0", "-right-20 top-10", "left-4 -bottom-12"],
-    ["-left-16 top-14", "right-2 -top-12", "-right-16 bottom-8"],
-    ["left-8 -top-12", "-left-20 bottom-8", "-right-16 top-1/2"],
-    ["-left-16 top-1/3", "right-4 -top-12", "right-0 -bottom-12"],
-    ["-left-18 top-6", "-right-20 top-1/3", "left-14 -bottom-12"],
-  ];
-  const fromLeft = index % 2 === 0;
-  const shouldReduceMotion = useReducedMotion();
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
-  const shouldAnimate = isMobile === false && !shouldReduceMotion;
-  const offsetX = shouldAnimate ? (fromLeft ? -140 : 140) : 0;
-  const activeStickers = stickerSets[index % stickerSets.length];
-  const activePositions = positionSets[index % positionSets.length];
-  const viewportConfig = {
-    once: !shouldAnimate,
-    amount: 0.25,
-    margin: "-5% 0px -5% 0px",
-  } as const;
-  const cardDuration = shouldAnimate ? 1.05 : 0.01;
-  const stickerDuration = shouldAnimate ? 0.8 : 0.01;
+function FeatureCard({
+  title,
+  detail,
+  index,
+  featured = false,
+  enableHover = true,
+}: FeatureCardProps) {
+  const Icon = featureIcons[index] ?? AgentMark;
+
+  return (
+    <motion.article
+      variants={fadeUp}
+      whileHover={
+        enableHover
+          ? { y: -3, transition: { duration: 0.22, ease: "easeOut" } }
+          : undefined
+      }
+      className={`group relative h-full overflow-hidden rounded-2xl border border-white/14 bg-[#0f155f]/75 p-6 transition-[border-color,box-shadow] duration-300 hover:border-[#93a6ff]/55 hover:shadow-[0_0_28px_rgba(114,136,255,0.22)] md:p-7 ${
+        featured ? "md:flex md:flex-col md:justify-between" : ""
+      }`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-gradient-to-br from-[#7d8eff]/25 via-[#5a6dff]/10 to-transparent opacity-80 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_12%_0%,rgba(255,255,255,0.12),transparent_55%)]"
+      />
+
+      <div className="relative">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/18 bg-white/8 text-[#b8c6ff] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] transition-[border-color,box-shadow] duration-300 group-hover:border-[#93a6ff]/45 group-hover:shadow-[0_0_16px_rgba(114,136,255,0.25)]">
+          <Icon />
+        </span>
+
+        <h3
+          className={`mt-5 font-semibold tracking-tight text-white ${
+            featured ? "text-2xl md:text-3xl" : "text-lg md:text-xl"
+          }`}
+        >
+          {title}
+        </h3>
+        <p
+          className={`mt-3 leading-relaxed text-blue-50/90 ${
+            featured ? "max-w-sm text-base md:text-lg" : "text-sm md:text-base"
+          }`}
+        >
+          {detail}
+        </p>
+      </div>
+
+      {featured ? (
+        <p className="relative mt-8 text-xs font-medium uppercase tracking-[0.18em] text-[#9db0ff]/75 md:mt-10">
+          Flagship capability
+        </p>
+      ) : null}
+    </motion.article>
+  );
+}
+
+export function Features() {
+  const reducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
     const update = () => setIsMobile(mediaQuery.matches);
     update();
     mediaQuery.addEventListener("change", update);
     return () => mediaQuery.removeEventListener("change", update);
   }, []);
 
-  return (
-    <motion.div
-      initial={shouldAnimate ? { x: offsetX, opacity: 0 } : { x: 0, opacity: 1 }}
-      animate={!shouldAnimate ? { x: 0, opacity: 1 } : undefined}
-      whileInView={shouldAnimate ? { x: 0, opacity: 1 } : undefined}
-      viewport={viewportConfig}
-      transition={{
-        duration: cardDuration,
-        delay: shouldAnimate ? index * 0.14 : 0,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="group relative h-full overflow-visible"
-    >
-      {activeStickers.map((sticker, stickerIndex) => (
-        <motion.span
-          key={`${title}-sticker-${stickerIndex}`}
-          aria-hidden
-          initial={shouldAnimate ? { opacity: 0, scale: 0.7, y: 8 } : { opacity: 0.75, scale: 1, y: 0 }}
-          animate={!shouldAnimate ? { opacity: 0.75, scale: 1, y: 0 } : undefined}
-          whileInView={
-            !shouldAnimate
-              ? { opacity: 0.75, scale: 1, y: 0 }
-              : { opacity: [0, 0.9, 0.7], scale: [0.6, 1.08, 1], y: [8, -4, 0] }
-          }
-          viewport={viewportConfig}
-          transition={{
-            duration: stickerDuration,
-            delay: shouldAnimate ? index * 0.14 + 0.15 + stickerIndex * 0.08 : 0,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className={`pointer-events-none absolute z-20 drop-shadow-[0_8px_14px_rgba(12,21,64,0.4)] ${activePositions[stickerIndex]} ${isMobile ? "hidden sm:inline-block" : ""}`}
-        >
-          <motion.span
-            animate={shouldAnimate ? { y: [0, -6, 0], rotate: [-5, 4, -5] } : undefined}
-            transition={
-              !shouldAnimate
-                ? undefined
-                : {
-                    duration: 2 + stickerIndex * 0.45,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                    delay: stickerIndex * 0.15,
-                  }
-            }
-            className="inline-block rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xl backdrop-blur-md md:text-2xl"
-          >
-            {sticker}
-          </motion.span>
-        </motion.span>
-      ))}
+  const stagger = reducedMotion || isMobile ? 0.06 : 0.12;
 
-      <div className="relative overflow-hidden rounded-3xl border border-white/25 bg-white/10 p-6 shadow-[0_24px_60px_rgba(4,10,32,0.38)] backdrop-blur-xl md:p-7">
-        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_8%_0%,rgba(255,255,255,0.42),rgba(255,255,255,0)_48%)]" />
-        <div className="pointer-events-none absolute inset-[1px] rounded-3xl border border-white/20" />
-        <div
-          className={`pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-gradient-to-br ${accents[index % accents.length]} opacity-70 blur-2xl`}
-        />
-        <motion.div
-          initial={shouldAnimate ? { x: fromLeft ? "-80%" : "80%", opacity: 0 } : { opacity: 0.25 }}
-          animate={!shouldAnimate ? { opacity: 0.25 } : undefined}
-          whileInView={
-            !shouldAnimate
-              ? { opacity: 0.25 }
-              : { x: fromLeft ? "135%" : "-135%", opacity: [0, 0.55, 0] }
-          }
-          viewport={viewportConfig}
-          transition={{
-            duration: shouldAnimate ? 1.25 : 0.01,
-            delay: shouldAnimate ? index * 0.14 + 0.2 : 0,
-            ease: "easeOut",
-          }}
-          className="pointer-events-none absolute -top-8 h-[150%] w-24 rotate-12 bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md"
-        />
-        <div className="relative">
-        <motion.div
-          initial={shouldAnimate ? { scale: 0.82, opacity: 0 } : { scale: 1, opacity: 1 }}
-          animate={!shouldAnimate ? { scale: 1, opacity: 1 } : undefined}
-          whileInView={shouldAnimate ? { scale: [0.75, 1.12, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
-          viewport={viewportConfig}
-          transition={{
-            duration: shouldAnimate ? 0.8 : 0.01,
-            delay: shouldAnimate ? index * 0.14 + 0.22 : 0,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-lg text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
-        >
-          {glyphs[index % glyphs.length]}
-        </motion.div>
-        <h3 className="mt-5 text-xl font-semibold tracking-tight text-white md:text-2xl">{title}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-blue-50/90 md:text-base">{detail}</p>
-        <div className="mt-6 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-blue-100/75">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-200/80" />
-          Core capability
-        </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-export function Features() {
   return (
     <section
       id="features"
-      className="scroll-mt-28 relative mx-auto w-full max-w-6xl px-5 py-16 md:px-8 md:py-24"
+      className="scroll-mt-28 relative mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
     >
-      <div className="pointer-events-none absolute inset-x-16 top-8 h-48 rounded-full bg-[#7f94ff]/20 blur-3xl md:top-4" />
-      <div className="pointer-events-none absolute -right-12 top-28 h-40 w-40 rounded-full bg-[#b982ff]/20 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-16 top-8 h-48 rounded-full bg-[#7f94ff]/15 blur-3xl md:top-4"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-12 top-28 h-40 w-40 rounded-full bg-[#b982ff]/12 blur-3xl"
+      />
 
-      <div className="relative">
-        <h2 className="mt-3 text-center text-4xl font-bold text-white md:text-5xl">Core features</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-blue-100/80 md:text-base">
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+        className="relative mx-auto max-w-2xl text-center"
+      >
+        <h2 className="text-4xl font-bold text-white md:text-5xl">Core features</h2>
+        <p className="mt-4 text-sm leading-relaxed text-blue-100/80 md:text-base">
           Every Connect Call AI deployment ships with production-ready capabilities designed for
           speed, reliability, and natural customer conversations.
         </p>
+      </motion.div>
 
-        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6">
-          {features.map((feature, index) => (
+      <motion.div
+        variants={{
+          ...staggerContainer,
+          visible: {
+            transition: {
+              staggerChildren: stagger,
+              delayChildren: reducedMotion ? 0 : 0.08,
+            },
+          },
+        }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        className="relative mt-10 grid grid-cols-1 gap-4 md:mt-12 md:grid-cols-2 md:gap-5"
+      >
+        {features.map((feature, index) => (
+          <div
+            key={feature.title}
+            className={index === 0 ? "h-full md:row-span-2" : "h-full"}
+          >
             <FeatureCard
-              key={feature.title}
               title={feature.title}
               detail={feature.detail}
               index={index}
+              featured={index === 0}
+              enableHover={!reducedMotion && !isMobile}
             />
-          ))}
-        </div>
-      </div>
+          </div>
+        ))}
+      </motion.div>
     </section>
   );
 }

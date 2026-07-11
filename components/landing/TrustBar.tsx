@@ -1,29 +1,48 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { trustLogos } from "@/lib/landing-data";
-import { fadeUp, staggerContainer } from "@/lib/motion";
+
+function LogoItem({ name }: { name: string }) {
+  return (
+    <span className="trust-marquee-item shrink-0 px-6 text-sm font-medium tracking-wide text-blue-100/55 md:px-8 md:text-[0.95rem]">
+      {name}
+    </span>
+  );
+}
 
 export function TrustBar() {
+  const reducedMotion = useReducedMotion();
+  const logos = [...trustLogos];
+
   return (
-    <section className="mx-auto w-full max-w-6xl px-5 py-8 md:px-8">
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.4 }}
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5"
-      >
-        {trustLogos.map((logo) => (
-          <motion.div
-            key={logo}
-            variants={fadeUp}
-            className="rounded-2xl border border-white/15 bg-white/6 px-4 py-3 text-center text-sm text-blue-100/90"
-          >
-            {logo}
-          </motion.div>
-        ))}
-      </motion.div>
+    <section
+      aria-label="Trusted by businesses"
+      className="mx-auto w-full max-w-6xl px-5 py-6 md:px-8 md:py-8"
+    >
+      {reducedMotion ? (
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          {logos.map((logo) => (
+            <LogoItem key={logo} name={logo} />
+          ))}
+        </div>
+      ) : (
+        <div className="trust-marquee relative overflow-hidden">
+          <div className="trust-marquee-track flex w-max items-center">
+            {[0, 1].map((copy) => (
+              <div
+                key={copy}
+                className="flex items-center"
+                aria-hidden={copy === 1 ? true : undefined}
+              >
+                {logos.map((logo) => (
+                  <LogoItem key={`${copy}-${logo}`} name={logo} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

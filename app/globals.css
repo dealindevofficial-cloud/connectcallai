@@ -358,6 +358,148 @@ body::-webkit-scrollbar-corner,
   }
 }
 
+@keyframes trust-marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.trust-marquee {
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+}
+
+.trust-marquee-track {
+  animation: trust-marquee-scroll 42s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .trust-marquee-track {
+    animation-duration: 32s;
+  }
+}
+
+/* How it works — timeline connector */
+.how-timeline-track {
+  background: rgba(158, 174, 255, 0.16);
+}
+
+.how-timeline-track--horizontal {
+  height: 1px;
+}
+
+.how-timeline-track--vertical {
+  width: 1px;
+}
+
+.how-timeline-progress {
+  background: linear-gradient(90deg, #6b7fff, #9b6dff);
+  box-shadow: 0 0 12px rgba(120, 130, 255, 0.35);
+}
+
+.how-timeline-progress--horizontal {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+}
+
+.how-timeline-progress--vertical {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, #6b7fff, #9b6dff);
+  transform-origin: top center;
+}
+
+/* Testimonials — auto-rotate progress */
+@keyframes testimonial-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.testimonial-progress {
+  height: 2px;
+  width: min(100%, 14rem);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(158, 174, 255, 0.16);
+}
+
+.testimonial-progress-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #6b7fff, #9b6dff);
+  box-shadow: 0 0 10px rgba(120, 130, 255, 0.35);
+  animation: testimonial-progress-fill 5s linear forwards;
+}
+
+.testimonial-progress-fill--static {
+  animation: none;
+}
+
+/* Final CTA — closing moment */
+.final-cta-banner {
+  background: linear-gradient(125deg, #18227f 0%, #1e1a72 48%, #2a1e77 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 28px 80px rgba(7, 10, 48, 0.55);
+}
+
+.final-cta-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.07) 48%,
+    rgba(180, 195, 255, 0.12) 52%,
+    transparent 65%
+  );
+  background-size: 220% 100%;
+  animation: final-cta-shimmer 7s ease-in-out infinite;
+}
+
+.final-cta-btn {
+  animation: final-cta-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes final-cta-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+@keyframes final-cta-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 28px rgba(108, 120, 255, 0.38);
+  }
+  50% {
+    box-shadow: 0 0 44px rgba(133, 110, 255, 0.58);
+  }
+}
+
 /* Sanitized blog HTML (markdown → rehype) */
 .blog-prose {
   max-width: 100%;
@@ -565,6 +707,15 @@ body::-webkit-scrollbar-corner,
       inset 0 1px 0 rgba(255, 255, 255, 0.12),
       0 12px 30px rgba(5, 10, 44, 0.4);
   }
+
+  .final-cta-shimmer {
+    animation-duration: 10s;
+    opacity: 0.65;
+  }
+
+  .final-cta-btn {
+    animation-duration: 3.6s;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -579,8 +730,26 @@ body::-webkit-scrollbar-corner,
 
   .glow-orb,
   .glow-surface::before,
-  .wave-bar {
+  .wave-bar,
+  .trust-marquee-track {
     animation: none !important;
     transform: none !important;
+  }
+
+  .how-timeline-progress--horizontal {
+    transform: scaleX(1) !important;
+  }
+
+  .how-timeline-progress--vertical {
+    transform: scaleY(1) !important;
+  }
+
+  .testimonial-progress-fill {
+    animation: none !important;
+  }
+
+  .final-cta-shimmer,
+  .final-cta-btn {
+    animation: none !important;
   }
 }

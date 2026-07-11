@@ -1,10 +1,12 @@
- "use client";
+"use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { faqs } from "@/lib/landing-data";
+import { fadeUp } from "@/lib/motion";
 
 export function Faqs() {
+  const reducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   return (
@@ -12,23 +14,39 @@ export function Faqs() {
       id="faqs"
       className="scroll-mt-28 mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20"
     >
-      <div className="mb-8 space-y-3 text-center md:mb-10">
-        <h2 className="text-center text-4xl font-bold text-white md:text-5xl">FAQs</h2>
-        <p className="mx-auto max-w-2xl text-sm leading-6 text-blue-100/75 md:text-base">
-          Explore the most common questions teams ask before launching an AI receptionist for
-          booking, support, and lead qualification.
-        </p>
-      </div>
+      <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] md:items-start md:gap-14 lg:gap-20">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.4 }}
+          className="md:sticky md:top-32"
+        >
+          <h2 className="text-4xl font-bold text-white md:text-5xl">FAQs</h2>
+          <p className="mt-4 max-w-sm text-sm leading-6 text-blue-100/75 md:text-base">
+            Explore the most common questions teams ask before launching an AI receptionist for
+            booking, support, and lead qualification.
+          </p>
+        </motion.div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/12 bg-gradient-to-b from-white/10 via-white/5 to-transparent p-6 md:p-8">
-        <div className="space-y-3">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="space-y-3"
+        >
           {faqs.map((faq, index) => {
             const isOpen = activeIndex === index;
 
             return (
               <article
                 key={faq.question}
-                className="rounded-2xl border border-white/12 bg-[#0e145d]/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-[#93a6ff]/45"
+                className={`rounded-2xl border bg-[#0e145d]/55 px-5 py-4 backdrop-blur-sm transition-[border-color,background-color] duration-300 ${
+                  isOpen
+                    ? "border-[#8ea3ff]/70 bg-[#121a6e]/70"
+                    : "border-white/12 hover:border-[#93a6ff]/40"
+                }`}
               >
                 <button
                   type="button"
@@ -55,13 +73,16 @@ export function Faqs() {
                   {isOpen ? (
                     <motion.div
                       key={`${faq.question}-answer`}
-                      initial={{ height: 0, opacity: 0 }}
+                      initial={reducedMotion ? false : { height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                      exit={reducedMotion ? undefined : { height: 0, opacity: 0 }}
+                      transition={{
+                        duration: reducedMotion ? 0 : 0.28,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                       className="overflow-hidden"
                     >
-                      <p className="pt-3 text-sm leading-6 text-blue-100/80 md:text-base">
+                      <p className="border-t border-[#8ea3ff]/25 pt-3 text-sm leading-6 text-blue-100/80 md:text-base">
                         {faq.answer}
                       </p>
                     </motion.div>
@@ -70,7 +91,7 @@ export function Faqs() {
               </article>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

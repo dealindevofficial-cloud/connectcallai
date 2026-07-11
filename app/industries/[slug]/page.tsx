@@ -75,8 +75,25 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
     permanentRedirect(getIndustryPath(industry));
   }
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: industry.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#070b3a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <BackgroundFX />
       <CursorGlow />
       <IndustryLanding industry={industry} />

@@ -34,11 +34,16 @@ export function Navbar() {
       return;
     }
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const { body, documentElement } = document;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverflow = documentElement.style.overflow;
+
+    body.style.overflow = "hidden";
+    documentElement.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      body.style.overflow = previousBodyOverflow;
+      documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [isMobileMenuOpen]);
 
@@ -112,7 +117,19 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0b1054]/70 backdrop-blur-xl">
+    <>
+      {isMobileMenuOpen ? (
+        <div
+          className="md:hidden"
+          style={{ height: mobileMenuTop > 0 ? mobileMenuTop : "4.5rem" }}
+          aria-hidden
+        />
+      ) : null}
+      <header
+        className={`z-40 border-b border-white/10 bg-[#0b1054]/70 backdrop-blur-xl ${
+          isMobileMenuOpen ? "fixed inset-x-0 top-0" : "sticky top-0"
+        }`}
+      >
       <div
         ref={headerBarRef}
         className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 md:px-8"
@@ -322,12 +339,13 @@ export function Navbar() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{
+              top: mobileMenuTop > 0 ? mobileMenuTop : undefined,
               maxHeight:
                 mobileMenuTop > 0
                   ? `calc(100dvh - ${mobileMenuTop}px)`
                   : "calc(100dvh - 4.5rem)",
             }}
-            className="absolute inset-x-0 top-full z-50 overflow-y-auto overscroll-contain border-t border-white/10 bg-[#0b1054] px-5 pt-4 shadow-[0_24px_70px_rgba(3,7,35,0.55)] [-webkit-overflow-scrolling:touch] md:hidden"
+            className="fixed inset-x-0 top-[4.5rem] z-50 overflow-y-auto overscroll-contain border-t border-white/10 bg-[#0b1054] px-5 pt-4 shadow-[0_24px_70px_rgba(3,7,35,0.55)] [-webkit-overflow-scrolling:touch] md:hidden"
           >
             <nav className="mx-auto flex w-full max-w-6xl flex-col gap-2 pb-[calc(2.5rem+env(safe-area-inset-bottom,0px))]">
               <div className="px-3 pt-1 text-xs font-semibold uppercase tracking-[0.12em] text-blue-100/55">
@@ -419,5 +437,6 @@ export function Navbar() {
         ) : null}
       </AnimatePresence>
     </header>
+    </>
   );
 }

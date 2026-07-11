@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { CalendlyTracker } from "@/components/analytics/CalendlyTracker";
+import { ContactCalendly } from "@/components/contact/ContactCalendly";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactHero } from "@/components/contact/ContactHero";
 import { BackgroundFX } from "@/components/landing/BackgroundFX";
 import { CursorGlow } from "@/components/landing/CursorGlow";
 import { getCalendlyEmbedUrl } from "@/lib/config/calendly";
@@ -53,53 +54,49 @@ const calendlyUrl = getCalendlyEmbedUrl(
   getEmbedDomain()
 );
 
+function ContactFormFallback() {
+  return (
+    <div className="rounded-3xl border border-[#92abff]/30 bg-[linear-gradient(145deg,rgba(19,30,112,0.82),rgba(9,14,62,0.96))] p-6 text-blue-100/80 md:p-8 lg:p-10">
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="space-y-3">
+          <div className="h-4 w-28 rounded-full bg-white/10" />
+          <div className="h-8 w-3/4 rounded-lg bg-white/10" />
+          <div className="h-16 w-full rounded-lg bg-white/8" />
+        </div>
+        <div className="space-y-3 rounded-2xl border border-white/12 bg-white/5 p-5">
+          <div className="h-12 w-full rounded-xl bg-white/8" />
+          <div className="h-12 w-full rounded-xl bg-white/8" />
+          <div className="h-32 w-full rounded-xl bg-white/8" />
+          <div className="h-12 w-full rounded-full bg-white/10" />
+        </div>
+      </div>
+      <p className="mt-4 text-sm text-blue-100/70">Loading contact form...</p>
+    </div>
+  );
+}
+
 export default function ContactUsPage() {
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#070b3a]">
       <BackgroundFX />
       <CursorGlow />
-      <main className="relative z-10 px-5 pb-16 pt-14 md:px-8 md:pt-20">
-        <div className="mx-auto w-full max-w-6xl">
-          <section className="mb-8 text-center md:mb-10">
-            <h1 className="text-4xl font-bold text-white md:text-5xl">Contact Us</h1>
-            <p className="mx-auto mt-4 max-w-2xl text-blue-100/80">
-              Tell us about your goals and our team will help you launch the right AI calling
-              setup for your business.
-            </p>
-          </section>
+      <main className="relative z-10 overflow-x-clip">
+        <ContactHero />
 
-          <section className="space-y-6 md:space-y-8">
-            <Suspense
-              fallback={
-                <div className="rounded-3xl border border-white/18 bg-[linear-gradient(135deg,rgba(67,84,175,0.38),rgba(20,31,106,0.52))] p-6 text-blue-100/80 shadow-[0_18px_60px_rgba(9,16,65,0.45)] backdrop-blur-xl md:p-8">
-                  Loading contact form...
-                </div>
-              }
-            >
+        <section
+          id="contact-form"
+          className="landing-section scroll-mt-28 bg-gradient-to-b from-transparent via-[#111969]/22 to-transparent"
+        >
+          <div className="mx-auto w-full max-w-6xl px-5 py-10 md:px-8 md:py-14">
+            <Suspense fallback={<ContactFormFallback />}>
               <ContactForm />
             </Suspense>
+          </div>
+        </section>
 
-            <div>
-              <h2 className="text-center text-3xl font-semibold text-white md:text-4xl">
-                Book your consultation
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-center text-blue-100/85">
-                Choose a time that works for you. We will review your goals, map your call flow,
-                and recommend the best setup.
-              </p>
-
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/15 bg-[#0b145f]/65">
-                <CalendlyTracker />
-                <iframe
-                  src={calendlyUrl}
-                  title="Book a consultation with Calendly"
-                  className="h-[700px] w-full"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </section>
-        </div>
+        <section className="landing-section bg-gradient-to-b from-transparent via-[#0f1760]/26 to-transparent">
+          <ContactCalendly calendlyUrl={calendlyUrl} />
+        </section>
       </main>
     </div>
   );

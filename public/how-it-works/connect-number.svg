@@ -1,16 +1,12 @@
 <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="connect-bg" x1="16" y1="10" x2="80" y2="88" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#3C64FF" />
-      <stop offset="1" stop-color="#2BC7FF" />
+      <stop stop-color="#3C64FF"/>
+      <stop offset="1" stop-color="#2BC7FF"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#connect-bg)" />
-  <rect x="28" y="18" width="40" height="60" rx="10" fill="#EEF4FF" fill-opacity="0.2" stroke="#F0F4FF" stroke-opacity="0.5" />
-  <rect x="36" y="26" width="24" height="34" rx="5" fill="#F9FBFF" fill-opacity="0.9" />
-  <circle cx="48" cy="68" r="3.5" fill="#F9FBFF" />
-  <path d="M14 36H28" stroke="#F6FAFF" stroke-width="3.5" stroke-linecap="round" />
-  <path d="M20 30L14 36L20 42" stroke="#F6FAFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M82 60H68" stroke="#F6FAFF" stroke-width="3.5" stroke-linecap="round" />
-  <path d="M76 54L82 60L76 66" stroke="#F6FAFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#connect-bg)"/>
+  <path d="M34 30c2.2-2.2 5.6-2.4 8-.6l4.2 3.2c1.8 1.4 2.2 4 1 6l-2.2 3.6c4.2 6.4 9.4 11.4 16 15l3.8-2.4c2-1.2 4.6-.8 6 1l3.4 4c1.8 2.2 1.6 5.4-.6 7.4l-3.8 3.4c-2.2 2-5.2 2.6-8 1.6-10.4-3.8-19.2-11.2-26-21.2-6.6-9.6-10.2-19.4-11-29-.2-2.8 1-5.6 3.4-7.4L34 30Z" fill="#F8FBFF"/>
+  <circle cx="64" cy="34" r="12" fill="#0B1A6A" fill-opacity="0.28" stroke="#F8FBFF" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M60.5 34h7M64 30.5v7" stroke="#F8FBFF" stroke-width="2.4" stroke-linecap="round"/>
 </svg>

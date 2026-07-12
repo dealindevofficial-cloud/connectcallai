@@ -1,14 +1,18 @@
 <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="pick-agent-bg" x1="14" y1="12" x2="82" y2="84" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5B73FF" />
-      <stop offset="1" stop-color="#8D63FF" />
+      <stop stop-color="#5B73FF"/>
+      <stop offset="1" stop-color="#8D63FF"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#pick-agent-bg)" />
-  <rect x="22" y="24" width="52" height="40" rx="10" fill="#E8EEFF" fill-opacity="0.18" stroke="#E8EEFF" stroke-opacity="0.45" />
-  <circle cx="48" cy="40" r="8" fill="#F5F8FF" />
-  <path d="M34 56C36.2 49.4 41.6 46 48 46C54.4 46 59.8 49.4 62 56" stroke="#F5F8FF" stroke-width="4" stroke-linecap="round" />
-  <path d="M30 20L33.5 14L37 20" stroke="#F5F8FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M59 20L62.5 14L66 20" stroke="#F5F8FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#pick-agent-bg)"/>
+  <rect x="24" y="26" width="48" height="44" rx="12" fill="#F5F8FF" fill-opacity="0.16" stroke="#F5F8FF" stroke-opacity="0.5" stroke-width="2"/>
+  <rect x="36" y="34" width="24" height="20" rx="7" fill="#F8FBFF"/>
+  <circle cx="43.5" cy="43" r="2.2" fill="#5B6FFF"/>
+  <circle cx="52.5" cy="43" r="2.2" fill="#5B6FFF"/>
+  <path d="M44 49.5h8" stroke="#5B6FFF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M48 34V30" stroke="#F8FBFF" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="48" cy="28.5" r="2" fill="#F8FBFF"/>
+  <path d="M28 40l1.6 3.4L33 45l-3.4 1.6L28 50l-1.6-3.4L23 45l3.4-1.6L28 40Z" fill="#F8FBFF"/>
+  <path d="M68 52l1.2 2.6L72 56l-2.8 1.2L68 60l-1.2-2.8L64 56l2.8-1.4L68 52Z" fill="#F8FBFF"/>
 </svg>

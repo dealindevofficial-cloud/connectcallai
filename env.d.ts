@@ -26,6 +26,11 @@ declare namespace NodeJS {
     ADMIN_LOGIN_RATE_WINDOW_MS?: string;
     /** Optional shared secret: when set, `/api/vapi/webhook` requires Bearer or `X-Vapi-Secret`. */
     VAPI_WEBHOOK_SECRET?: string;
+    /**
+     * Vapi **public** key (not `VAPI_API_KEY`), used by the browser test call at
+     * `/ccai-admin/test-call`. Safe to expose: it can only start web calls.
+     */
+    NEXT_PUBLIC_VAPI_PUBLIC_KEY?: string;
     /** When `"true"`, `/api/vapi/webhook` sends post-call customer emails; otherwise it no-ops (default off). */
     VAPI_POST_CALL_EMAIL_ENABLED?: string;
     /** Cloudinary cloud name (server-only; used by `/api/admin/upload`). */

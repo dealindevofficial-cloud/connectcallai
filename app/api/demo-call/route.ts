@@ -4,6 +4,11 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import {
+  getAssistantIdForIndustry,
+  normalizeIndustrySlug,
+  type IndustrySlug,
+} from "@/lib/vapi/assistants";
 
 export const runtime = "nodejs";
 
@@ -13,8 +18,6 @@ type DemoCallPayload = {
   email?: string;
   industry?: string;
 };
-
-type IndustrySlug = "real-estate" | "restaurants" | "hospitals" | "dental-offices" | "pet-clinics";
 
 type ValidationErrors = Partial<Record<"name" | "phone" | "email" | "industry", string>>;
 
@@ -36,14 +39,6 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const resend = new Resend(process.env.RESEND_API_KEY);
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "connectcallaiofficial@gmail.com";
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Connect Call AI <onboarding@resend.dev>";
-const INDUSTRY_TO_ASSISTANT_ENV: Record<IndustrySlug, string | undefined> = {
-  "real-estate": process.env.VAPI_ASSISTANT_REAL_ESTATE_ID,
-  restaurants: process.env.VAPI_ASSISTANT_RESTAURANTS_ID,
-  hospitals: process.env.VAPI_ASSISTANT_HOSPITALS_ID,
-  // TODO: Replace with a dedicated dental Vapi assistant env var when it is ready.
-  "dental-offices": process.env.VAPI_ASSISTANT_HOSPITALS_ID,
-  "pet-clinics": process.env.VAPI_ASSISTANT_PET_CLINICS_ID,
-};
 
 const vapiApiKey = process.env.VAPI_API_KEY;
 const vapiApiBaseUrl = (process.env.VAPI_API_BASE_URL ?? "https://api.vapi.ai").replace(/\/+$/, "");
@@ -96,20 +91,6 @@ function normalizeEmail(value: string | undefined) {
   return (value ?? "").trim().toLowerCase();
 }
 
-function normalizeIndustry(value: string | undefined): IndustrySlug | "" {
-  const normalized = (value ?? "").trim().toLowerCase();
-  if (
-    normalized === "real-estate" ||
-    normalized === "restaurants" ||
-    normalized === "hospitals" ||
-    normalized === "dental-offices" ||
-    normalized === "pet-clinics"
-  ) {
-    return normalized;
-  }
-  return "";
-}
-
 function normalizePhone(value: string | undefined) {
   const raw = (value ?? "").trim();
   if (!raw) return "";
@@ -130,7 +111,7 @@ function validatePayload(body: DemoCallPayload) {
   const name = normalizeName(body.name);
   const email = normalizeEmail(body.email);
   const phone = normalizePhone(body.phone);
-  const industry = normalizeIndustry(body.industry);
+  const industry = normalizeIndustrySlug(body.industry);
   const errors: ValidationErrors = {};
 
   if (!name || name.length < 2) {
@@ -441,7 +422,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const assistantId = INDUSTRY_TO_ASSISTANT_ENV[industry];
+  const assistantId = getAssistantIdForIndustry(industry);
   if (!assistantId) {
     console.error("[demo-call]", {
       requestId,
